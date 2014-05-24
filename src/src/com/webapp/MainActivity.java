@@ -2,17 +2,38 @@ package com.webapp;
 
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.*;
 import android.app.Activity;
 import android.app.Fragment;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
+	private MainFragment mainFragment;
+	
+	
+	/* loads the layout in the main activity.
+	   If there is no saved state -> create a new fragment, load it.
+	   If there is 				  -> restore that. */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		
+	    if (savedInstanceState == null) {
+	        // Add the fragment on initial activity setup
+	        mainFragment = new MainFragment();
+	        getSupportFragmentManager()
+	        .beginTransaction()
+	        .add(android.R.id.content, mainFragment)
+	        .commit();
+	    } else {
+	        // Or set the fragment from restored state info
+	        mainFragment = (MainFragment) getSupportFragmentManager()
+	        .findFragmentById(android.R.id.content);
+	    }
+	    
 	}
 
 	@Override
@@ -46,7 +67,7 @@ public class MainActivity extends Activity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
+			View rootView = inflater.inflate(R.layout.main, container,
 					false);
 			return rootView;
 		}
