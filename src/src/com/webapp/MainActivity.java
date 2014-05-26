@@ -2,18 +2,18 @@ package com.webapp;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.*;
-import android.app.Fragment;
+import android.support.v4.app.*;
 import android.content.Intent;
 
 public class MainActivity extends FragmentActivity {
 
-	private LoginFragment mainFragment;
-	
+	private LoginFragment login;
+	private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback(){
 	    @Override
 	    public void call (Session session, SessionState state, Exception exception) {
@@ -28,6 +28,9 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		
+		uiHelper = new UiLifecycleHelper(this, callback);
+	    uiHelper.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
         // Check that the activity is using the layout version with
@@ -42,7 +45,7 @@ public class MainActivity extends FragmentActivity {
             }
 
             // Create a new Fragment to be placed in the activity layout
-            LoginFragment login = new LoginFragment();
+            login = new LoginFragment();
             
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
@@ -70,14 +73,50 @@ public class MainActivity extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	@Override
+	public void onResume() {
+	    super.onResume();
+	    uiHelper.onResume();
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    super.onActivityResult(requestCode, resultCode, data);
+	    uiHelper.onActivityResult(requestCode, resultCode, data);
+	}
+
+	@Override
+	public void onPause() {
+	    super.onPause();
+	    uiHelper.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+	    super.onDestroy();
+	    uiHelper.onDestroy();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+	    super.onSaveInstanceState(outState);
+	    uiHelper.onSaveInstanceState(outState);
+	}
 	
 	private void onSessionStateChange(Session session, SessionState state,
 			  Exception exception) {
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		if (state.isOpened()) {
 			// Remove the LoginFragment, add the LandingFragment.
+			transaction.replace(R.id.fragment_container, new SelectFragment());
+			transaction.addToBackStack(null);
+			transaction.commit();
 		} else if (state.isClosed()) {
 			//TODO
 			// Remove whatever is there, add LoginFragment
+			transaction.replace(R.id.fragment_container, new LoginFragment());
+			transaction.addToBackStack(null);
+			transaction.commit();
 		}
 	}
 
