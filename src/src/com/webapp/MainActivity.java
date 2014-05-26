@@ -48,19 +48,6 @@ public class MainActivity extends FragmentActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, login).commit();
         }
-	    /* if (savedInstanceState == null) {
-	        // Add the fragment on initial activity setup
-	        mainFragment = new LoginFragment();
-	        getSupportFragmentManager()
-	        .beginTransaction()
-	        .add(android.R.id.content, mainFragment)
-	        .commit();
-	    } else {
-	        // Or set the fragment from restored state info
-	        mainFragment = (LoginFragment) getSupportFragmentManager()
-	        .findFragmentById(android.R.id.content);
-	    }*/
-	    
 	}
 
 	@Override
@@ -83,33 +70,15 @@ public class MainActivity extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	/*
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.login_fragment, container,
-					false);
-			return rootView;
-		}
-	}*/
-	/* Change */ 
+	
 	private void onSessionStateChange(Session session, SessionState state,
 			  Exception exception) {
 		if (state.isOpened()) {
-			Intent intent = new Intent(this, SelectActivity.class);
-			startActivity(intent);
+			// Remove the LoginFragment, add the LandingFragment.
 		} else if (state.isClosed()) {
 			//TODO
-			Log.i( "LoginActivity", "Logged out...");
+			// Remove whatever is there, add LoginFragment
 		}
-}
+	}
 
 }
