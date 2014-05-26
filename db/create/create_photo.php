@@ -21,7 +21,7 @@ if (isset($_POST['user_id']) && isset($_POST['photo_path'])) {
     $db = new DB_CONNECT();
  
     // pgsql inserting a new row
-    $result = pg_query("INSERT INTO photos(user_id, photo_path) VALUES('$user_id','$photo_path'");
+    $result = pg_query("INSERT INTO photos(user_id, photo_path) VALUES('$user_id','$photo_path')");
  
     // check if row inserted or not
     if ($result) {

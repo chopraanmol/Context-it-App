@@ -20,7 +20,7 @@ if (isset($_POST['user_id'])) {
     $db = new DB_CONNECT();
  
     // pgsql inserting a new row
-    $result = pg_query("INSERT INTO users(user_id) VALUES('$id'");
+    $result = pg_query("INSERT INTO users(user_id) VALUES('$id')");
  
     // check if row inserted or not
     if ($result) {
