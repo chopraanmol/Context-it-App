@@ -25,8 +25,8 @@ class DB_CONNECT {
         require_once __DIR__ . '/db_config.php';
  
         // Connecting to the postgres database
-        $con = pg_connect(PG_INFO) or die('Could not connect: ' . pg_last_error());
- 
+        $con = pg_connect(PG_INFO);
+        if(!$con)
         // returning connection cursor
         return $con;
     }
