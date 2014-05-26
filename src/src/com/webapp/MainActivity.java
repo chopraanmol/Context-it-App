@@ -112,7 +112,6 @@ public class MainActivity extends FragmentActivity {
 			transaction.addToBackStack(null);
 			transaction.commit();
 		} else if (state.isClosed()) {
-			//TODO
 			// Remove whatever is there, add LoginFragment
 			transaction.replace(R.id.fragment_container, new LoginFragment());
 			transaction.addToBackStack(null);

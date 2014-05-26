@@ -58,7 +58,9 @@ public class SelectFragment extends Fragment {
 	}
 	
 	public void activateCamera() {
-		//TODO
+		// TODO 
+		// For now, it just makes the button disappear (for the sake of debugging)
+		// Add code to activate camera, or transition to other fragment, etc.
 		cameraButton.setVisibility(View.INVISIBLE);
 	}
 
