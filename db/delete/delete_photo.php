@@ -14,16 +14,18 @@ if (isset($_POST['user_id']) && isset($_POST['photo_path'])) {
     $photo_path = $_POST['photo_path'];
 
     // include db connect class
-    require_once __DIR__ . '/db_connect.php';
+    require_once '../db_connect.php';
  
     // connecting to db
     $db = new DB_CONNECT();
  
     // mysql update row with matched pid
-    $result = mysql_query("DELETE FROM photos WHERE user_id = $uid AND photo_path = $photo_path");
+    $result = pg_query("DELETE FROM photos WHERE user_id = '$uid' AND photo_path = '$photo_path'");
  
+    unset($db);
+    
     // check if row deleted or not
-    if (pg_affected_rows() > 0) {
+    if (pg_affected_rows($result) > 0) {
         // successfully updated
         $response["success"] = 1;
         

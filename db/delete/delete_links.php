@@ -20,10 +20,12 @@ if (isset($_POST['photo_id']) && isset($_POST['url'])) {
     $db = new DB_CONNECT();
  
     // mysql update row with matched pid
-    $result = mysql_query("DELETE FROM weburls WHERE photo_id = $pid AND url = $url");
+    $result = pg_query("DELETE FROM weburls WHERE photo_id = $pid AND url = '$url'");
  
+    unset($db);
+    
     // check if row deleted or not
-    if (pg_affected_rows() > 0) {
+    if (pg_affected_rows($result) > 0) {
         // successfully updated
         $response["success"] = 1;
         

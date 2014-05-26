@@ -20,24 +20,25 @@ if (isset($_POST['photo_id'] && isset($_POST['urls'])) {
     // connecting to db
     $db = new DB_CONNECT();
     if(!$db->has_connected) {
-	$response["success"] = 0;
-    	$response["message"] = "Required field(s) is missing";
+	   $response["success"] = 0;
+       $response["message"] = "Database could not be opened";
 	
-	// echoing JSON response
-    	echo json_encode($response);
-	exit(-1);
+	   // echoing JSON response
+       echo json_encode($response);
+	   exit(-1);
     }
-    $link = array();
+
+    $links_not_added = array();
     foreach ($urls as $value) {
         // pgsql inserting a new row
         $result = pg_query("INSERT INTO weburls VALUES('$id', '$value')");
         if(!$result){
-            array_push($link,$value);
+            array_push($links_not_added,$value);
         }    
     }    
- 
+    unset($db);
     // check if row inserted or not
-    if (count($link) == 0) {
+    if (count($links_not_added) == 0) {
         // successfully inserted into database
         $response["success"] = 1;
  
@@ -47,7 +48,7 @@ if (isset($_POST['photo_id'] && isset($_POST['urls'])) {
         // failed to insert row
         $response["success"] = 0;
         $response["message"] = "Oops! An error occurred.";
-        $response["not_included"] = $link;
+        $response["not_included"] = $links_not_added;
  
         // echoing JSON response
         echo json_encode($response);

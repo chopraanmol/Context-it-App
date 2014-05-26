@@ -21,7 +21,9 @@ if (isset($_POST['user_id'])) {
  
     // pgsql inserting a new row
     $result = pg_query("INSERT INTO users(user_id) VALUES('$id')");
- 
+    
+    unset($db);
+    
     // check if row inserted or not
     if ($result) {
         // successfully inserted into database

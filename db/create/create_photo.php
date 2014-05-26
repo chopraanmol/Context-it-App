@@ -23,6 +23,8 @@ if (isset($_POST['user_id']) && isset($_POST['photo_path'])) {
     // pgsql inserting a new row
     $result = pg_query("INSERT INTO photos(user_id, photo_path) VALUES('$user_id','$photo_path')");
  
+    unset($db);
+
     // check if row inserted or not
     if ($result) {
         // successfully inserted into database
@@ -38,7 +40,6 @@ if (isset($_POST['user_id']) && isset($_POST['photo_path'])) {
         // echoing JSON response
         echo json_encode($response);
     }
-    unset($db);
 } else {
     // required field is missing
     $response["success"] = 0;
