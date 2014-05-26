@@ -17,7 +17,7 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
 import com.webapp.R;
 
-public class MainFragment extends Fragment{
+public class LoginFragment extends Fragment{
 	
 	private static final String tag = "MainFragment";
 	
@@ -53,7 +53,7 @@ public class MainFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, 
 	        Bundle savedInstanceState) {
-	    View view = inflater.inflate(R.layout.main, container, false);
+	    View view = inflater.inflate(R.layout.login_fragment, container, false);
 	    LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 	    /* Return result to fragment, not to main activity. */
 	    authButton.setFragment(this);
