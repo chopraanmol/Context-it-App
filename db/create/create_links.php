@@ -19,11 +19,18 @@ if (isset($_POST['photo_id'] && isset($_POST['urls'])) {
  
     // connecting to db
     $db = new DB_CONNECT();
-
+    if(!$db->has_connected) {
+	$response["success"] = 0;
+    	$response["message"] = "Required field(s) is missing";
+	
+	// echoing JSON response
+    	echo json_encode($response);
+	exit(-1);
+    }
     $link = array();
     foreach ($urls as $value) {
         // pgsql inserting a new row
-        $result = pg_query("INSERT INTO weburls VALUES('$id', '$value'");
+        $result = pg_query("INSERT INTO weburls VALUES('$id', '$value')");
         if(!$result){
             array_push($link,$value);
         }    
