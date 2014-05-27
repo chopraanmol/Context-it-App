@@ -1,3 +1,4 @@
+
 <?php
  
 /*
@@ -9,11 +10,18 @@
 $response = array();
  
 // include db connect class
-require_once __DIR__ . '/db_connect.php';
+require_once __DIR__ . '/../db_connect.php';
 
 // connecting to db
 $db = new DB_CONNECT();
- 
+if(!$db->has_connected) {
+	$response["success"] = 0;
+        $response["message"] = "Database could not be opened";
+	
+	   // echoing JSON response
+       echo json_encode($response);
+	   exit;
+    }
 // check for post data
 if (isset($_GET["user_id"])) {
     $uid = $_GET['user_id'];
@@ -36,7 +44,7 @@ if (isset($_GET["user_id"])) {
         } else {
             // no product found
             $response["success"] = 0;
-            $response["message"] = "No links found";
+            $response["message"] = "No product found";
  
             // echo no users JSON
             echo json_encode($response);
@@ -44,7 +52,7 @@ if (isset($_GET["user_id"])) {
     } else {
         // no product found
         $response["success"] = 0;
-        $response["message"] = "No links found";
+        $response["message"] = "No product found";
  
         // echo no users JSON
         echo json_encode($response);

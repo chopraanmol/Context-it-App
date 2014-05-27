@@ -20,12 +20,12 @@ if (isset($_POST['photo_id'] && isset($_POST['urls'])) {
     // connecting to db
     $db = new DB_CONNECT();
     if(!$db->has_connected) {
-	   $response["success"] = 0;
-       $response["message"] = "Database could not be opened";
+	$response["success"] = 0;
+        $response["message"] = "Database could not be opened";
 	
 	   // echoing JSON response
        echo json_encode($response);
-	   exit(-1);
+	   exit;
     }
 
     $links_not_added = array();
@@ -57,7 +57,7 @@ if (isset($_POST['photo_id'] && isset($_POST['urls'])) {
     // required field is missing
     $response["success"] = 0;
     $response["message"] = "Required field(s) is missing";
- 
+
     // echoing JSON response
     echo json_encode($response);
 }

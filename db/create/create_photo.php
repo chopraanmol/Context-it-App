@@ -19,7 +19,14 @@ if (isset($_POST['user_id']) && isset($_POST['photo_path'])) {
  
     // connecting to db
     $db = new DB_CONNECT();
- 
+    if(!$db->has_connected) {
+	$response["success"] = 0;
+        $response["message"] = "Database could not be opened";
+	
+	   // echoing JSON response
+       echo json_encode($response);
+	   exit;
+    }
     // pgsql inserting a new row
     $result = pg_query("INSERT INTO photos(user_id, photo_path) VALUES('$user_id','$photo_path')");
  
