@@ -9,11 +9,18 @@
 $response = array();
  
 // include db connect class
-require_once __DIR__ . '/db_connect.php';
+require_once __DIR__ . '/../db_connect.php';
 
 // connecting to db
 $db = new DB_CONNECT();
- 
+if(!$db->has_connected) {
+	$response["success"] = 0;
+        $response["message"] = "Database could not be opened";
+	
+	   // echoing JSON response
+       echo json_encode($response);
+	   exit;
+    }
 // check for post data
 if (isset($_GET["photo_id"])) {
     $photo_id = $_GET['photo_id'];
