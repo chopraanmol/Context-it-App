@@ -36,7 +36,7 @@ if (isset($_GET["user_id"])) {
         } else {
             // no product found
             $response["success"] = 0;
-            $response["message"] = "No product found";
+            $response["message"] = "No links found";
  
             // echo no users JSON
             echo json_encode($response);
@@ -44,7 +44,7 @@ if (isset($_GET["user_id"])) {
     } else {
         // no product found
         $response["success"] = 0;
-        $response["message"] = "No product found";
+        $response["message"] = "No links found";
  
         // echo no users JSON
         echo json_encode($response);
