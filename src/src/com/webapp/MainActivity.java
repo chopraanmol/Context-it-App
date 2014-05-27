@@ -17,7 +17,9 @@ public class MainActivity extends FragmentActivity {
 	private Session.StatusCallback callback = new Session.StatusCallback(){
 	    @Override
 	    public void call (Session session, SessionState state, Exception exception) {
-	        onSessionStateChange(session, state, exception);
+	    	if (session != null) {
+	    		onSessionStateChange(session, state, exception);
+	    	}
 	    }
 	};
 	
@@ -51,6 +53,7 @@ public class MainActivity extends FragmentActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, login).commit();
         }
+        Log.d("Webapp", "CREATING\n");
 	}
 
 	@Override
@@ -58,6 +61,8 @@ public class MainActivity extends FragmentActivity {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		
+		Log.d("Webapp", "CREATING\n");
 		return true;
 	}
 
@@ -70,6 +75,8 @@ public class MainActivity extends FragmentActivity {
 		if (id == R.id.action_settings) {
 			return true;
 		}
+		Log.d("Webapp", "CREATING\n");
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -77,6 +84,9 @@ public class MainActivity extends FragmentActivity {
 	public void onResume() {
 	    super.onResume();
 	    uiHelper.onResume();
+	   
+		Log.d("Webapp", "RESUMING\n");
+	    
 	}
 
 	@Override
@@ -106,7 +116,7 @@ public class MainActivity extends FragmentActivity {
 	private void onSessionStateChange(Session session, SessionState state,
 			  Exception exception) {
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		if (state.isOpened()) {
+		if (state.isOpened() || state == SessionState.OPENING) {
 			// Remove the LoginFragment, add the LandingFragment.
 			transaction.replace(R.id.fragment_container, new SelectFragment());
 			transaction.addToBackStack(null);
