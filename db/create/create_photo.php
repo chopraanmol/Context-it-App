@@ -1,18 +1,14 @@
-#!/usr/bin/php
 <?php
 error_reporting(E_ERROR);
 
 
-// array for JSON response
-$response = array();
 
-$input = json_decode(file_get_contents('php://input'), true);
-
-// check for required fields
-if (isset($input['user_id']) && isset($input['photo_path'])) {
+function create_photo($user_id,$photo_path){
+    // array for JSON response
+    $response = array();
  
-    $id = $input['user_id'];
-    $path = $input['photo_path'];
+    $id = $user_id;
+    $path = $photo_path;
  
     // include db connect class
     require_once '../db_connect.php';
@@ -20,8 +16,8 @@ if (isset($input['user_id']) && isset($input['photo_path'])) {
     // connecting to db
     $db = new DB_CONNECT();
     if(!$db->has_connected) {
-	$response["status"] = 2;
-	unset($db);
+    $response["status"] = 2;
+    unset($db);
         echo json_encode($response);
         exit;
     }
@@ -36,9 +32,6 @@ if (isset($input['user_id']) && isset($input['photo_path'])) {
     } else {
         $response["status"] = 3;
     }
-} else {
-    // required field is missing
-    $response['status'] = 4;
 }
-echo json_encode($response);
+
 ?>

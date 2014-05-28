@@ -7,26 +7,27 @@ $username = 'guest';
 $password = 'rackrack';
 $host = 'cvm-g1327111';
 
+	//Upload the photo using the userid 
 
+	$Dir = 'photos/' . $user_id . '/';
 
-//Upload the photo using the userid 
+	if(!is_dir($Dir)) {
+	    mkdir($Dir, 0777,true);
+	    chmod($Dir, 0777);
+	}
 
-$Dir = 'photos/' . $user_id . '/';
+	do {
+	    $fileName = microtime();
+		$fileName = preg_replace('/\s+/', '_', $fileName);
+	} while (file_exists("$Dir". $fileName . '.jpg'));
+	 
+	$file_path = $Dir.basename($_FILES['uploaded_file']['name']);
 
-if(!is_dir($Dir)) {
-    mkdir($Dir, 0777);
-    chmod($Dir, 0777);
-}
+	//add the photo to the database
+	require_once '../db/create/create_photo.php';
 
-do {
-    $fileName = microtime();
-	$fileName = preg_replace('/\s+/', '_', $fileName);
-} while (file_exists("$Dir". $fileName . '.jpg'));
-
-$file_path = $Dir.basename( $_FILES['uploaded_file']['name']);
-
-//add the photo to the database
-//TODO
+	$photo_path = 'http://www.doc.ic.ac.uk/project/2013/271/g1327111/process/'. $file_path;
+	create_photo($user_id,$photo_path);
 
 //copy the file from the server to the vm. 	
 	$sftp = new Net_SFTP($host);
@@ -36,31 +37,29 @@ $file_path = $Dir.basename( $_FILES['uploaded_file']['name']);
 
 	// puts an x-byte file named photo on the SFTP server,
 	// where x is the size of photo.jpg
-	$dest_photo = 'photo.jpg';
-	$src_photo = $dir;
-	$sftp->put($dest, $src , NET_SFTP_LOCAL_FILE);
-
-//run tesseract on it.
+	$dest_photo = $fileName;
+	$src_photo = "$Dir". $fileName . '.jpg';
+	$sftp->put($dest_photo, $src_photo , NET_SFTP_LOCAL_FILE);
+	unset($stfp);
+	
+	//run tesseract on it.
 	$ssh = new Net_SSH2($host);
 	if (!$ssh->login($username, $password)) {
 	    exit('Login Failed');
 	}
-	$src_text = 'out';
+	$trans_text = 'out4';
 	$cmd = 'tesseract ' . $dest_photo . ' ' . $trans_text . ' -psm 1';
 	$ssh->exec($cmd);
 	$cmd = 'cat ' . $trans_text . '.txt';
-	echo $ssh->exec($cmd);
+	$text =  $ssh->exec($cmd);
+	echo $text;
 
-//recognise words from the dictionary and search. 
-//TODO
+	//recognise words from the dictionary and search. 
+	//TODO
 
-// make searchs using different algorithms. 
-//TODO
+	// make searchs using different algorithms. 
+	//TODO
 
-unset($stfp);
 unset($ssh);	
-
-
-
 
 ?>
