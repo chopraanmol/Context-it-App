@@ -140,7 +140,7 @@ public class MainActivity extends FragmentActivity {
 				}).executeAsync();
 			}
 			
-			transaction.replace(R.id.fragment_container, new SelectFragment());
+			transaction.replace(R.id.fragment_container, new LandingFragment());
 			transaction.addToBackStack(null);
 			transaction.commit();
 		} else if (state.isClosed()) {
@@ -151,6 +151,12 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 	
+	public void jumpToTest(View v) {
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.replace(R.id.fragment_container, new ResultFragment());
+		transaction.addToBackStack(null);
+		transaction.commit();
+	}
 	
 
 }

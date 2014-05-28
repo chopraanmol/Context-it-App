@@ -23,7 +23,7 @@ import android.widget.Toast;
 import android.os.Build;
 import android.provider.MediaStore;
 
-public class SelectFragment extends Fragment {
+public class LandingFragment extends Fragment {
 	
 	Button cameraButton = null;
 	File file = null;
@@ -44,7 +44,7 @@ public class SelectFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, 
 	        Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.select_fragment, container, false);
+		View view = inflater.inflate(R.layout.landing_fragment, container, false);
 		cameraButton = (Button) view.findViewById(R.id.camera_button);
 		cameraButton.setOnClickListener(new OnClickListener() {
 			
