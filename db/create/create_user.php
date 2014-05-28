@@ -1,10 +1,6 @@
+#!/usr/bin/php
 <?php
- error_reporting(E_ERROR);
-//ALSO CHANGE THE SUCCESS VALUES TO REFLECT WHAT WENT WRONG RATHER THAN A MESSAGE!!
-/*
- * Following code will create a new product row
- * All product details are read from HTTP Post Request
- */
+error_reporting(E_ERROR);
  
 // array for JSON response
 $response = array();
@@ -22,40 +18,25 @@ if (isset($input['user_id'])) {
     // connecting to db
     $db = new DB_CONNECT();
     if(!$db->has_connected) {
-	$response["success"] = 0;
-        $response["message"] = "Database could not be opened";
-	
-	   // echoing JSON response
-       echo json_encode($response);
-	exit;
+	$response["status"] = 2;
+	unset($db);
+        echo json_encode($response);
+        exit;
     }
+
     // pgsql inserting a new row
     $result = pg_query_params($db->con,'INSERT INTO users(user_id) VALUES($1)', array($id));
-
     unset($db);
     
-    // check if row inserted or not
+    //if insertion was successful, return status code 1, else 0.
     if ($result) {
-        // successfully inserted into database
-        $response["success"] = 1;
-
-        // echoing JSON response
-        echo json_encode($response);
+        $response["status"] = 1;
     } else {
-        // failed to insert row
-        $response["success"] = 0;
-        $response["message"] = "Oops! An error occurred.";
- 
-        // echoing JSON response
-        echo json_encode($response);
+        $response["status"] = 3;
     }
 } else {
     // required field is missing
-    $response['success'] = 0;
-    $response['message'] = 'Required field(s) is missing';
-    $r = var_dump ($_GET);
-	echo $r;
-    // echoing JSON response
-    echo json_encode($response);
+    $response['status'] = 4;
 }
+echo json_encode($response);
 ?>

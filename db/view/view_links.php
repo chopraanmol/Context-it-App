@@ -1,66 +1,37 @@
+#!/usr/bin/php
 <?php
- 
-/*
- * Following code will get single product details
- * A product is identified by product id (pid)
- */
- 
-// array for JSON response
+error_reporting(E_ERROR);
 $response = array();
- 
-// include db connect class
-require_once __DIR__ . '/../db_connect.php';
+$response["weburls"] = array();
+$response["status"] = -1;
+
+$input = json_decode(file_get_contents('php://input'), true);
 
 // connecting to db
+require_once '../db_connect.php';
 $db = new DB_CONNECT();
 if(!$db->has_connected) {
-	$response["success"] = 0;
-        $response["message"] = "Database could not be opened";
-	
-	   // echoing JSON response
-       echo json_encode($response);
-	   exit;
-    }
-// check for post data
-if (isset($_GET["photo_id"])) {
-    $photo_id = $_GET['photo_id'];
-    // get a product from products table
-    $result = pg_query("SELECT * FROM weburls WHERE photo_id = '$photo_id'");
- 
-    if (!empty($result)) {
-        // check for empty result
-        if (pg_num_rows($result) > 0) {
- 
-            $result = pg_fetch_all($result);
-            $response["weburls"] = array();
- 			foreach($result as $row){
-	            array_push($response["weburls"], $row["url"]);
- 			}   
- 			$response["success"] = 1;
-            // echoing JSON response
-            echo json_encode($response);
-        } else {
-            // no product found
-            $response["success"] = 0;
-            $response["message"] = "No links found";
- 
-            // echo no users JSON
-            echo json_encode($response);
-        }
-    } else {
-        // no product found
-        $response["success"] = 0;
-        $response["message"] = "No links found";
- 
-        // echo no users JSON
+	$response["status"] = 2;
+	unset($db);
         echo json_encode($response);
+	exit;
+}
+
+if (isset($input['photo_id'])) {
+    $id = $input['photo_id'];
+    $result = pg_query_params($db->con,'SELECT * FROM weburls WHERE photo_id = $1', array($id));
+    unset($db);
+    if ($result) {
+            $result = pg_fetch_all($result);
+ 	    foreach($result as $row){
+	            array_push($response["weburls"], $row["url"]);
+ 	    }
+ 	    $response["status"] = 1;
+    } else {
+        $response["status"] = 3;
     }
 } else {
-    // required field is missing
-    $response["success"] = 0;
-    $response["message"] = "Field missing";
- 
-    // echoing JSON response
-    echo json_encode($response);
+    $response["success"] = 4;
 }
+echo json_encode($response);
 ?>

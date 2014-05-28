@@ -13,7 +13,6 @@ class DB_CONNECT {
     function __construct() {
         $this->connect();
 	if(!$this->con) {
-	echo "did not connect!";
 		$this->has_connected = false;
 	}
 

@@ -49,11 +49,11 @@ public class DisplayMessageActivity extends Activity {
 			// TODO Auto-generated catch block
 			message = "" + e;
 		}
-		try {
-			message = (new JSONObject(message)).getString("message");
-		} catch (JSONException e) {
-			message = "nonono    " + e;
-		}
+//		try {
+//			message = ""+(new JSONObject(message)).getJSONArray("photo_paths").getString(0);
+//		} catch (JSONException e) {
+//			message = "nonono    " + e;
+//		}
 	    TextView textView = (TextView) findViewById(R.id.view_text);
 	    textView.setText(message);
 	    // Set the text view as the activity layout
@@ -67,14 +67,13 @@ public class DisplayMessageActivity extends Activity {
 		public String call() throws Exception {
 			JSONObject json = new JSONObject();
 			try {
-				json.accumulate("user_id", "rishabh");
-				json.accumulate("lala", "rishabh");
+				json.accumulate("photo_id", 1);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			String message = "";
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost("http://192.168.0.8/db/create/create_user.php");
+			HttpPost httpPost = new HttpPost("http://www.doc.ic.ac.uk/project/2013/271/g1327111/db/view/view_links.php");
 			try {
 			StringEntity se = new StringEntity(json.toString());
 			httpPost.setEntity(se);
