@@ -18,7 +18,14 @@ if (isset($_POST['user_id']) && isset($_POST['photo_path'])) {
  
     // connecting to db
     $db = new DB_CONNECT();
- 
+    if(!$db->has_connected) {
+	$response["success"] = 0;
+        $response["message"] = "Database could not be opened";
+	
+	   // echoing JSON response
+       echo json_encode($response);
+	   exit;
+    }
     // mysql update row with matched pid
     $result = pg_query("DELETE FROM photos WHERE user_id = '$uid' AND photo_path = '$photo_path'");
  

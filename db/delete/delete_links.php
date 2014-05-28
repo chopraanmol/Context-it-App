@@ -18,7 +18,14 @@ if (isset($_POST['photo_id']) && isset($_POST['url'])) {
  
     // connecting to db
     $db = new DB_CONNECT();
- 
+    if(!$db->has_connected) {
+	$response["success"] = 0;
+        $response["message"] = "Database could not be opened";
+	
+	   // echoing JSON response
+       echo json_encode($response);
+	   exit;
+    }
     // mysql update row with matched pid
     $result = pg_query("DELETE FROM weburls WHERE photo_id = $pid AND url = '$url'");
  

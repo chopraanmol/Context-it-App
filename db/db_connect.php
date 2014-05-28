@@ -7,10 +7,10 @@
 
 //error_reporting(E_ERROR);
 class DB_CONNECT {
- 
+	
+    public $has_connected = true;
     function __construct() {
-        $this->connect();	
-	$this->has_connected = true;
+        $this->connect();
 	if(!$this->con) {
 		$this->has_connected = false;
 	}
@@ -21,12 +21,12 @@ class DB_CONNECT {
         $this->close();
     }
  
-    function connect() {
+    private function connect() {
         require_once __DIR__ . '/db_config.php';
         $this->con = pg_connect(PG_INFO);
     }
  
-    function close() {
+    private function close() {
 	if($this->con) {
         	pg_close($this->con);
 	}
