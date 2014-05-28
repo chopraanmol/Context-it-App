@@ -1,5 +1,26 @@
 package com.example.serverconnect;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -18,15 +39,57 @@ public class DisplayMessageActivity extends Activity {
 		setContentView(R.layout.activity_display_message);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		Intent intent = getIntent();
-		String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+		ExecutorService pool = Executors.newFixedThreadPool(1);
+		Future<String> future = pool.submit(new ServerConnect());
 		// Create the text view
+		String message;
+		try {
+			message = future.get();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			message = "" + e;
+		}
+		try {
+			message = (new JSONObject(message)).getString("message");
+		} catch (JSONException e) {
+			message = "nonono    " + e;
+		}
 	    TextView textView = (TextView) findViewById(R.id.view_text);
-	    textView.setTextSize(40);
 	    textView.setText(message);
 	    // Set the text view as the activity layout
 	    //setContentView(textView);
 
+	}
+	
+	public class ServerConnect implements Callable<String> {
+
+		@Override
+		public String call() throws Exception {
+			JSONObject json = new JSONObject();
+			try {
+				json.accumulate("user_id", "rishabh");
+				json.accumulate("lala", "rishabh");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			String message = "";
+			HttpClient httpClient = new DefaultHttpClient();
+			HttpPost httpPost = new HttpPost("http://192.168.0.8/db/create/create_user.php");
+			try {
+			StringEntity se = new StringEntity(json.toString());
+			httpPost.setEntity(se);
+			HttpResponse httpResponse = httpClient.execute(httpPost);
+			message = EntityUtils.toString(httpResponse.getEntity());
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				message = "a  "+e;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				message = "b   "+e;
+			} catch(Exception e) {message = "c   "+e;}
+			return message;
+		}
+		
 	}
 
 	/**
