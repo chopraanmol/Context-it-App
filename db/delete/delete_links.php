@@ -1,57 +1,44 @@
+#!/usr/bin/php
 <?php
- 
-/*
- * Following code will delete a product from table
- * A product is identified by product id (pid)
- */
- 
+error_reporting(E_ERROR);
+
+
 // array for JSON response
 $response = array();
- 
-// check for required fields
-if (isset($_POST['photo_id']) && isset($_POST['url'])) {
-    $pid = $_POST['photo_id'];
-    $url = $_POST['url'];
 
+$input = json_decode(file_get_contents('php://input'), true);
+
+// check for required fields
+if (isset($input['url']) && isset($input['photo_id'])) {
+ 
+    $url = $input['url'];
+    $id = $input['photo_id'];
+ 
     // include db connect class
     require_once '../db_connect.php';
  
     // connecting to db
     $db = new DB_CONNECT();
     if(!$db->has_connected) {
-	$response["success"] = 0;
-        $response["message"] = "Database could not be opened";
-	
-	   // echoing JSON response
-       echo json_encode($response);
-	   exit;
+	$response["status"] = 2;
+	unset($db);
+        echo json_encode($response);
+        exit;
     }
-    // mysql update row with matched pid
-    $result = pg_query("DELETE FROM weburls WHERE photo_id = $pid AND url = '$url'");
- 
+
+    // pgsql inserting a new row
+    $result = pg_query_params($db->con,'DELETE FROM weburls WHERE photo_id = $1 AND url = $2', array($id, $url));
     unset($db);
     
-    // check if row deleted or not
+    //if insertion was successful, return status code 1, else 0.
     if (pg_affected_rows($result) > 0) {
-        // successfully updated
-        $response["success"] = 1;
-        
-        // echoing JSON response
-        echo json_encode($response);
+        $response["status"] = 1;
     } else {
-        // no product found
-        $response["success"] = 0;
-        $response["message"] = "No photo found";
- 
-        // echo no users JSON
-        echo json_encode($response);
+        $response["status"] = 3;
     }
 } else {
     // required field is missing
-    $response["success"] = 0;
-    $response["message"] = "Required field(s) is missing";
- 
-    // echoing JSON response
-    echo json_encode($response);
+    $response['status'] = 4;
 }
+echo json_encode($response);
 ?>

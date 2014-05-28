@@ -1,0 +1,4 @@
+1: sucessful
+2: database connection failed.
+3: user input error.
+4: Json error.

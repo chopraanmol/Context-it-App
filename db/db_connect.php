@@ -9,6 +9,7 @@
 class DB_CONNECT {
 	
     public $has_connected = true;
+    public $con;
     function __construct() {
         $this->connect();
 	if(!$this->con) {
