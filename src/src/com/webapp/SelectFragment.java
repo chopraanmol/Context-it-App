@@ -26,6 +26,7 @@ import android.provider.MediaStore;
 public class SelectFragment extends Fragment {
 	
 	Button cameraButton = null;
+	File file = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,27 +69,24 @@ public class SelectFragment extends Fragment {
 	}
 	
 	public void activateCamera() {
-		// TODO 
-		// For now, it just makes the button disappear (for the sake of debugging)
-		// Add code to activate camera, or transition to other fragment, etc.
-		//cameraButton.setVisibility(View.INVISIBLE);
+		
 		/*
-		 * Capturing Camera Image will lauch camera app requrest image capture
+		 * Capturing Camera Image will launch camera app request image capture
 		 */
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		 
 		Uri fileUri;
 		try {
-			File temp = (File.createTempFile("IMAGE_TEMP", null));
-			fileUri = Uri.fromFile(temp);
-			Log.d("TAG", "BEFORE " + temp.getAbsolutePath());
-            if(temp.exists() == false) {
-    			Log.d("TAG", "AFTER " + temp.getAbsolutePath());
-                temp.getParentFile().mkdirs();
-                temp.createNewFile();
+			file = (File.createTempFile("IMAGE_TEMP", null));
+			fileUri = Uri.fromFile(file);
+			Log.d("TAG", "BEFORE " + file.getAbsolutePath());
+            if(!file.exists()) {
+    			Log.d("TAG", "AFTER " + file.getAbsolutePath());
+                file.getParentFile().mkdirs();
+                file.createNewFile();
             }
-            temp.setWritable(true, false);
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);		
+            file.setWritable(true, false);
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);	
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -110,6 +108,8 @@ public class SelectFragment extends Fragment {
 	            Toast.makeText(getActivity().getApplicationContext(),
 	                    "Hooray!", Toast.LENGTH_SHORT)
 	                    .show();
+	           // ((MainActivity) getActivity()).sendFileToServer(file);
+	            
 	        } else if (resultCode == Activity.RESULT_CANCELED) {
 	            // user cancelled Image capture
 	            Toast.makeText(getActivity().getApplicationContext(),

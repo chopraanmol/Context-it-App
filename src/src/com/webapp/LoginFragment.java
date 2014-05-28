@@ -36,10 +36,8 @@ public class LoginFragment extends Fragment{
 	    View view = inflater.inflate(R.layout.login_fragment, container, false);
 	    LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 	    /* Return result to fragment, not to main activity. */
-	    authButton.setFragment(this);
+	    //authButton.setFragment(this);
 	    return view;
 	}
-	
-
 	
 }
