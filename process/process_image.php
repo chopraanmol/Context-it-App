@@ -7,15 +7,28 @@ $username = 'guest';
 $password = 'rackrack';
 $host = 'cvm-g1327111';
 
+
+
 //Upload the photo using the userid 
-//TODO
+
+$Dir = 'photos/' . $user_id . '/';
+
+if(!is_dir($Dir)) {
+    mkdir($Dir, 0777);
+    chmod($Dir, 0777);
+}
+
+do {
+    $fileName = microtime();
+	$fileName = preg_replace('/\s+/', '_', $fileName);
+} while (file_exists("$Dir". $fileName . '.jpg'));
+
+$file_path = $Dir.basename( $_FILES['uploaded_file']['name']);
 
 //add the photo to the database
 //TODO
 
-
-//copy the file from the server to the vm. 
-	
+//copy the file from the server to the vm. 	
 	$sftp = new Net_SFTP($host);
 	if (!$sftp->login($username, $password)) {
 	    exit('Login Failed');
@@ -24,7 +37,7 @@ $host = 'cvm-g1327111';
 	// puts an x-byte file named photo on the SFTP server,
 	// where x is the size of photo.jpg
 	$dest_photo = 'photo.jpg';
-	$src_photo = 'photo.jpg';
+	$src_photo = $dir;
 	$sftp->put($dest, $src , NET_SFTP_LOCAL_FILE);
 
 //run tesseract on it.
@@ -33,9 +46,9 @@ $host = 'cvm-g1327111';
 	    exit('Login Failed');
 	}
 	$src_text = 'out';
-	$cmd = 'tesseract ' . $dest_photo . ' ' . $src_text . ' -psm 1';
+	$cmd = 'tesseract ' . $dest_photo . ' ' . $trans_text . ' -psm 1';
 	$ssh->exec($cmd);
-	$cmd = 'cat ' . $src_text . '.txt';
+	$cmd = 'cat ' . $trans_text . '.txt';
 	echo $ssh->exec($cmd);
 
 //recognise words from the dictionary and search. 
@@ -46,5 +59,8 @@ $host = 'cvm-g1327111';
 
 unset($stfp);
 unset($ssh);	
+
+
+
 
 ?>
