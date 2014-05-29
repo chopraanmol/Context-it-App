@@ -14,9 +14,9 @@ public class ResultFragment extends Fragment {
 	
 	MainActivity main = (MainActivity) getActivity();
 	private int locationId;
-
-	public ResultFragment(int locationId) {
-		this.locationId = locationId;
+	
+	public void setArguments(Bundle args) {
+		locationId = args.getInt("locationId");
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class ResultFragment extends Fragment {
 	private void saveResult() {
 		// TODO Auto-generated method stub	
 		Log.d("Webapp", "save button is pressed");
-		main.replaceResult(this);
+		main.replaceResult(locationId);
 	}
 	
 	private void showResultOnline() {
@@ -64,7 +64,7 @@ public class ResultFragment extends Fragment {
 	private void discardResult() {
 		// TODO Auto-generated method stub
 		Log.d("Webapp", "discard button is pressed");
-		main.replaceResult(this);
+		main.replaceResult(locationId);
 	}
 
 	

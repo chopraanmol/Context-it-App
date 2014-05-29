@@ -167,15 +167,16 @@ public class MainActivity extends FragmentActivity {
 	
 	public void jumpToTest(View v) {
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.replace(R.id.fragment_container, new ResultFragment(1));
+		transaction.replace(R.id.fragment_container, new ResultContainerFragment());
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
 	
 
-	private void displayFirstResults() {
-		// This should be called by some callback object probably.
-		// inflate new view, which is result_container_fragment.xml (haven't implemented that yet)  
+	public void displayFirstResults() {
+		for(int i = 1; i <= numResultToShowLarge; i++) {
+			renderResult(i);
+		}
 	}
 
 	public void replaceResult(int location) {
@@ -193,7 +194,35 @@ public class MainActivity extends FragmentActivity {
 	private void renderResult(int location) {
 		// TODO Auto-generated method stub
 		// check if there is any more result to show, if yes render it.
-		// otherewise render empty fragment (or whatever needs to be done)
+		// otherwise render empty fragment (or whatever needs to be done)
+		// Create new fragment and transaction
+		Fragment newFragment = new ResultFragment();
+		Bundle args = new Bundle();
+		args.putInt("locationId", location);
+		newFragment.setArguments(args);
+		Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+		FragmentTransaction transaction = frag.getFragmentManager().beginTransaction();
+		// Replace whatever is in the fragment_container view with this fragment,
+		// and add the transaction to the back stack
+		switch(location) {
+		case 1:
+			transaction.replace(R.id.result_fragment1, newFragment);
+			transaction.addToBackStack(null);
+			break;
+		case 2:
+			transaction.replace(R.id.result_fragment2, newFragment);
+			transaction.addToBackStack(null);
+			break;
+		case 3:
+			transaction.replace(R.id.result_fragment3, newFragment);
+			transaction.addToBackStack(null);
+			break;
+		default: //add unswipeable
+			break;
+		}
+
+		// Commit the transaction
+		transaction.commit();
 	}
 	
 
