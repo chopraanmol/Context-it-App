@@ -69,10 +69,12 @@ public class MainActivity extends FragmentActivity {
 
             // Create a new Fragment to be placed in the activity layout
             login = new LoginFragment();
-            
-            // Add the fragment to the 'fragment_container' FrameLayout
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, login).commit();
+    	    Session session = Session.getActiveSession();
+    	    if (!(session != null &&
+    	           session.isOpened())) {
+                // Add the fragment to the 'fragment_container' FrameLayout
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, login).commit();
+    	    }
         }
 	}
 
