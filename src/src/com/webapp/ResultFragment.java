@@ -12,8 +12,15 @@ import android.widget.Button;
 
 public class ResultFragment extends Fragment {
 	
-	MainActivity main = (MainActivity) getActivity();
 	private int locationId;
+	
+	MainActivity main;
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		main = (MainActivity) getActivity();
+	};
 	
 	public void setArguments(Bundle args) {
 		locationId = args.getInt("locationId");
