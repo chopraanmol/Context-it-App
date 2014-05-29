@@ -18,6 +18,7 @@ import android.support.v4.app.*;
 import android.content.Intent;
 import android.content.pm.*;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Point;
 
 public class MainActivity extends FragmentActivity {
 
@@ -32,6 +33,14 @@ public class MainActivity extends FragmentActivity {
 	    }
 	};
 	
+	private int resultCounter = 0;
+	private int resultToShowCounter = 0;
+	
+	
+	boolean large = false;
+	private final int numResultToShowLarge = 3;
+	
+	
 	/* loads the layout in the main activity.
 	   If there is no saved state -> create a new fragment, load it.
 	   If there is 				  -> restore that. */
@@ -39,6 +48,10 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		//TODO UPDATE LARGE FIELD HERE.
 		uiHelper = new UiLifecycleHelper(this, callback);
 	    uiHelper.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
@@ -61,7 +74,6 @@ public class MainActivity extends FragmentActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, login).commit();
         }
-        Log.d("Webapp", "CREATING\n");
 	}
 
 	@Override
@@ -153,9 +165,33 @@ public class MainActivity extends FragmentActivity {
 	
 	public void jumpToTest(View v) {
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.replace(R.id.fragment_container, new ResultFragment());
+		transaction.replace(R.id.fragment_container, new ResultFragment(1));
 		transaction.addToBackStack(null);
 		transaction.commit();
+	}
+	
+
+	private void displayFirstResults() {
+		// This should be called by some callback object probably.
+		// inflate new view, which is result_container_fragment.xml (haven't implemented that yet)  
+	}
+
+	public void replaceResult(int location) {
+		// TODO Auto-generated method stub
+		if (resultCounter == 0) {
+			Log.d("ERROR", "replaceResult called even though there shouldn't be any "
+							+ "more resultFragment");
+		} else {
+			resultCounter--;
+			renderResult(location);
+		}
+		
+	}
+
+	private void renderResult(int location) {
+		// TODO Auto-generated method stub
+		// check if there is any more result to show, if yes render it.
+		// otherewise render empty fragment (or whatever needs to be done)
 	}
 	
 

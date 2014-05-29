@@ -1,5 +1,6 @@
 package com.webapp;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,6 +12,13 @@ import android.widget.Button;
 
 public class ResultFragment extends Fragment {
 	
+	MainActivity main = (MainActivity) getActivity();
+	private int locationId;
+
+	public ResultFragment(int locationId) {
+		this.locationId = locationId;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, 
@@ -45,6 +53,7 @@ public class ResultFragment extends Fragment {
 	private void saveResult() {
 		// TODO Auto-generated method stub	
 		Log.d("Webapp", "save button is pressed");
+		main.replaceResult(this);
 	}
 	
 	private void showResultOnline() {
@@ -55,6 +64,7 @@ public class ResultFragment extends Fragment {
 	private void discardResult() {
 		// TODO Auto-generated method stub
 		Log.d("Webapp", "discard button is pressed");
+		main.replaceResult(this);
 	}
 
 	
