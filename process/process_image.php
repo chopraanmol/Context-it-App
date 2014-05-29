@@ -30,13 +30,7 @@ if (isset($input['user_id'])){
 		}
  
 	// make searchs using different algorithms. 
-		$query = urlencode("'{$_POST['query']}'");
-	    $fullUri = 'http://www.faroo.com/api?q='.$query.'&start=1&length=10&l=en&src=web&f=json&key=y3EVs8B2ntbxXrmZWpBTDBueayA_&rlength=0';
-	    curl_setopt($ch, CURLOPT_URL, $fullUri);
-	    echo $fullUri;
-	    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-	    $data=curl_exec($ch);
-	    $js = json_decode($data);
+	$results = search($array[0]); // search the first line. 
 
 	
 }else{
