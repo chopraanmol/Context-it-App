@@ -2,6 +2,7 @@ package com.webapp;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Queue;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -24,6 +25,7 @@ public class MainActivity extends FragmentActivity {
 
 	private LoginFragment login;
 	private UiLifecycleHelper uiHelper;
+	private Queue<SearchResult> results;
 	private Session.StatusCallback callback = new Session.StatusCallback(){
 	    @Override
 	    public void call (Session session, SessionState state, Exception exception) {
@@ -104,10 +106,10 @@ public class MainActivity extends FragmentActivity {
 	public void onResume() {
 	    super.onResume();
 	    Session session = Session.getActiveSession();
-	    if (session != null &&
+	    /*if (session != null &&
 	           (session.isOpened() || session.isClosed()) ) {
 	        onSessionStateChange(session, session.getState(), null);
-	    }
+	    }*/
 	    uiHelper.onResume();    
 	}
 
@@ -175,7 +177,7 @@ public class MainActivity extends FragmentActivity {
 
 	public void displayFirstResults() {
 		for(int i = 1; i <= numResultToShowLarge; i++) {
-			renderResult(i);
+			renderResult(i, results.poll());
 		}
 	}
 
@@ -186,12 +188,11 @@ public class MainActivity extends FragmentActivity {
 							+ "more resultFragment");
 		} else {
 			resultCounter--;
-			renderResult(location);
-		}
-		
+			renderResult(location, results.poll());
+		}	
 	}
 
-	private void renderResult(int location) {
+	private void renderResult(int location, SearchResult result) {
 		// TODO Auto-generated method stub
 		// check if there is any more result to show, if yes render it.
 		// otherwise render empty fragment (or whatever needs to be done)
@@ -199,6 +200,8 @@ public class MainActivity extends FragmentActivity {
 		Fragment newFragment = new ResultFragment();
 		Bundle args = new Bundle();
 		args.putInt("locationId", location);
+		args.putString("headLine", result.getHeadLine());
+		args.putString("summary", result.getSummary());
 		newFragment.setArguments(args);
 		Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 		FragmentTransaction transaction = frag.getChildFragmentManager().beginTransaction();
@@ -223,6 +226,12 @@ public class MainActivity extends FragmentActivity {
 
 		// Commit the transaction
 		transaction.commit();
+	}
+	
+	public void receiveResults(Queue results) {
+		// Incase we decided to receive results multiple times:
+		this.results.addAll(results);
+		resultCounter = results.size();
 	}
 	
 

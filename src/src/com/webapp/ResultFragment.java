@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class ResultFragment extends Fragment {
 	
 	private int locationId;
-	
+	private String headline = "";
+	private String summary = "";
 	MainActivity main;
 	
 	@Override
@@ -24,6 +26,8 @@ public class ResultFragment extends Fragment {
 	
 	public void setArguments(Bundle args) {
 		locationId = args.getInt("locationId");
+		headline = args.getString("headLine");
+		summary = args.getString("summary");
 	}
 
 	@Override
@@ -31,6 +35,10 @@ public class ResultFragment extends Fragment {
 	        ViewGroup container, 
 	        Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.result_fragment, container, false);
+		TextView headlineView = (TextView) view.findViewById(R.id.headline);
+		headlineView.setText(headline);
+		TextView summaryView = (TextView) view.findViewById(R.id.summary);
+		summaryView.setText(summary);
 		Button saveButton = (Button) view.findViewById(R.id.save_result_button);
 		saveButton.setOnClickListener(new OnClickListener() {
 			@Override

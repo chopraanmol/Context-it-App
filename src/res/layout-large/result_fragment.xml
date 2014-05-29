@@ -1,14 +1,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
     
+    <TextView
+        android:id="@+id/headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+     />
+    <TextView
+        android:id="@+id/summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+     />
     <Button
         android:id="@+id/save_result_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:text="@string/save_result"
         />
     
@@ -16,8 +28,8 @@
         android:id="@+id/discard_result_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:text="@string/discard_result"
         />
     
@@ -25,8 +37,8 @@
         android:id="@+id/see_online_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="90dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:text="@string/see_online"
         />
 
