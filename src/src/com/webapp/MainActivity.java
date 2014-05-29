@@ -1,5 +1,6 @@
 package com.webapp;
 
+import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -104,10 +105,10 @@ public class MainActivity extends FragmentActivity {
 	public void onResume() {
 	    super.onResume();
 	    Session session = Session.getActiveSession();
-	    if (session != null &&
+	   /* if (session != null &&
 	           (session.isOpened() || session.isClosed()) ) {
 	        onSessionStateChange(session, session.getState(), null);
-	    }
+	    }*/
 	    uiHelper.onResume();    
 	}
 
@@ -222,6 +223,13 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		// Commit the transaction
+		transaction.commit();
+	}
+
+	public void sendFileToServer(File file) {
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.replace(R.id.fragment_container, new WaitFragment());
+		transaction.addToBackStack(null);
 		transaction.commit();
 	}
 	

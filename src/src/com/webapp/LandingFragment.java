@@ -108,7 +108,7 @@ public class LandingFragment extends Fragment {
 	            Toast.makeText(getActivity().getApplicationContext(),
 	                    "Hooray!", Toast.LENGTH_SHORT)
 	                    .show();
-	           // ((MainActivity) getActivity()).sendFileToServer(file);
+	           ((MainActivity) getActivity()).sendFileToServer(file);
 	            
 	        } else if (resultCode == Activity.RESULT_CANCELED) {
 	            // user cancelled Image capture
