@@ -201,7 +201,7 @@ public class MainActivity extends FragmentActivity {
 		args.putInt("locationId", location);
 		newFragment.setArguments(args);
 		Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-		FragmentTransaction transaction = frag.getFragmentManager().beginTransaction();
+		FragmentTransaction transaction = frag.getChildFragmentManager().beginTransaction();
 		// Replace whatever is in the fragment_container view with this fragment,
 		// and add the transaction to the back stack
 		switch(location) {
