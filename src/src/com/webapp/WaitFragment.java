@@ -24,7 +24,6 @@ public class WaitFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, 
 	        Bundle savedInstanceState) {
-		Log.d("FUKC","AAAAAAAAAAAAAAAAAAAAAAAAA");
 		View view = inflater.inflate(R.layout.wait_fragment, container, false);
 		return view;
 	}
