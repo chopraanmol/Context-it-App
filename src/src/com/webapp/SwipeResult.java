@@ -76,7 +76,13 @@ public class SwipeResult extends Fragment{
     	View view = inflater.inflate(R.layout.activity_list_view_deletion, container, false);
     	mListView = (ListView) view.findViewById(R.id.listview);
         android.util.Log.d("Debug", "d=" + mListView.getDivider());
-        mAdapter = new StableArrayAdapter(this, R.layout.opaque_text_view, searchResults,
+        String[] stringResults = new String[searchResults.size()];
+        int i = 0;
+        for(SearchResult sR : searchResults) {
+        	stringResults[i]= sR.toString();
+        	i++;
+        }
+        mAdapter = new StableArrayAdapter(this, R.layout.opaque_text_view,new ArrayList<String>(stringResults),
                 mTouchListener);
         mListView.setAdapter(mAdapter);
     	return null;

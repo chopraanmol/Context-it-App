@@ -3,6 +3,7 @@ package com.webapp;
 import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.LinkedList;
 import java.util.Queue;
 
 import com.facebook.Request;
@@ -51,6 +52,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		results = new LinkedList<SearchResult>();
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
@@ -178,6 +180,10 @@ public class MainActivity extends FragmentActivity {
 
 	public void displayFirstResults() {
 		for(int i = 1; i <= numResultToShowLarge; i++) {
+			if(resultCounter == 0) {
+				break;
+			}
+			resultCounter--;
 			renderResult(i, results.poll());
 		}
 	}

@@ -19,4 +19,10 @@ public class SearchResult {
 	public String getSummary() {
 		return summary;
 	}
+	
+	@Override
+	public String toString() {
+		return headLine + "\n\n" + summary;
+		
+	}
 }
