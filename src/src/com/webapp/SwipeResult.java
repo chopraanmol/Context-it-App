@@ -17,10 +17,12 @@
 package com.webapp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Queue;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -51,11 +53,9 @@ public class SwipeResult extends Fragment{
     private static final int SWIPE_DURATION = 250;
     private static final int MOVE_DURATION = 150;
     
-    final Queue<SearchResult> searchResults;
     
-    public SwipeResult(Queue<SearchResult> results) {
-    	this.searchResults = results;
-    }
+    Context context;
+   
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -76,16 +76,23 @@ public class SwipeResult extends Fragment{
     	View view = inflater.inflate(R.layout.activity_list_view_deletion, container, false);
     	mListView = (ListView) view.findViewById(R.id.listview);
         android.util.Log.d("Debug", "d=" + mListView.getDivider());
-        String[] stringResults = new String[searchResults.size()];
+        //String[] stringResults = new String[searchResults.size()];
         int i = 0;
-        for(SearchResult sR : searchResults) {
+        /* for(SearchResult sR : searchResults) {
         	stringResults[i]= sR.toString();
         	i++;
-        }
-        mAdapter = new StableArrayAdapter(this, R.layout.opaque_text_view,new ArrayList<String>(stringResults),
-                mTouchListener);
+        }*/
+       
+        mAdapter = new StableArrayAdapter(context, R.layout.opaque_text_view, 
+        								  savedInstanceState.getStringArrayList("search_results"),
+        								  mTouchListener);
         mListView.setAdapter(mAdapter);
-    	return null;
+    	return view;
+    }
+    
+    @Override
+    public void onAttach(Activity activity) {
+    	context = getActivity();
     }
 
     /**
@@ -99,7 +106,7 @@ public class SwipeResult extends Fragment{
         @Override
         public boolean onTouch(final View v, MotionEvent event) {
             if (mSwipeSlop < 0) {
-                mSwipeSlop = ViewConfiguration.get(ListViewRemovalAnimation.this).
+                mSwipeSlop = ViewConfiguration.get(context).
                         getScaledTouchSlop();
             }
             switch (event.getAction()) {

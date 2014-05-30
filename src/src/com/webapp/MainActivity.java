@@ -3,6 +3,8 @@ package com.webapp;
 import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -246,6 +248,17 @@ public class MainActivity extends FragmentActivity {
 		// Incase we decided to receive results multiple times:
 		this.results.addAll(results);
 		resultCounter = results.size();
+	}
+	
+	public void goToSwipeView(View v) {
+		Bundle b = new Bundle();
+		b.putStringArrayList("search_results", 
+							 new ArrayList<String>(Arrays.asList("headline 1 : blah blah",
+														 "headline 2: asdfghj",
+														 "headline 3: wertyrew")));
+		SwipeResult s = new SwipeResult();
+		s.setArguments(b);
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, s).commit();
 	}
 	
 
