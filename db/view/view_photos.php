@@ -5,7 +5,7 @@ $response = array();
 $response["photo_paths"] = array();
 $response["status"] = -1;
 
-$input = json_decode(file_get_contents('php://input'), true);
+$input = $_GET;
 
 // connecting to db
 require_once '../db_connect.php';
@@ -31,7 +31,6 @@ if (isset($input['user_id'])) {
         $response["status"] = 3;
     }
 } else {
-    // required field is missing
     $response["success"] = 4;
 }
 echo json_encode($response);

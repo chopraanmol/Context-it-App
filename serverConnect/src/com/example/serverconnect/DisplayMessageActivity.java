@@ -1,8 +1,14 @@
 package com.example.serverconnect;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -14,6 +20,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -21,6 +28,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -39,56 +47,37 @@ public class DisplayMessageActivity extends Activity {
 		setContentView(R.layout.activity_display_message);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		ExecutorService pool = Executors.newFixedThreadPool(1);
-		Future<String> future = pool.submit(new ServerConnect());
-		// Create the text view
-		String message;
+		
+		ServerConnection s = new ServerConnection();
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("user_id", "rishabh");
+		params.put("photo_path", "a");
+		String message = "";
 		try {
-			message = future.get();
-		} catch (Exception e) {
+			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://192.168.0.8/db/create/create_photo.php", params);
+			Future<JSONObject> f2 = s.asyncSendPOSTRequest("http://192.168.0.8/db/delete/delete_photo.php", params);
+			Thread.sleep(2000);
+			message = f1.get().toString();
+			message = message + "   " + f2.get().toString();
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			message = "" + e;
+			message = "a" + e.toString();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			message = "b" + e.toString();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-//		try {
-//			message = ""+(new JSONObject(message)).getJSONArray("photo_paths").getString(0);
-//		} catch (JSONException e) {
-//			message = "nonono    " + e;
-//		}
+		s.closeConnection();
+		
 	    TextView textView = (TextView) findViewById(R.id.view_text);
 	    textView.setText(message);
-	    // Set the text view as the activity layout
-	    //setContentView(textView);
 
-	}
-	
-	public class ServerConnect implements Callable<String> {
 
-		@Override
-		public String call() throws Exception {
-			JSONObject json = new JSONObject();
-			try {
-				json.accumulate("photo_id", 1);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			String message = "";
-			HttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost("http://www.doc.ic.ac.uk/project/2013/271/g1327111/db/view/view_links.php");
-			try {
-			StringEntity se = new StringEntity(json.toString());
-			httpPost.setEntity(se);
-			HttpResponse httpResponse = httpClient.execute(httpPost);
-			message = EntityUtils.toString(httpResponse.getEntity());
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				message = "a  "+e;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				message = "b   "+e;
-			} catch(Exception e) {message = "c   "+e;}
-			return message;
-		}
-		
 	}
 
 	/**
