@@ -23,9 +23,11 @@ import java.util.Queue;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ListView;
 
@@ -57,14 +59,27 @@ public class SwipeResult extends Fragment{
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        setContentView(R.layout.activity_list_view_deletion);
+        //setContentView(R.layout.activity_list_view_deletion);
     
-        mBackgroundContainer = (BackgroundContainer) findViewById(R.id.listViewBackground);
-        mListView = (ListView) findViewById(R.id.listview);
+       // mBackgroundContainer = (BackgroundContainer) findViewById(R.id.listViewBackground);
+        //mListView = (ListView) findViewById(R.id.listview);
+        //android.util.Log.d("Debug", "d=" + mListView.getDivider());
+        //mAdapter = new StableArrayAdapter(this, R.layout.opaque_text_view, searchResults,
+        //        mTouchListener);
+        //mListView.setAdapter(mAdapter);
+    }
+    
+    @Override
+	public View onCreateView(LayoutInflater inflater, 
+	        ViewGroup container, 
+	        Bundle savedInstanceState) {
+    	View view = inflater.inflate(R.layout.activity_list_view_deletion, container, false);
+    	mListView = (ListView) view.findViewById(R.id.listview);
         android.util.Log.d("Debug", "d=" + mListView.getDivider());
         mAdapter = new StableArrayAdapter(this, R.layout.opaque_text_view, searchResults,
                 mTouchListener);
         mListView.setAdapter(mAdapter);
+    	return null;
     }
 
     /**
