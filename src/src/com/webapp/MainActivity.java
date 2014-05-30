@@ -1,12 +1,19 @@
 package com.webapp;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ExecutionException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -19,6 +26,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.*;
+import android.widget.Toast;
 import android.support.v4.app.*;
 import android.content.Intent;
 import android.content.pm.*;
@@ -154,7 +162,33 @@ public class MainActivity extends FragmentActivity {
 						@Override
 							public void onCompleted(GraphUser user, Response response) {
 								if(user != null) {
-									Log.d("Webapp", "User ID "+ user.getId());
+									ServerConnection IDConnection = new ServerConnection();
+									Map<String, String> POSTMap = new HashMap<String, String>();
+									POSTMap.put("user_id", user.getId());
+									
+									try {
+										JSONObject ret = IDConnection.sendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/db/create/create_user.php", POSTMap);
+										switch(ret.getInt("status")) {
+										case 1:
+								            Toast.makeText(getApplicationContext(),
+								                    "New user entered to database", Toast.LENGTH_SHORT)
+								                    .show();
+								            break;
+										case 3:
+								            Toast.makeText(getApplicationContext(),
+								                    "Existing user acknowledged", Toast.LENGTH_SHORT)
+								                    .show();
+								            break;
+								        default:
+								            Toast.makeText(getApplicationContext(),
+								                    "YOU MESSED UP", Toast.LENGTH_SHORT)
+								                    .show();
+								            break;
+										}
+										IDConnection.closeConnection();
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
 									// send user id.
 								} 
 							}
