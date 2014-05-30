@@ -19,15 +19,13 @@ function upload_photo($user_id,$_FILES){
 		$fileName = preg_replace('/\s+/', '_', $fileName);
 	} while (file_exists("$Dir". $fileName . '.jpg'));
 	 
-	$allowedExts = array("gif", "jpeg", "jpg", "png");
+	$allowedExts = array("jpeg", "jpg", "png");
 	$temp = explode(".", $_FILES["file"]["name"]);
 	$extension = end($temp);
 
-	if ((($_FILES["file"]["type"] == "image/gif")
-	|| ($_FILES["file"]["type"] == "image/jpeg")
+	if ((($_FILES["file"]["type"] == "image/jpeg")
 	|| ($_FILES["file"]["type"] == "image/jpg")
 	|| ($_FILES["file"]["type"] == "image/pjpeg")
-	|| ($_FILES["file"]["type"] == "image/x-png")
 	|| ($_FILES["file"]["type"] == "image/png"))
 	&& ($_FILES["file"]["size"] < 20000)
 	&& in_array($extension, $allowedExts)) {
@@ -59,8 +57,10 @@ function execute_tesseract($src_photo){
 	$ssh->exec($cmd);
 	$cmd = 'cat ' . $trans_text . '.txt';
 	$text =  $ssh->exec($cmd);
+	$text = preg_replace("/[0-9:'|=,.]/", "", $text);
+	$result = $ssh->exec("php script.php '".$text."'");
 	unset($ssh);
-	return $text;
+	return $result;
 }
 
 function transfer_file_to_vm($src_photo,$dest_photo){
@@ -75,7 +75,7 @@ function transfer_file_to_vm($src_photo,$dest_photo){
 		unset($stfp);
 }
 
-function search($data){
+function searchFaroo($data){
 	$ch = curl_init();
 	$query = urlencode("'{$data}'");
     $fullUri = 'http://www.faroo.com/api?q='.$query.'&start=1&l=en&src=web&f=json&key=FsiN97uGtZCJZSg5iErp4T4bpbU_';
@@ -92,12 +92,14 @@ function search($data){
 		*/
 	}
     return $data;
+}
 
-    /*
-    // TO USE BING API for better results.
+
+   // TO USE BING API for better results.
+function searchBing($data){
 	$acctKey = 'rt9rIpjp5a8649Zxw8rfcCJbvZa6PNKHF7HkOxMct/M';
     $rootUri =  'https://api.datamarket.azure.com/Bing/Search';  
-    $query = urlencode("'wikipedia'");
+    $query = urlencode("'$data'");
     $requestUri = "$rootUri/Web?\$format=json&Query=$query";
     $auth = base64_encode("$acctKey:$acctKey");
     $data = array(
@@ -114,7 +116,5 @@ function search($data){
    
 	$jsonObj = json_decode($response);
 	return $jsonObj->d->results;
-    */
-}
 
 ?>
