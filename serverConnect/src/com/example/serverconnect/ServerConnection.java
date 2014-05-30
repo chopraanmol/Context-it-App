@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -26,6 +27,7 @@ public class ServerConnection {
 	private HttpClient httpClient;
 	private ExecutorService threadPool;
 	private final int MAX_ALLOWANCE = 1;
+	private final int TIMEOUT = 30;
 	
 	public ServerConnection() {
 		httpClient = new DefaultHttpClient();
@@ -33,7 +35,17 @@ public class ServerConnection {
 	}
 	
 	public void closeConnection() {
-		httpClient.getConnectionManager().shutdown();
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				threadPool.shutdown();
+				try {
+					threadPool.awaitTermination(TIMEOUT, TimeUnit.SECONDS);
+				} catch (InterruptedException e) {
+					threadPool.shutdownNow();
+				}
+				httpClient.getConnectionManager().shutdown();
+			}}).start();
 	}
 	
 	
@@ -59,6 +71,7 @@ public class ServerConnection {
 	public Future<JSONObject> asyncSendPOSTRequest(String URL, Map<String, String> params) throws InterruptedException, ExecutionException, JSONException, UnsupportedEncodingException {
 		HttpPost request = new HttpPost(URL);
 		JSONObject json = new JSONObject();
+		//MultipartEntityBuilder mpe = MultipartEntityBuilder.create();
 		for(String key : params.keySet()) {
 			json.accumulate(key, params.get(key));
 		}
