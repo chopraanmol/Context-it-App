@@ -21,18 +21,25 @@ import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 public class StableArrayAdapter extends ArrayAdapter<String> {
 
     HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+    List<String> texts;
     View.OnTouchListener mTouchListener;
-
+    Context context;
+    LayoutInflater inflater;
     public StableArrayAdapter(Context context, int textViewResourceId,
             List<String> objects, View.OnTouchListener listener) {
         super(context, textViewResourceId, objects);
+        this.context = context;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        texts = objects;
         Log.d("Debug", objects.isEmpty() ? "null" : "ok");
         mTouchListener = listener;
         for (int i = 0; i < objects.size(); ++i) {
@@ -53,11 +60,16 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = super.getView(position, convertView, parent);
+        //View view = super.getView(position, convertView, parent);
+    	View view = convertView;
+    	String text = texts.get(position);
+        view = inflater.inflate(R.layout.search_result_list_row, null);
         if (view != convertView) {
             // Add touch listener to every new view to track swipe motion
             view.setOnTouchListener(mTouchListener);
         }
+        TextView t = (TextView) view.findViewById(R.id.title);
+        t.setText(text);
         return view;
     }
 
