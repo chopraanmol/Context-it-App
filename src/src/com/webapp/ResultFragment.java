@@ -35,10 +35,10 @@ public class ResultFragment extends Fragment {
 	        ViewGroup container, 
 	        Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.result_fragment, container, false);
-		TextView headlineView = (TextView) view.findViewById(R.id.headline);
+		/*TextView headlineView = (TextView) view.findViewById(R.id.headline);
 		headlineView.setText(headline);
 		TextView summaryView = (TextView) view.findViewById(R.id.summary);
-		summaryView.setText(summary);
+		summaryView.setText(summary);*/
 		Button saveButton = (Button) view.findViewById(R.id.save_result_button);
 		saveButton.setOnClickListener(new OnClickListener() {
 			@Override

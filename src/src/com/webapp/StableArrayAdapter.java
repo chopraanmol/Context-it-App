@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -32,6 +33,7 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
     public StableArrayAdapter(Context context, int textViewResourceId,
             List<String> objects, View.OnTouchListener listener) {
         super(context, textViewResourceId, objects);
+        Log.d("Debug", objects.isEmpty() ? "null" : "ok");
         mTouchListener = listener;
         for (int i = 0; i < objects.size(); ++i) {
             mIdMap.put(objects.get(i), i);

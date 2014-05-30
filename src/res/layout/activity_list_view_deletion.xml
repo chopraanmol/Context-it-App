@@ -20,7 +20,7 @@
     tools:context=".ListViewAnimations" >
 
     <view
-        class="com.example.android.listviewremovalanimation.BackgroundContainer"
+        class="com.webapp.BackgroundContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listViewBackground">
@@ -30,7 +30,8 @@
             android:divider="@null"
             android:dividerHeight="0dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+             />
 
     </view>
 

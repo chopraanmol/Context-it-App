@@ -11,4 +11,5 @@
     <string name="discard_result">Skip</string>
     <string name="see_online">Read</string>
     <string name="test">Test</string>
+    <string name="swipe_view">Go Swipe</string>
 </resources>

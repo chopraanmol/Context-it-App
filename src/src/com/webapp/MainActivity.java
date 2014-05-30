@@ -251,14 +251,17 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	public void goToSwipeView(View v) {
+		SwipeResult s = new SwipeResult();
 		Bundle b = new Bundle();
 		b.putStringArrayList("search_results", 
 							 new ArrayList<String>(Arrays.asList("headline 1 : blah blah",
 														 "headline 2: asdfghj",
 														 "headline 3: wertyrew")));
-		SwipeResult s = new SwipeResult();
 		s.setArguments(b);
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, s).commit();
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, s);
+        transaction.addToBackStack(null);
+        transaction.commit();
 	}
 	
 

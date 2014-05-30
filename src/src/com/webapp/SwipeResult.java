@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -74,24 +75,30 @@ public class SwipeResult extends Fragment{
 	        ViewGroup container, 
 	        Bundle savedInstanceState) {
     	View view = inflater.inflate(R.layout.activity_list_view_deletion, container, false);
+    	mBackgroundContainer = (BackgroundContainer) view.findViewById(R.id.listViewBackground);
+    	if(savedInstanceState == null) {
+    		Log.d("Webapp", "view is null");
+    	}
     	mListView = (ListView) view.findViewById(R.id.listview);
-        android.util.Log.d("Debug", "d=" + mListView.getDivider());
         //String[] stringResults = new String[searchResults.size()];
-        int i = 0;
+        //int i = 0;
         /* for(SearchResult sR : searchResults) {
         	stringResults[i]= sR.toString();
         	i++;
         }*/
-       
+        
         mAdapter = new StableArrayAdapter(context, R.layout.opaque_text_view, 
-        								  savedInstanceState.getStringArrayList("search_results"),
+        								  getArguments().getStringArrayList("search_results"),
         								  mTouchListener);
+        android.util.Log.d("Debug", "d=" + mListView);
+
         mListView.setAdapter(mAdapter);
     	return view;
     }
     
     @Override
     public void onAttach(Activity activity) {
+    	super.onAttach(activity);
     	context = getActivity();
     }
 
@@ -106,9 +113,11 @@ public class SwipeResult extends Fragment{
         @Override
         public boolean onTouch(final View v, MotionEvent event) {
             if (mSwipeSlop < 0) {
+
                 mSwipeSlop = ViewConfiguration.get(context).
                         getScaledTouchSlop();
             }
+            
             switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (mItemPressed) {
@@ -125,14 +134,22 @@ public class SwipeResult extends Fragment{
                 break;
             case MotionEvent.ACTION_MOVE:
                 {
+                    Log.d("HERE", "HEREHERE");
                     float x = event.getX() + v.getTranslationX();
                     float deltaX = x - mDownX;
                     float deltaXAbs = Math.abs(deltaX);
                     if (!mSwiping) {
                         if (deltaXAbs > mSwipeSlop) {
+                        	if(mListView==null) {
+                        		Log.d("Debug", "mListView is null");
+                        	}
+                        	if(mBackgroundContainer == null) {
+                        		Log.d("Debug", "mBackgroundConteiner is null");
+                        	}
                             mSwiping = true;
                             mListView.requestDisallowInterceptTouchEvent(true);
                             mBackgroundContainer.showBackground(v.getTop(), v.getHeight());
+                        
                         }
                     }
                     if (mSwiping) {
