@@ -20,10 +20,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Point;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -34,6 +38,8 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
     View.OnTouchListener mTouchListener;
     Context context;
     LayoutInflater inflater;
+    int height_of_element;
+    final int num_of_rows = 3;
     public StableArrayAdapter(Context context, int textViewResourceId,
             List<String> objects, View.OnTouchListener listener) {
         super(context, textViewResourceId, objects);
@@ -44,6 +50,18 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
         mTouchListener = listener;
         for (int i = 0; i < objects.size(); ++i) {
             mIdMap.put(objects.get(i), i);
+        }
+      
+        WindowManager w = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display d = w.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        d.getMetrics(metrics);
+       
+        try {
+        	Point realSize = new Point();
+        	Display.class.getMethod("getRealSize", Point.class).invoke(d, realSize);
+            height_of_element = realSize.y / num_of_rows;
+        } catch (Exception ignored) {
         }
     }
 
@@ -70,6 +88,8 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
         }
         TextView t = (TextView) view.findViewById(R.id.title);
         t.setText(text);
+        
+        t.setHeight(height_of_element);
         return view;
     }
 
