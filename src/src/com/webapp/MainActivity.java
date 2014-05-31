@@ -292,7 +292,7 @@ public class MainActivity extends FragmentActivity {
 														 "headline 2: asdfghj",
 														 "headline 3: wertyrew",
 														 "headline 4:weardfgvx",
-														 "headline 5: weaggggg")));
+														 "headline 5: weaggggg","")));
 		s.setArguments(b);
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, s);

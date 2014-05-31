@@ -81,7 +81,11 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
         TextView t = (TextView) view.findViewById(R.id.title);
         t.setText(text);
         
-        t.setHeight(height_of_element);
+        if(text.equals("")) {
+            t.setHeight(0);
+        } else {
+            t.setHeight(height_of_element);
+        }
         return view;
     }
 
