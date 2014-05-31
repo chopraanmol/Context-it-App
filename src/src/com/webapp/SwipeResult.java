@@ -19,6 +19,8 @@ package com.webapp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import android.app.Activity;
@@ -33,6 +35,9 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * This example shows how to use a swipe effect to remove items from a ListView,
@@ -49,6 +54,7 @@ public class SwipeResult extends Fragment{
     BackgroundContainer mBackgroundContainer;
     boolean mSwiping = false;
     boolean mItemPressed = false;
+    List<String> keptResults = new LinkedList<String>();
     HashMap<Long, Integer> mItemIdTopMap = new HashMap<Long, Integer>();
 
     private static final int SWIPE_DURATION = 250;
@@ -175,6 +181,14 @@ public class SwipeResult extends Fragment{
                             endX = deltaX < 0 ? -v.getWidth() : v.getWidth();
                             endAlpha = 0;
                             remove = true;
+                            //keep items swiped right
+                            if(deltaX > 0) {
+                            	String s = ((TextView)((RelativeLayout) v).findViewById(R.id.title)).getText().toString();
+                            	keptResults.add(s);
+					            Toast.makeText(getActivity().getApplicationContext(),
+					            		s, Toast.LENGTH_SHORT)
+					                    .show();
+                            }
                         } else {
                             // Not far enough - animate it back
                             fractionCovered = 1 - (deltaXAbs / v.getWidth());
