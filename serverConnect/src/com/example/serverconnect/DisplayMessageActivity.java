@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -58,10 +59,10 @@ public class DisplayMessageActivity extends Activity {
 		ServerConnection s = new ServerConnection();
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("user_id","abcdefgh");
-		Map<String, InputStream> params = new HashMap<String, InputStream>();	
+		Map<String, Pair<String,InputStream>> params = new HashMap<String, Pair<String,InputStream>>();	
 		String message = "";
 		try {
-			params.put("picture_name",getAssets().open("m.png"));
+			params.put("picture",new Pair<String,InputStream>("mercedes.png", getAssets().open("m.png")));
 			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://192.168.0.8/db/delete/delete_photo.php", m, params);
 			message = f1.get().toString();
 		} catch (InterruptedException e) {

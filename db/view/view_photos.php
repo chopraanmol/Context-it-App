@@ -1,6 +1,6 @@
-#!/usr/bin/php
 <?php
 error_reporting(E_ERROR);
+
 $response = array();
 $response["photo_paths"] = array();
 $response["status"] = -1;
@@ -31,6 +31,7 @@ if (isset($input['user_id'])) {
         $response["status"] = 3;
     }
 } else {
+    // required field is missing
     $response["success"] = 4;
 }
 echo json_encode($response);

@@ -1,7 +1,5 @@
-#!/usr/bin/php
 <?php
 error_reporting(E_ERROR);
-
 
 // array for JSON response
 $response = array();

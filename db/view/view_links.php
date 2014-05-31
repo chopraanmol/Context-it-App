@@ -1,6 +1,6 @@
-#!/usr/bin/php
 <?php
 error_reporting(E_ERROR);
+
 $response = array();
 $response["weburls"] = array();
 $response["status"] = -1;

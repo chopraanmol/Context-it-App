@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri;
+import android.util.Pair;
 
 public class ServerConnection {
 	private HttpClient httpClient;
@@ -76,13 +77,15 @@ public class ServerConnection {
 		return future;
 	}
 	
-	//Calling this will block the calling thread. Fill in the not needed parameters with null.
-	public JSONObject sendPOSTRequest(String URL, Map<String, String> params, Map<String, InputStream> files) throws InterruptedException, ExecutionException, UnsupportedEncodingException, JSONException {
+	/*Calling this will block the calling thread. Fill in the not needed parameters with null.
+	Map<key to get file details, Pair<filename,InputStream>>*/
+	public JSONObject sendPOSTRequest(String URL, Map<String, String> params, Map<String, Pair<String,InputStream>> files) throws InterruptedException, ExecutionException, UnsupportedEncodingException, JSONException {
 		return asyncSendPOSTRequest(URL, params, files).get();
 	}
 	
-	//Calling this will not block the calling thread. Fill in the not needed parameters with null.
-	public Future<JSONObject> asyncSendPOSTRequest(String URL, Map<String, String> params, Map<String, InputStream> files) throws InterruptedException, ExecutionException, JSONException, UnsupportedEncodingException {
+	/*Calling this will not block the calling thread. Fill in the not needed parameters with null.
+	Map<key to get file details, Pair<filename,InputStream>>*/
+	public Future<JSONObject> asyncSendPOSTRequest(String URL, Map<String, String> params, Map<String, Pair<String,InputStream>> files) throws InterruptedException, ExecutionException, JSONException, UnsupportedEncodingException {
 		HttpPost request = new HttpPost(URL);
 		MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
 		if(params!=null) {
@@ -91,8 +94,8 @@ public class ServerConnection {
 			}
 		}
 		if(files!=null) {
-			for(String fileName : files.keySet()) {
-				multipartEntity.addPart(fileName, new InputStreamBody(files.get(fileName),ContentType.MULTIPART_FORM_DATA, fileName));
+			for(String key : files.keySet()) {
+				multipartEntity.addPart(key, new InputStreamBody(files.get(key).second,ContentType.MULTIPART_FORM_DATA, files.get(key).first));
 			}
 		}
 		request.setEntity(multipartEntity.build());

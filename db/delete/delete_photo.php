@@ -1,12 +1,21 @@
-#!/usr/bin/php
 <?php
 error_reporting(E_ERROR);
-
-
+$uploads_dir = __DIR__ . '/uploads';
+$status = -1;
+    if ($_FILES["picture"]["error"] == UPLOAD_ERR_OK) {
+        $tmp_name = $_FILES["picture"]["tmp_name"];
+        $name = $_FILES["picture"]["name"];
+        $status = move_uploaded_file($tmp_name, "$uploads_dir/$name");
+    }
+$response["status"] = $status;
+$response["user_id"] = $_POST["user_id"];
+$response["name"] =  $name;
+$response["extension"] = end (explode(".", $name));	
+/*
 // array for JSON response
 $response = array();
 
-$input = json_decode(file_get_contents('php://input'), true);
+$input = $_POST;
 
 // check for required fields
 if (isset($input['photo_path']) && isset($input['user_id'])) {
@@ -39,6 +48,6 @@ if (isset($input['photo_path']) && isset($input['user_id'])) {
 } else {
     // required field is missing
     $response['status'] = 4;
-}
+}*/
 echo json_encode($response);
 ?>
