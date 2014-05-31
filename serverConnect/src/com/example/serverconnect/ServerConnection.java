@@ -1,6 +1,7 @@
 package com.example.serverconnect;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
@@ -16,7 +17,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +37,8 @@ public class ServerConnection {
 		threadPool = Executors.newFixedThreadPool(MAX_ALLOWANCE);
 	}
 	
+	/*It is safe to shutdown the connection even while processes are communicating with the server.
+	But there is a timeout of 30 seconds for all the processes to finish their work before they are killed.*/
 	public void closeConnection() {
 		new Thread(new Runnable(){
 			@Override
@@ -48,11 +53,12 @@ public class ServerConnection {
 			}}).start();
 	}
 	
-	
+	//Calling this will block the calling thread.
 	public JSONObject sendGETRequest(String URL, Map<String, String> params) throws InterruptedException, ExecutionException {
 		return asyncSendGETRequest(URL, params).get();
 	}
 	
+	//Calling this will not block the calling thread.
 	public Future<JSONObject> asyncSendGETRequest(String URL, Map<String, String> params) throws InterruptedException, ExecutionException {
 		Uri.Builder builder = new Uri.Builder();
 		builder.encodedPath(URL);
@@ -64,23 +70,31 @@ public class ServerConnection {
 		return future;
 	}
 	
-	public JSONObject sendPOSTRequest(String URL, Map<String, String> params) throws InterruptedException, ExecutionException, UnsupportedEncodingException, JSONException {
-		return asyncSendPOSTRequest(URL, params).get();
+	//Calling this will block the calling thread. Fill in the not needed parameters with null.
+	public JSONObject sendPOSTRequest(String URL, Map<String, String> params, Map<String, InputStream> files) throws InterruptedException, ExecutionException, UnsupportedEncodingException, JSONException {
+		return asyncSendPOSTRequest(URL, params, files).get();
 	}
 	
-	public Future<JSONObject> asyncSendPOSTRequest(String URL, Map<String, String> params) throws InterruptedException, ExecutionException, JSONException, UnsupportedEncodingException {
+	//Calling this will not block the calling thread. Fill in the not needed parameters with null.
+	public Future<JSONObject> asyncSendPOSTRequest(String URL, Map<String, String> params, Map<String, InputStream> files) throws InterruptedException, ExecutionException, JSONException, UnsupportedEncodingException {
 		HttpPost request = new HttpPost(URL);
-		JSONObject json = new JSONObject();
-		//MultipartEntityBuilder mpe = MultipartEntityBuilder.create();
-		for(String key : params.keySet()) {
-			json.accumulate(key, params.get(key));
+		MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
+		if(params!=null) {
+			for(String key : params.keySet()) {
+				multipartEntity.addTextBody(key, params.get(key));
+			}
 		}
-		request.setEntity(new StringEntity(json.toString()));
+		if(files!=null) {
+			for(String fileName : files.keySet()) {
+				multipartEntity.addPart(fileName, new InputStreamBody(files.get(fileName),ContentType.MULTIPART_FORM_DATA, fileName));
+			}
+		}
+		request.setEntity(multipartEntity.build());
 		Future<JSONObject> future = threadPool.submit(new executeRequest(request));
 		return future;
 	}
 	
-	
+	//Thread to communicate with server.
 	private class executeRequest implements Callable<JSONObject> {
 		
 		HttpRequestBase request;

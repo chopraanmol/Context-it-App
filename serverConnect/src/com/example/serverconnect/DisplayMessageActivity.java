@@ -2,9 +2,12 @@ package com.example.serverconnect;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.HashMap;
@@ -37,10 +40,14 @@ import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.os.Build;
+import android.provider.MediaStore;
 
 public class DisplayMessageActivity extends Activity {
-
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,28 +56,29 @@ public class DisplayMessageActivity extends Activity {
 		setupActionBar();
 		
 		ServerConnection s = new ServerConnection();
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("user_id", "rishabh");
-		params.put("photo_path", "a");
+		Map<String, String> m = new HashMap<String, String>();
+		m.put("user_id","abcdefgh");
+		Map<String, InputStream> params = new HashMap<String, InputStream>();	
 		String message = "";
 		try {
-			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://192.168.0.8/db/create/create_photo.php", params);
-			Future<JSONObject> f2 = s.asyncSendPOSTRequest("http://192.168.0.8/db/delete/delete_photo.php", params);
-			Thread.sleep(2000);
+			params.put("picture_name",getAssets().open("m.png"));
+			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://192.168.0.8/db/delete/delete_photo.php", m, params);
 			message = f1.get().toString();
-			message = message + "   " + f2.get().toString();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			message = "a" + e.toString();
+			message = "  a  " + e.toString();
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
-			message = "b" + e.toString();
+			message = "  b  " + e.toString();
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			message = "  c  " + e.toString();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			message = " d  " + e.toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			message = " e  " + e.toString();
 		}
 		s.closeConnection();
 		
