@@ -33,6 +33,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * This example shows how to use a swipe effect to remove items from a ListView,
@@ -134,7 +135,6 @@ public class SwipeResult extends Fragment{
                 break;
             case MotionEvent.ACTION_MOVE:
                 {
-                    Log.d("HERE", "HEREHERE");
                     float x = event.getX() + v.getTranslationX();
                     float deltaX = x - mDownX;
                     float deltaXAbs = Math.abs(deltaX);

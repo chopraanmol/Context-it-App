@@ -50,7 +50,8 @@ public class BackgroundContainer extends FrameLayout {
     }
 
     public void showBackground(int top, int bottom) {
-        setWillNotDraw(false);
+    	// !!!! SET BACK TO TRUE IF YOU WANNA DRAW THE BACKGROUND 
+        setWillNotDraw(true);
         mOpenAreaTop = top;
         mOpenAreaHeight = bottom;
         mShowing = true;

@@ -290,7 +290,9 @@ public class MainActivity extends FragmentActivity {
 		b.putStringArrayList("search_results", 
 							 new ArrayList<String>(Arrays.asList("headline 1 : blah blah",
 														 "headline 2: asdfghj",
-														 "headline 3: wertyrew")));
+														 "headline 3: wertyrew",
+														 "headline 4:weardfgvx",
+														 "headline 5: weaggggg")));
 		s.setArguments(b);
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, s);

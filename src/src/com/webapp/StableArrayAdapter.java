@@ -20,10 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,18 +49,12 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
         for (int i = 0; i < objects.size(); ++i) {
             mIdMap.put(objects.get(i), i);
         }
-      
-        WindowManager w = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display d = w.getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        d.getMetrics(metrics);
-       
-        try {
-        	Point realSize = new Point();
-        	Display.class.getMethod("getRealSize", Point.class).invoke(d, realSize);
-            height_of_element = realSize.y / num_of_rows;
-        } catch (Exception ignored) {
-        }
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        int heightOfTitleBar = 0;
+        int x  = (int) getContext().getTheme().obtainStyledAttributes(
+                new int[] { android.R.attr.actionBarSize }).getDimension(0, 0);
+        int px = Math.round(2* x * (metrics.xdpi / DisplayMetrics.DENSITY_DEFAULT) - (16 * 2));
+        height_of_element = (metrics.heightPixels-px ) / num_of_rows;
     }
 
     @Override
