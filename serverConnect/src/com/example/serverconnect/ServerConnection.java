@@ -31,15 +31,21 @@ public class ServerConnection {
 	private ExecutorService threadPool;
 	private final int MAX_ALLOWANCE = 1;
 	private final int TIMEOUT = 30;
+	private boolean connection_closed;
 	
 	public ServerConnection() {
 		httpClient = new DefaultHttpClient();
 		threadPool = Executors.newFixedThreadPool(MAX_ALLOWANCE);
+		connection_closed = false;
 	}
 	
 	/*It is safe to shutdown the connection even while processes are communicating with the server.
 	But there is a timeout of 30 seconds for all the processes to finish their work before they are killed.*/
 	public void closeConnection() {
+		if(connection_closed) {
+			return;
+		}
+		connection_closed = true;
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
