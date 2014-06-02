@@ -1,37 +1,15 @@
 package com.example.serverconnect;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Pair;
@@ -40,11 +18,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.res.AssetManager;
-import android.database.Cursor;
 import android.os.Build;
-import android.provider.MediaStore;
 
 public class DisplayMessageActivity extends Activity {
 	
@@ -58,12 +32,12 @@ public class DisplayMessageActivity extends Activity {
 		
 		ServerConnection s = new ServerConnection();
 		Map<String, String> m = new HashMap<String, String>();
-		m.put("user_id","abcdefgh");
+		m.put("user_id","abcdefg");
 		Map<String, Pair<String,InputStream>> params = new HashMap<String, Pair<String,InputStream>>();	
 		String message = "";
 		try {
-			params.put("picture",new Pair<String,InputStream>("mercedes.png", getAssets().open("m.png")));
-			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://192.168.0.8/db/delete/delete_photo.php", m, params);
+			params.put("picture",new Pair<String,InputStream>("mercedes.jpg", getAssets().open("m.jpg")));
+			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/db/delete/delete_photo.php", m, params);
 			message = f1.get().toString();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
