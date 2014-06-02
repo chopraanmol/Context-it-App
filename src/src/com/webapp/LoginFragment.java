@@ -4,12 +4,16 @@ package com.webapp;
 import java.util.Arrays;
 
 import android.support.v4.app.Fragment;
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -20,7 +24,7 @@ import com.webapp.R;
 public class LoginFragment extends Fragment{
 	
 	private static final String tag = "MainFragment";
-	
+	private Activity activity;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,10 +38,21 @@ public class LoginFragment extends Fragment{
 	        ViewGroup container, 
 	        Bundle savedInstanceState) {
 	    View view = inflater.inflate(R.layout.login_fragment, container, false);
+	    
 	    LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 	    /* Return result to fragment, not to main activity. */
 	    //authButton.setFragment(this);
+	    Typeface font = Typeface.createFromAsset(activity.getAssets(), "PrimeScript_PERSONAL_USE.ttf" );
+		TextView title = (TextView) view.findViewById(R.id.app_title);
+		title.setTypeface(font);
 	    return view;
 	}
+	
+	@Override
+    public void onAttach(Activity activity) {
+    	super.onAttach(activity);
+    	this.activity = getActivity();
+    }
+
 	
 }
