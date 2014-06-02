@@ -3,7 +3,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . 'phpseclib');
 include '../db/create/create_photo.php';
 include 'util.php';
 
-$input = json_decode(file_get_contents('php://input'), true);
+$input = $_POST;
 
 if (isset($input['user_id'])){
 	//upload image 
@@ -17,22 +17,36 @@ if (isset($input['user_id'])){
 		transfer_file_to_vm($file_info[2],$dest_photo);
 		
 	//run tesseract on it and return dictionary words.
-		$text = execute_tesseract($dest_photo);
-		echo $text;
+		$text_array = execute_tesseract($dest_photo);
+		echo $text_array[0]; // Without spellchecker
+		echo $text_array[1] . '<br>'; // with spellchecker
 			
-		 
-	//Split the words into a 2-d array based on line number. 
-		$array = preg_split("/\r\n|\n|\r/", $text); // Split the result by newline. 
-		$recognized_words = array();
-		for($i = 0; $i < count($array); $i++){
-			$line = preg_split("/[\s,]+/", $array[$i]); // split each line into words. 
-			foreach($line as $word){
-				array_push($recognized_words[$i],$word); 					
-			}
-		}
  
-	// make searchs using different algorithms. 
-	$results = searchFaroo($array[0]); // search the first line. 
+    // Split both strings into 2-D array of words
+    	$actual_text = getArrayFromString($text_array[0]);
+
+
+	// make searchs using different algorithms.
+	
+	// search the actual text using bing 
+	// $results = searchBing($text_array[0]);	
+	// search the actual text using faroo 	
+	$results = searchFaroo($text_array[0]); 
+	// search the first line.
+	$results = searchFaroo($actual_text[0]); 
+	// search the last line.
+	$results = searchFaroo($actual_text[count($actual_text) - 1]); 
+	// search the dictionary line.	
+	$results = searchFaroo($text_array[1]); 
+	
+
+
+
+
+	// Iterative deepening.	search for the longest string (gives bigger context).
+	$results = searchFaroo($array[0]); 
+ 
+	
 	// $results_bing = searchBing($array[0]);
 	
 }else{

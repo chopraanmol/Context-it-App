@@ -6,7 +6,7 @@ error_reporting(E_ERROR);
 // array for JSON response
 $response = array();
 
-$input = json_decode(file_get_contents('php://input'), true);
+$input = $POST;
 
 // check for required fields
 if (isset($input['url']) && isset($input['photo_id'])) {

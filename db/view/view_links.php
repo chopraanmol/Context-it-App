@@ -5,7 +5,7 @@ $response = array();
 $response["weburls"] = array();
 $response["status"] = -1;
 
-$input = json_decode(file_get_contents('php://input'), true);
+$input = $POST;
 
 // connecting to db
 require_once '../db_connect.php';
