@@ -45,6 +45,9 @@ public class LoginFragment extends Fragment{
 	    Typeface font = Typeface.createFromAsset(activity.getAssets(), "PrimeScript_PERSONAL_USE.ttf" );
 		TextView title = (TextView) view.findViewById(R.id.app_title);
 		title.setTypeface(font);
+	    Typeface font2 = Typeface.createFromAsset(activity.getAssets(), "LABTSECW.ttf" );
+		TextView des = (TextView) view.findViewById(R.id.app_description);
+		des.setTypeface(font2);
 	    return view;
 	}
 	
