@@ -6,11 +6,11 @@ $password = 'rackrack';
 $host = 'cvm-g1327111';
 
 //Upload the photo using the userid 
-function upload_photo($user_id,$_FILES){
+function upload_image($user_id,$_FILES){
 	$Dir = 'photos/' . $user_id . '/';
 
 	if(!is_dir($Dir)) {
-	    mkdir($Dir, 0777,true);
+	    mkdir($Dir, 0777);
 	    chmod($Dir, 0777);
 	}
 
@@ -23,20 +23,22 @@ function upload_photo($user_id,$_FILES){
 	$temp = explode(".", $_FILES["file"]["name"]);
 	$extension = end($temp);
 
-	if ((($_FILES["file"]["type"] == "image/jpeg")
-	|| ($_FILES["file"]["type"] == "image/jpg")
-	|| ($_FILES["file"]["type"] == "image/pjpeg")
-	|| ($_FILES["file"]["type"] == "image/png"))
-	&& ($_FILES["file"]["size"] < 20000)
-	&& in_array($extension, $allowedExts)) {
-	  if ($_FILES["file"]["error"] > 0) {
-	    echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
-	  } 
-	  else {
-	    move_uploaded_file($_FILES["file"]["tmp_name"],
+
+	move_uploaded_file($_FILES["file"]["tmp_name"],
 	    "$Dir". $fileName . '.'. $extension);
-	    }
-	}
+//	if ((($_FILES["file"]["type"] == "image/jpeg")
+//	|| ($_FILES["file"]["type"] == "image/jpg")
+//	|| ($_FILES["file"]["type"] == "image/pjpeg")
+//	|| ($_FILES["file"]["type"] == "image/png"))
+//	&& ($_FILES["file"]["size"] < 20000)
+//	&& in_array($extension, $allowedExts)) {
+//	  if ($_FILES["file"]["error"] > 0) {
+//	    echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
+//	  } 
+//	  else {
+	    
+//	    }
+//	}
 
 	return array($fileName, $extension , "$Dir". $fileName . '.'. $extension);
 }
@@ -86,7 +88,7 @@ function searchFaroo($data){
 	$data = $js->results;
 	$urls = array();
 	foreach($data as $row){
-		array_push($urls,$row->url);
+		array_push($urls,array("desc"=> $row->title, "url" => $row->url));
 		/*You can use the following fields: 
 		* title, kwic (keyword in context) , content
 		* url, iurl , news, votes, date, related. 
@@ -118,7 +120,7 @@ function searchBing($data){
 	$jsonObj = json_decode($response);
 	$urls = array();
 	foreach($jsonObj->d->results as $result){
-		array_push($urls,$result->Url);
+		array_push($urls,array("desc"=> $result->Title,"url" => $result->Url);
 	}
 	return $urls;
 

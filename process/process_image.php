@@ -18,33 +18,36 @@ if (isset($input['user_id'])){
 		
 	//run tesseract on it and return dictionary words.
 		$text_array = execute_tesseract($dest_photo);
-		echo $text_array[0]; // Without spellchecker
-		echo $text_array[1] . '<br>'; // with spellchecker
+		//$text_array[0]; // Without spellchecker
+		//$text_array[1]; // With spellchecker
 			
  
     // Split both strings into 2-D array of words
     	$actual_text = getArrayFromString($text_array[0]);
 
-
+		$urlInfo = array();
 	// make searchs using different algorithms.
 	
 	// search the actual text using bing 
 	// $results = searchBing($text_array[0]);	
 	// search the actual text using faroo 	
-	$results = searchFaroo($text_array[0]); 
+		//searchFaroo($text_array[0]); 
 	// search the first line.
-	$results = searchFaroo($actual_text[0]); 
+		//searchFaroo($actual_text[0]); 
 	// search the last line.
-	$results = searchFaroo($actual_text[count($actual_text) - 1]); 
+		//searchFaroo($actual_text[count($actual_text) - 1]); 
 	// search the dictionary line.	
-	$results = searchFaroo($text_array[1]); 
-	
+		//searchFaroo($text_array[1]); 
+	$urlInfo = array_merge($urlInfo, searchFaroo($text_array[0]), searchFaroo($actual_text[0]), 
+			searchFaroo($actual_text[count($actual_text) - 1], searchFaroo($text_array[1]);
 
-
-
-
+	$response = array();
+	$response['status'] = 1;
+	$response['url_set'] = $url_info; 
+	echo json_encode($urlInfo);
+	//TODO UIAGVKIAGBVKJASBVJASBVF
 	// Iterative deepening.	search for the longest string (gives bigger context).
-	$results = searchFaroo($array[0]); 
+		//$results = searchFaroo($array[0]); 
  
 	
 	// $results_bing = searchBing($array[0]);
