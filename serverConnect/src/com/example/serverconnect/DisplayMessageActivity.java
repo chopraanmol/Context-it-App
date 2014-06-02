@@ -37,13 +37,14 @@ public class DisplayMessageActivity extends Activity {
 		String message = "";
 		try {
 			params.put("picture",new Pair<String,InputStream>("mercedes.jpg", getAssets().open("m.jpg")));
-			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/db/delete/delete_photo.php", m, params);
+			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/testing.php", m, params);
 			message = f1.get().toString();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			message = "  a  " + e.toString();
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
 			message = "  b  " + e.toString();
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block

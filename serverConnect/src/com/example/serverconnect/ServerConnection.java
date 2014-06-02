@@ -14,6 +14,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -21,6 +22,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,8 +82,8 @@ public class ServerConnection {
 	
 	/*Calling this will block the calling thread. Fill in the not needed parameters with null.
 	Map<key to get file details, Pair<filename,InputStream>>*/
-	public JSONObject sendPOSTRequest(String URL, Map<String, String> params, Map<String, Pair<String,InputStream>> files) throws InterruptedException, ExecutionException, UnsupportedEncodingException, JSONException {
-		return null;//asyncSendPOSTRequest(URL, params, files).get();
+	public JSONObject sendPOSTRequest(String URL, Map<String, String> params, Map<String, Pair<String,InputStream>> files) throws InterruptedException, ExecutionException, JSONException, IOException {
+		return asyncSendPOSTRequest(URL, params, files).get();
 	}
 	
 	/*Calling this will not block the calling thread. Fill in the not needed parameters with null.
@@ -96,10 +98,16 @@ public class ServerConnection {
 		}
 		if(files!=null) {
 			for(String key : files.keySet()) {
-				multipartEntity.addBinaryBody(key, IOUtils.toByteArray(files.get(key).second),ContentType.DEFAULT_BINARY, files.get(key).first);
+				multipartEntity.addPart(key, new InputStreamBody(files.get(key).second, ContentType.APPLICATION_OCTET_STREAM,files.get(key).first));
+				//multipartEntity.addBinaryBody(key, IOUtils.toByteArray(files.get(key).second),ContentType.APPLICATION_OCTET_STREAM, files.get(key).first);
 			}
 		}
+		request.setHeader("Content-Length", "87929");
 		request.setEntity(multipartEntity.build());
+		System.out.println("aaaaaaaaaaaaaaaaaaaaaa   " + request.getEntity().getContentLength()); //87929
+		for(Header h : request.getAllHeaders()) {
+			System.out.println(h.getName() + "  " + h.getValue());
+		}
 		Future<JSONObject> future = threadPool.submit(new executeRequest(request));
 		return future;
 	}
@@ -114,6 +122,7 @@ public class ServerConnection {
 		}
 		@Override
 		public JSONObject call() throws Exception {
+			System.out.println("reached here!!!!!!!!!!!!!11");
 			HttpResponse httpResponse = httpClient.execute(request);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
 			StringBuilder stringReply = new StringBuilder();
