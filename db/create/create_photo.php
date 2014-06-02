@@ -11,15 +11,14 @@ function create_photo($user_id,$photo_path){
     $path = $photo_path;
  
     // include db connect class
-    require_once '../db_connect.php';
+    require_once '/vol/project/2013/271/g1327111/db/db_connect.php';
  
     // connecting to db
     $db = new DB_CONNECT();
     if(!$db->has_connected) {
-    $response["status"] = 2;
-    unset($db);
-        echo json_encode($response);
-        exit;
+        $response["status"] = 2;
+        unset($db);
+        return $response["status"];
     }
 
     // pgsql inserting a new row
@@ -32,6 +31,7 @@ function create_photo($user_id,$photo_path){
     } else {
         $response["status"] = 3;
     }
+    return $response["status"];
 }
 
 ?>

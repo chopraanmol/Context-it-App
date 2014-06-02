@@ -1,0 +1,9 @@
+For the Process_image script,
+
+
+1: Successful.
+2: File not uploaded.
+3: Input missing from the user.
+4: Database error.
+5: FTP error.
+6: SSH error.
