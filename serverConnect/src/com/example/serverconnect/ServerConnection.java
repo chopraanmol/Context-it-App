@@ -1,9 +1,12 @@
 package com.example.serverconnect;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -28,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Pair;
 
 public class ServerConnection {
@@ -98,16 +102,11 @@ public class ServerConnection {
 		}
 		if(files!=null) {
 			for(String key : files.keySet()) {
-				multipartEntity.addPart(key, new InputStreamBody(files.get(key).second, ContentType.APPLICATION_OCTET_STREAM,files.get(key).first));
-				//multipartEntity.addBinaryBody(key, IOUtils.toByteArray(files.get(key).second),ContentType.APPLICATION_OCTET_STREAM, files.get(key).first);
+				//multipartEntity.addPart(key, new InputStreamBody(files.get(key).second, ContentType.APPLICATION_OCTET_STREAM,files.get(key).first));
+				multipartEntity.addBinaryBody(key, IOUtils.toByteArray(files.get(key).second),ContentType.APPLICATION_OCTET_STREAM, files.get(key).first);
 			}
 		}
-		request.setHeader("Content-Length", "87929");
 		request.setEntity(multipartEntity.build());
-		System.out.println("aaaaaaaaaaaaaaaaaaaaaa   " + request.getEntity().getContentLength()); //87929
-		for(Header h : request.getAllHeaders()) {
-			System.out.println(h.getName() + "  " + h.getValue());
-		}
 		Future<JSONObject> future = threadPool.submit(new executeRequest(request));
 		return future;
 	}
@@ -122,15 +121,46 @@ public class ServerConnection {
 		}
 		@Override
 		public JSONObject call() throws Exception {
-			System.out.println("reached here!!!!!!!!!!!!!11");
 			HttpResponse httpResponse = httpClient.execute(request);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
+			InputStream in = httpResponse.getEntity().getContent();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			StringBuilder stringReply = new StringBuilder();
 			String replyLine;
 			while ((replyLine = reader.readLine()) != null) {
 			    stringReply.append(replyLine);
 			}
+			in.close();
 			return new JSONObject(stringReply.toString());
-		}	
-	}	
+		}
+	}
+	
+	public File getFile(String url, File file) throws InterruptedException, ExecutionException {
+		return asyncGetFile(url, file).get();
+	}
+	
+	public Future<File> asyncGetFile(String url, File file) {
+		HttpGet request = new HttpGet(url);
+		Future<File> future = threadPool.submit(new getFileRequest(request, file));
+		return future;
+	}
+	
+	//Thread to communicate with server.
+		private class getFileRequest implements Callable<File> {
+			
+			HttpRequestBase request;
+			File file;
+			public getFileRequest(HttpRequestBase request, File file) {
+				this.request = request;
+				this.file = file;
+			}
+			@Override
+			public File call() throws Exception {
+				HttpResponse httpResponse = httpClient.execute(request);
+				InputStream in = httpResponse.getEntity().getContent();
+				OutputStream out = new FileOutputStream(file);
+				IOUtils.copy(in, out);
+				return file;
+			}
+		}
+	
 }

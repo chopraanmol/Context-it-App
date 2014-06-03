@@ -1,7 +1,11 @@
 package com.example.serverconnect;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +43,16 @@ public class DisplayMessageActivity extends Activity {
 			params.put("picture",new Pair<String,InputStream>("mercedes.jpg", getAssets().open("m.jpg")));
 			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/testing.php", m, params);
 			message = f1.get().toString();
+			File file = new File(this.getExternalCacheDir(), "a.jpg");
+			s.getFile("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/mercedes.jpg", file);
+			InputStream in = new FileInputStream(file);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			StringBuilder stringReply = new StringBuilder();
+			String replyLine;
+			while ((replyLine = reader.readLine()) != null) {
+			    stringReply.append(replyLine);
+			}
+			System.out.println(stringReply);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			message = "  a  " + e.toString();
