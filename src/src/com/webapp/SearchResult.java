@@ -1,13 +1,21 @@
 package com.webapp;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class SearchResult {
 	private String headLine;
 	private String summary;
 	
 	// Dummy constructor
-	public SearchResult() {
-		headLine = "headline";
-		summary = "summary";
+	public SearchResult(JSONObject jsonObject) {
+		try {
+			headLine = jsonObject.getString("url");
+			summary = jsonObject.getString("desc");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	// Implement proper constructor that takes Jason object

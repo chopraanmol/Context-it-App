@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -91,13 +92,14 @@ public class WaitFragment extends Fragment {
 							} 
 						}
 
-					private ArrayList<String> JSONToArrayList(JSONObject ret) {
+					private ArrayList<String> JSONToArrayList(JSONObject ret) throws JSONException {
 						// TODO Auto-generated method stub
-						return new ArrayList<String>(Arrays.asList("headline 1 : blah blah",
-								 "headline 2: asdfghj",
-								 "headline 3: wertyrew",
-								 "headline 4:weardfgvx",
-								 "headline 5: weaggggg",""));
+						JSONArray url_set = ret.getJSONArray("url_set");
+						ArrayList<String> toRet = new ArrayList<String>();
+						for(int i = 0; i < url_set.length(); i++) {
+							toRet.add(new SearchResult(url_set.getJSONObject(i)).toString());
+						}
+						return toRet;
 					}
 			}).executeAsync();
 		return view;

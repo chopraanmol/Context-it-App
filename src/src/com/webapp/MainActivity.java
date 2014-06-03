@@ -307,10 +307,11 @@ public class MainActivity extends FragmentActivity {
 				 "headline 5: weaggggg","")));
 	}
 	
-	public void goToSwipeView(ArrayList<String> aL) {
+	public void goToSwipeView(ArrayList<String> arrayList) {
+		Log.d("COnrad2", "GOT HERE HOORAY");
 		SwipeResult s = new SwipeResult();
 		Bundle b = new Bundle();
-		b.putStringArrayList("search_results", aL);
+		b.putStringArrayList("search_results", arrayList);
 		s.setArguments(b);
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, s);
