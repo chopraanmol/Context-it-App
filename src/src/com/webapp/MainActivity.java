@@ -79,6 +79,8 @@ public class MainActivity extends FragmentActivity {
             // then we don't need to do anything and should return or else
             // we could end up with overlapping fragments.
             if (savedInstanceState != null) {
+    			System.out.println("SAVED INSTANCE NON-NULL");
+
                 return;
             }
 
@@ -119,10 +121,10 @@ public class MainActivity extends FragmentActivity {
 	public void onResume() {
 	    super.onResume();
 	    Session session = Session.getActiveSession();
-	   /* if (session != null &&
+	    if (session != null &&
 	           (session.isOpened() || session.isClosed()) ) {
 	        onSessionStateChange(session, session.getState(), null);
-	    }*/
+	    }
 	    uiHelper.onResume();    
 	}
 
@@ -152,8 +154,7 @@ public class MainActivity extends FragmentActivity {
 	
 	private void onSessionStateChange(Session session, SessionState state,
 			  Exception exception) {
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		if (state.isOpened() || state == SessionState.OPENING) {
+		if (state.isOpened() && state != SessionState.OPENING) {
 			// Remove the LoginFragment, add the LandingFragment.
 			if(state.isOpened()){
 				Request.newMeRequest(session,
@@ -161,13 +162,13 @@ public class MainActivity extends FragmentActivity {
 	         
 						@Override
 							public void onCompleted(GraphUser user, Response response) {
+							Log.d("Conrad", "FUCK YOU CONRAD");
 								if(user != null) {
 									ServerConnection IDConnection = new ServerConnection();
 									Map<String, String> POSTMap = new HashMap<String, String>();
 									POSTMap.put("user_id", user.getId());
-									
 									try {
-										JSONObject ret = IDConnection.sendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/db/create/create_user.php", POSTMap);
+										JSONObject ret = IDConnection.sendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/db/create/create_user.php", POSTMap, null);
 										switch(ret.getInt("status")) {
 										case 1:
 								            Toast.makeText(getApplicationContext(),
@@ -190,20 +191,29 @@ public class MainActivity extends FragmentActivity {
 										e.printStackTrace();
 									}
 									// send user id.
-								} 
+								}
+								jumpToLandingFragment();
 							}
 				}).executeAsync();
 			}
 			
-			transaction.replace(R.id.fragment_container, new LandingFragment());
-			transaction.addToBackStack(null);
-			transaction.commit();
-		} else if (state.isClosed()) {
+		} else  {
+			System.out.println("HELLO HERE");
+			if (state.isClosed()) {
 			// Remove whatever is there, add LoginFragment
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(R.id.fragment_container, new LoginFragment());
 			transaction.addToBackStack(null);
 			transaction.commit();
+			}
 		}
+	}
+	
+	public void jumpToLandingFragment() {
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.replace(R.id.fragment_container, new LandingFragment());
+		transaction.addToBackStack(null);
+		transaction.commitAllowingStateLoss();
 	}
 	
 	public void jumpToTest(View v) {
@@ -273,7 +283,11 @@ public class MainActivity extends FragmentActivity {
 
 	public void sendFileToServer(File file) {
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.replace(R.id.fragment_container, new WaitFragment());
+		Fragment newFragment = new WaitFragment();
+		Bundle args = new Bundle();
+		args.putSerializable("file", file);
+		newFragment.setArguments(args);
+		transaction.replace(R.id.fragment_container, newFragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
@@ -284,21 +298,24 @@ public class MainActivity extends FragmentActivity {
 		resultCounter = results.size();
 	}
 	
-	public void goToSwipeView(View v) {
+	public void testSwipeView(View v) {
+		goToSwipeView(							 
+				new ArrayList<String>(Arrays.asList("headline 1 : blah blah",
+				 "headline 2: asdfghj",
+				 "headline 3: wertyrew",
+				 "headline 4:weardfgvx",
+				 "headline 5: weaggggg","")));
+	}
+	
+	public void goToSwipeView(ArrayList<String> aL) {
 		SwipeResult s = new SwipeResult();
 		Bundle b = new Bundle();
-		b.putStringArrayList("search_results", 
-							 new ArrayList<String>(Arrays.asList("headline 1 : blah blah",
-														 "headline 2: asdfghj",
-														 "headline 3: wertyrew",
-														 "headline 4:weardfgvx",
-														 "headline 5: weaggggg","")));
+		b.putStringArrayList("search_results", aL);
 		s.setArguments(b);
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, s);
         transaction.addToBackStack(null);
         transaction.commit();
 	}
-	
 
 }

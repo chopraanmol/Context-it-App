@@ -30,7 +30,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="90dp"
         android:text="@string/swipe_view"
-        android:onClick="goToSwipeView"
+        android:onClick="testSwipeView"
         />
      
     

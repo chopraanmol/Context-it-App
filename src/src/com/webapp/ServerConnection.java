@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri;
+import android.util.Log;
 import android.util.Pair;
 
 public class ServerConnection {
@@ -80,8 +81,8 @@ public class ServerConnection {
 	
 	/*Calling this will block the calling thread. Fill in the not needed parameters with null.
 	Map<key to get file details, Pair<filename,InputStream>>*/
-	public JSONObject sendPOSTRequest(String URL, Map<String, String> params, Map<String, Pair<String,InputStream>> files) throws InterruptedException, ExecutionException, UnsupportedEncodingException, JSONException {
-		return null;//asyncSendPOSTRequest(URL, params, files).get();
+	public JSONObject sendPOSTRequest(String URL, Map<String, String> params, Map<String, Pair<String,InputStream>> files) throws InterruptedException, ExecutionException, JSONException, IOException {
+		return asyncSendPOSTRequest(URL, params, files).get();
 	}
 	
 	/*Calling this will not block the calling thread. Fill in the not needed parameters with null.
@@ -121,6 +122,7 @@ public class ServerConnection {
 			while ((replyLine = reader.readLine()) != null) {
 			    stringReply.append(replyLine);
 			}
+			Log.d("Conrad11111", stringReply.toString());
 			return new JSONObject(stringReply.toString());
 		}	
 	}	
