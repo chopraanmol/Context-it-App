@@ -57,6 +57,10 @@ public class LandingFragment extends Fragment {
 				activateCamera();	
 			}
 		});
+		Button testButton = (Button) view.findViewById(R.id.test_button);
+		testButton.setTypeface(font);
+		Button swipeButton = (Button) view.findViewById(R.id.swipe_view_button);
+		swipeButton.setTypeface(font);
 		return view;
 	}
 	

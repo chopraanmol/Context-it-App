@@ -37,6 +37,7 @@ public class LoginFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, 
 	        Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
 	    View view = inflater.inflate(R.layout.login_fragment, container, false);
 	    
 	    LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
@@ -56,6 +57,7 @@ public class LoginFragment extends Fragment{
     	super.onAttach(activity);
     	this.activity = getActivity();
     }
+	
 
 	
 }
