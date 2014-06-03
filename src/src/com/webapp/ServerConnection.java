@@ -116,13 +116,15 @@ public class ServerConnection {
 		@Override
 		public JSONObject call() throws Exception {
 			HttpResponse httpResponse = httpClient.execute(request);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
+			InputStream in = httpResponse.getEntity().getContent();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			StringBuilder stringReply = new StringBuilder();
 			String replyLine;
 			while ((replyLine = reader.readLine()) != null) {
 			    stringReply.append(replyLine);
 			}
 			Log.d("Conrad11111", stringReply.toString());
+			in.close();
 			return new JSONObject(stringReply.toString());
 		}	
 	}	
