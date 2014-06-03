@@ -3,14 +3,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/login_background">
 
-    <com.facebook.widget.LoginButton
+    <TextView
+        android:id="@+id/app_title"
+        android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="70dp"
+		android:textSize="80sp"
+		android:textColor="@android:color/white"
+		android:text="@string/app_name"
+		android:background="@android:color/transparent"
+        /> 
+        <TextView
+        android:id="@+id/app_description"
+        android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="50dp"
+		android:layout_marginLeft="50dp"
+		android:layout_marginRight="50dp"
+		android:gravity="center"
+		android:textSize="30sp"
+		android:textColor="@android:color/white"
+		android:text="@string/app_description"
+		android:background="@android:color/transparent"
+        /> 
+   <com.facebook.widget.LoginButton
         android:id="@+id/authButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
         facebook:fetch_user_info="true"
         />
 

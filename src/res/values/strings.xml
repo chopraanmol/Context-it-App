@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <string name="app_name">webapp</string>
+    <string name="app_name">ContextIt </string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="app_id">246830678850383</string>
@@ -10,6 +10,8 @@
     <string name="save_result">Save</string>
     <string name="discard_result">Skip</string>
     <string name="see_online">Read</string>
-    <string name="test">Test</string>
-    <string name="swipe_view">Go Swipe</string>
+    <string name="test">&#xf128;</string>
+    <string name="swipe_view">&#xf07e;</string>
+    <string name="icon_camera">&#xf030; </string>
+    <string name="app_description">ContextIt allows you to attach web context with ease!</string>
 </resources>

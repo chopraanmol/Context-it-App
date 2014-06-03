@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,7 @@ public class LandingFragment extends Fragment {
 	
 	Button cameraButton = null;
 	File file = null;
+	Activity activity;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,9 @@ public class LandingFragment extends Fragment {
 	        ViewGroup container, 
 	        Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.landing_fragment, container, false);
+		Typeface font = Typeface.createFromAsset( activity.getAssets(), "fontawesome-webfont.ttf" );
 		cameraButton = (Button) view.findViewById(R.id.camera_button);
+		cameraButton.setTypeface(font);
 		cameraButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -53,8 +57,18 @@ public class LandingFragment extends Fragment {
 				activateCamera();	
 			}
 		});
+		Button testButton = (Button) view.findViewById(R.id.test_button);
+		testButton.setTypeface(font);
+		Button swipeButton = (Button) view.findViewById(R.id.swipe_view_button);
+		swipeButton.setTypeface(font);
 		return view;
 	}
+	
+	@Override
+    public void onAttach(Activity activity) {
+    	super.onAttach(activity);
+    	this.activity = getActivity();
+    }
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
