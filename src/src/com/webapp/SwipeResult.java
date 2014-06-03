@@ -118,6 +118,10 @@ public class SwipeResult extends Fragment{
         
         @Override
         public boolean onTouch(final View v, MotionEvent event) {
+        	String s = ((TextView)((RelativeLayout) v).findViewById(R.id.title)).getText().toString();
+        	if(s.equals("")) {
+        		return true;
+        	}
             if (mSwipeSlop < 0) {
 
                 mSwipeSlop = ViewConfiguration.get(context).
@@ -182,7 +186,6 @@ public class SwipeResult extends Fragment{
                             remove = true;
                             //keep items swiped right
                             if(deltaX > 0) {
-                            	String s = ((TextView)((RelativeLayout) v).findViewById(R.id.title)).getText().toString();
                             	keptResults.add(s);
 					            Toast.makeText(getActivity().getApplicationContext(),
 					            		s, Toast.LENGTH_SHORT)
