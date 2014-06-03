@@ -43,7 +43,8 @@ function execute_tesseract($src_photo){
 	if (!$ssh->login($GLOBALS['username'], $GLOBALS['password'])) {
 	    return null;
 	}
-	$trans_text = explode(".", $src_photo)[0];
+	$array = explode(".", $src_photo);
+	$trans_text = $array[0];
 	$cmd = 'tesseract ' . $src_photo . ' ' . $trans_text . ' -psm 1';
 	$ssh->exec($cmd);
 	$cmd = 'cat ' . $trans_text . '.txt';
@@ -100,10 +101,9 @@ function searchBing($data){
 	$jsonObj = json_decode($response);
 	$urls = array();
 	foreach($jsonObj->d->results as $result){
-		array_push($urls,array("desc"=> $result->Title,"url" => $result->Url);
+		array_push($urls,array("desc"=> $result->Title,"url" => $result->Url));
 	}
 	return $urls;
-
 }
 
 
@@ -123,6 +123,6 @@ function getArrayFromString($text){
 		}
 	}
 	return $recognized_words;
-		
+}	
 
 ?>

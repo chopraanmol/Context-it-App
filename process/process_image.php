@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <?php
 set_include_path(get_include_path() . PATH_SEPARATOR . 'phpseclib');
 include '../db/create/create_photo.php';
@@ -13,9 +14,9 @@ if (isset($input['user_id'])){
 		//add the photo to the database
 			if(create_photo($user_id,$file_dir) != 1){
 					//copy the file from the server to the vm. 	
-				$dest_photo = $file_info[0] . $file_info[1];					
+				$dest_photo = $file_info[0] .'.'. $file_info[1];					
 					//run tesseract on it and return dictionary words.
-					if(transfer_file_to_vm($file_info[2],$dest_photo){
+					if(transfer_file_to_vm($file_info[2],$dest_photo)){
 						$text_array = execute_tesseract($dest_photo);
             if(!is_array($text_array)){
               //$text_array[0] // Without spellchecker
@@ -34,8 +35,8 @@ if (isset($input['user_id'])){
               // search the dictionary line using searchFaroo($text_array[1]); 
               $urlInfo = array_merge($urlInfo, searchFaroo($text_array[0]), 
                                       searchFaroo($actual_text[0]), 
-                                      searchFaroo($actual_text[count($actual_text) - 1], 
-                                      searchFaroo($text_array[1]);
+                                      searchFaroo($actual_text[count($actual_text) - 1]), 
+                                      searchFaroo($text_array[1]));
               
               // Iterative deepening. search for the longest string (gives bigger context).
               $results = searchFaroo($array[0]); 
@@ -69,7 +70,7 @@ if (isset($input['user_id'])){
 		
 	}else{
 		//File not uploaded successfully.
-    $response['status'] = 2;
+    $response['status'] = 7;
     echo json_encode($response); 
 	}
 		
