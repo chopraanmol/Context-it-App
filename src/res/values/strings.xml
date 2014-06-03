@@ -10,7 +10,7 @@
     <string name="save_result">Save</string>
     <string name="discard_result">Skip</string>
     <string name="see_online">Read</string>
-    <string name="test">&#xf128;</string>
+    <string name="test">&#xf013;</string>
     <string name="swipe_view">&#xf07e;</string>
     <string name="icon_camera">&#xf030; </string>
     <string name="app_description">ContextIt allows you to attach web context with ease!</string>

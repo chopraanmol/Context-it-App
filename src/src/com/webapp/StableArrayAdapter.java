@@ -21,6 +21,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -83,10 +84,12 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
         RelativeLayout r = (RelativeLayout) view.findViewById(R.id.r_l_title);
         TextView t = (TextView) view.findViewById(R.id.title);
         t.setText(text);
+        Typeface tf = Typeface.createFromAsset(context.getAssets(), "OleoScript-Bold.ttf" );
+        t.setTypeface(tf);
         if(position % 2 == 0) {
         	t.setBackgroundColor(Color.argb(42, 0, 0, 0));
         } else {
-        	t.setBackgroundColor(Color.argb(84, 0, 0, 0));
+        	t.setBackgroundColor(Color.argb(120, 0, 0, 0));
         }
         t.setHeight(height_of_element);
         r.setMinimumHeight(height_of_element);

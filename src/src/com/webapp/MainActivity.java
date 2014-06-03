@@ -32,6 +32,7 @@ import android.content.Intent;
 import android.content.pm.*;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 
 public class MainActivity extends FragmentActivity {
 
@@ -298,6 +299,7 @@ public class MainActivity extends FragmentActivity {
         transaction.replace(R.id.fragment_container, s);
         transaction.addToBackStack(null);
         transaction.commit();
+        v.setBackground(Drawable.createFromPath("@drawable/blur"));
 	}
 	
 

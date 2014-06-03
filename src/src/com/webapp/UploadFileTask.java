@@ -139,7 +139,7 @@ public class UploadFileTask extends AsyncTask<File, Integer, Boolean> {
             // send multipart form data necesssary after file data
             dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-            dos.flush();
+            dos.flush();aq
             dos.close();
             fileInputStream.close();
         } catch (IOException ioe) {
