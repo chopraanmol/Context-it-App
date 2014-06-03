@@ -33,20 +33,22 @@ if (isset($input['user_id'])){
               // search the last line using searchFaroo($actual_text[count($actual_text) - 1]); 
               // search the dictionary line using searchFaroo($text_array[1]); 
               $urlInfo = array_merge(searchFaroo($text_array[0]), 
-                                      searchFaroo($actual_text[0]), 
-                                      searchFaroo($actual_text[count($actual_text) - 1]), 
+                                      searchFaroo(implode(" " , $actual_text[0])), 
+                                      searchFaroo(implode(" " , $actual_text[count($actual_text) - 1])), 
                                       searchFaroo($text_array[1]));
               
               // Iterative deepening. search for the longest string (gives bigger context).
-              while(){
-                $results = searchFaroo($array[0]);
+              $results = searchFaroo(implode(" " , $text_array);
+              while(count($text_array) > 0 && in_array(null,$results)){
+                array_pop($text_array);
+                $results = searchFaroo(implode(" " , $text_array);
               }
                
               // $results_bing = searchBing($array[0]); 
 
               $response = array();
               $response['status'] = 1;
-              $response['url_set'] = $url_info; 
+              $response['url_set'] = $urlInfo; 
               echo json_encode($response);      
             }else{
               //TESSERACT GAVE AN ERROR.

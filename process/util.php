@@ -43,7 +43,7 @@ function execute_tesseract($src_photo){
 	$ssh->exec($cmd);
 	$cmd = 'cat ' . $trans_text . '.txt';
 	$text =  $ssh->exec($cmd);
-	$text = preg_replace("/[0-9:'|=,.]/", "", $text);
+	$text = preg_replace('/[\s\W]+/', "", $text);
 	$result[0] = $text;
 	$result[1] = $ssh->exec("php script.php '".$text."'");
 	unset($ssh);
