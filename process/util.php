@@ -23,15 +23,9 @@ function upload_image($user_id){
 	$temp = explode(".", $_FILES["file"]["name"]);
 	$extension = end($temp);
 
-if (($_FILES["file"]["size"] < 20000)
-	&& in_array($extension, $allowedExts)) {
-	  if ($_FILES["file"]["error"] > 0) {
-	    return null;
-	  } 
-	  else {
+	if (in_array($extension, $allowedExts)) {
 	    move_uploaded_file($_FILES["file"]["tmp_name"],
 	    "$Dir". $fileName . '.'. $extension);
-		}
 	}	
 	
 	return array($fileName, $extension , "$Dir". $fileName . '.'. $extension);

@@ -1,1 +1,4 @@
 The file responsible for creating the database is supposed to be called database_create.sql. It is renamed to database_create.sql.txt for security reasons. 
+
+
+Look for status code files for detailed description of the error received.

@@ -24,7 +24,6 @@ if (isset($input['user_id'])){
               // Split into 2-D array of words
               $actual_text = getArrayFromString($text_array[0]);
 
-              $urlInfo = array();
               // make searchs using different algorithms.
             
               // search the actual text using bing using searchBing($text_array[0]);  
@@ -32,48 +31,42 @@ if (isset($input['user_id'])){
               // search the first line using searchFaroo($actual_text[0]); 
               // search the last line using searchFaroo($actual_text[count($actual_text) - 1]); 
               // search the dictionary line using searchFaroo($text_array[1]); 
-              $urlInfo = array_merge($urlInfo, searchFaroo($text_array[0]), 
+              $urlInfo = array_merge(searchFaroo($text_array[0]), 
                                       searchFaroo($actual_text[0]), 
                                       searchFaroo($actual_text[count($actual_text) - 1], 
                                       searchFaroo($text_array[1]);
               
               // Iterative deepening. search for the longest string (gives bigger context).
-              $results = searchFaroo($array[0]); 
-             
-            
+              while(){
+                $results = searchFaroo($array[0]);
+              }
+               
               // $results_bing = searchBing($array[0]); 
 
               $response = array();
               $response['status'] = 1;
               $response['url_set'] = $url_info; 
-              echo json_encode($response);
-                    
+              echo json_encode($response);      
             }else{
               //TESSERACT GAVE AN ERROR.
               $response['status'] = 6;
               echo json_encode($response); 
-            }
-					  
+            } 
 					}else{
             //FILE NOT TRANSFERRED
               $response['status'] = 5;
               echo json_encode($response); 
-          }
-					
+          }			
 			}else{
 				//Photo not added to the database.
         $response['status'] = 4;
         echo json_encode($response); 
 			}
-
-		
 	}else{
 		//File not uploaded successfully.
     $response['status'] = 2;
     echo json_encode($response); 
 	}
-		
-	
 }else{
 	//user_id not provided by the user.
   $response['status'] = 3;
