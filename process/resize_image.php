@@ -1,12 +1,5 @@
 <?php
-/**
- * Resize image class will allow you to resize an image
- *
- * Can resize to exact size
- * Max width size while keep aspect ratio
- * Max height size while keep aspect ratio
- * Automatic while keep aspect ratio
- */
+
 class ResizeImage
 {
 	private $ext;

@@ -1,5 +1,6 @@
 <?php 
 include('Net/SFTP.php');
+include 'resize_image.php';
 
 $username = 'guest';
 $password = 'rackrack';
@@ -10,7 +11,7 @@ function upload_image($user_id){
 	$Dir = 'photos/' . $user_id . '/';
 
 	if(!is_dir($Dir)) {
-    mkdir($Dir, 0777);
+      mkdir($Dir, 0777);
 	  chmod($Dir, 0777);
 	}
 
@@ -25,9 +26,12 @@ function upload_image($user_id){
 
 	if (in_array($extension, $allowedExts)) {
 	    move_uploaded_file($_FILES["file"]["tmp_name"],
-	    "$Dir". $fileName . '.'. $extension);
+	        "$Dir". $fileName . '.'. $extension);
+
+	    $image = new ResizeImage("$Dir". $fileName . '.'. $extension);
+		$image->resizeTo(100, 100, 'exact');
+		$image->saveImage("$Dir". $fileName .'_thumbnail' .'.'. $extension);
 	}	
-	
 	return array($fileName, $extension , "$Dir". $fileName . '.'. $extension);
 }
 	
@@ -57,6 +61,7 @@ function transfer_file_to_vm($src_photo,$dest_photo){
 	}
 	$sftp->put($dest_photo, $src_photo , NET_SFTP_LOCAL_FILE);
 	unset($stfp);
+	return true;
 }
 
 function searchFaroo($data){
@@ -77,7 +82,7 @@ function searchFaroo($data){
 
    // TO USE BING API for better results.
 function searchBing($data){
-	$acctKey = 'rt9rIpjp5a8649Zxw8rfcCJbvZa6PNKHF7HkOxMct/M';
+  $acctKey = 'rt9rIpjp5a8649Zxw8rfcCJbvZa6PNKHF7HkOxMct/M';
   $rootUri =  'https://api.datamarket.azure.com/Bing/Search';  
   $query = urlencode("'$data'");
   $requestUri = "$rootUri/Web?\$format=json&Query=$query";
@@ -89,17 +94,17 @@ function searchBing($data){
 	'header' => "Authorization: Basic $auth")
 	);
 	
-	$context = stream_context_create($data);
-	// Get the response from Bing.
-	$response = file_get_contents($requestUri, 0, $context);  
-	$jsonObj = json_decode($response);
-	$urls = array();
-	foreach($jsonObj->d->results as $result){
-		array_push($urls,array("desc"=> $result->Title,"url" => $result->Url));
-	}
-	return $urls;
+  $context = stream_context_create($data);
+  // Get the response from Bing.
+  $response = file_get_contents($requestUri, 0, $context);  
+  $jsonObj = json_decode($response);
+  $urls = array();
+  for($i = 0; $i < 10; $i++){	
+	$result = $jsonObj->d->results[$i]; 		
+	array_push($urls,array("desc"=> $result->Title,"url" => $result->Url));	
+  }
+  return $urls;
 }
-
 
 //Split the words into a 2-d array based on line number. 
 function getArrayFromString($text){

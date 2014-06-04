@@ -9,16 +9,16 @@ $input = $_POST;
 if (isset($input['user_id'])){
 	//upload image 
 	if(!empty($_FILES)){
-		$file_info = upload_image($user_id);
+		$file_info = upload_image($input['user_id']);
 		$file_dir = 'http://www.doc.ic.ac.uk/project/2013/271/g1327111/process/'. $file_info[2];
 		//add the photo to the database
-			if(create_photo($user_id,$file_dir) != 1){
+			if(create_photo($input['user_id'],$file_dir) != 1){
 					//copy the file from the server to the vm. 	
 				$dest_photo = $file_info[0] .'.'. $file_info[1];					
 					//run tesseract on it and return dictionary words.
 					if(transfer_file_to_vm($file_info[2],$dest_photo)){
 						$text_array = execute_tesseract($dest_photo);
-            if(!is_array($text_array)){
+            if(is_array($text_array)){
               //$text_array[0] // Without spellchecker
               //$text_array[1] // With spellchecker
                  
@@ -44,7 +44,7 @@ if (isset($input['user_id'])){
                 $results = searchFaroo(implode(" " , $text_array);
               }
                
-              // $results_bing = searchBing($array[0]); 
+              $urlInfo = array_merge($results, $urlInfo);
 
               $response = array();
               $response['status'] = 1;
