@@ -14,7 +14,7 @@ if (isset($input['user_id'])){
 		//add the photo to the database
 			if(create_photo($input['user_id'],$file_dir) != 1){
 					//copy the file from the server to the vm. 	
-				$dest_photo = $file_info[0] .'.'. $file_info[1];					
+				  $dest_photo = $file_info[0] .'.'. $file_info[1];					
 					//run tesseract on it and return dictionary words.
 					if(transfer_file_to_vm($file_info[2],$dest_photo)){
 						$text_array = execute_tesseract($dest_photo);

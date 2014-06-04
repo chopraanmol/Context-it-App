@@ -43,8 +43,10 @@ function execute_tesseract($src_photo){
 	}
 	$array = explode(".", $src_photo);
 	$trans_text = $array[0];
-	$cmd = 'tesseract ' . $src_photo . ' ' . $trans_text . ' -psm 1';
-	$ssh->exec($cmd);
+	$tesseract = 'tesseract ' . $src_photo . ' ' . $trans_text . ' -psm 1';
+	$cleaning = './textcleaner -g -e none -f 10 -o 5'. $src_photo .$src_photo;
+	$ssh->exec($cleaning);
+	$ssh->exec($tesseract);
 	$cmd = 'cat ' . $trans_text . '.txt';
 	$text =  $ssh->exec($cmd);
 	$text = preg_replace('/[\s\W]+/', "", $text);
