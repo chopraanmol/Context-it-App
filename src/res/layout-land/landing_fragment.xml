@@ -40,7 +40,7 @@
         android:background="@android:color/transparent"
         android:textSize="80sp"
         android:text="@string/swipe_view"
-        android:onClick="goToSwipeView"
+        android:onClick="testSwipeView"
      />
      
     

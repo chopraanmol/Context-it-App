@@ -87,11 +87,8 @@ public class MainActivity extends FragmentActivity {
 
             // Create a new Fragment to be placed in the activity layout
             login = new LoginFragment();
-    	    Session session = Session.getActiveSession();
-    	    if (!(session != null &&
-    	           session.isOpened())) {
-                // Add the fragment to the 'fragment_container' FrameLayout
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, login).commit();
+    	    if(Session.restoreSession(this, null, callback, savedInstanceState) != null) {
+    	    	getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, login).commitAllowingStateLoss();
     	    }
         }
 	}
@@ -151,6 +148,7 @@ public class MainActivity extends FragmentActivity {
 	public void onSaveInstanceState(Bundle outState) {
 	    super.onSaveInstanceState(outState);
 	    uiHelper.onSaveInstanceState(outState);
+	    Session.saveSession(Session.getActiveSession(), outState);
 	}
 	
 	private void onSessionStateChange(Session session, SessionState state,
@@ -205,7 +203,7 @@ public class MainActivity extends FragmentActivity {
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(R.id.fragment_container, new LoginFragment());
 			transaction.addToBackStack(null);
-			transaction.commit();
+			transaction.commitAllowingStateLoss();
 			}
 		}
 	}
@@ -221,7 +219,7 @@ public class MainActivity extends FragmentActivity {
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragment_container, new ResultContainerFragment());
 		transaction.addToBackStack(null);
-		transaction.commit();
+		transaction.commitAllowingStateLoss();
 	}
 	
 
@@ -278,8 +276,8 @@ public class MainActivity extends FragmentActivity {
 			break;
 		}
 
-		// Commit the transaction
-		transaction.commit();
+		// commitAllowingStateLoss the transaction
+		transaction.commitAllowingStateLoss();
 	}
 
 	public void sendFileToServer(File file) {
@@ -290,7 +288,7 @@ public class MainActivity extends FragmentActivity {
 		newFragment.setArguments(args);
 		transaction.replace(R.id.fragment_container, newFragment);
 		transaction.addToBackStack(null);
-		transaction.commit();
+		transaction.commitAllowingStateLoss();
 	}
 	
 	public void receiveResults(Queue results) {
@@ -317,8 +315,7 @@ public class MainActivity extends FragmentActivity {
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, s);
         transaction.addToBackStack(null);
-        transaction.commit();
-        v.setBackground(Drawable.createFromPath("@drawable/blur"));
+        transaction.commitAllowingStateLoss();
 	}
 
 }
