@@ -294,14 +294,20 @@ public class MainActivity extends FragmentActivity {
 	
 	public void testSwipeView(View v) {
 		goToSwipeView(							 
-				new ArrayList<String>(Arrays.asList("headline 1 : blah blah",
+				new ArrayList<String>(Arrays.asList(
+				 "headline 1 : blah blah",
 				 "headline 2: asdfghj",
 				 "headline 3: wertyrew",
 				 "headline 4:weardfgvx",
-				 "headline 5: weaggggg","")));
+				 "headline 5: weaggggg",
+				 "headline 6 : wawearwe",
+				 "headline 7: twatwea",
+				 "headline 8 : twaeaa",
+				 "headline 9 : waeaea",
+				 "headline 10: wawaaa",
+				 "" )), v);
 	}
-	
-	public void goToSwipeView(ArrayList<String> arrayList) {
+	public void goToSwipeView(ArrayList<String> arrayList, View v) {
 		Log.d("COnrad2", "GOT HERE HOORAY");
 		SwipeResult s = new SwipeResult();
 		Bundle b = new Bundle();
