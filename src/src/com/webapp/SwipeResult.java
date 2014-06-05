@@ -65,6 +65,7 @@ public class SwipeResult extends Fragment{
    
     @Override
     public void onCreate(Bundle savedInstance) {
+    	Log.d("CONRAD", "CREATE");
         super.onCreate(savedInstance);
         //setContentView(R.layout.activity_list_view_deletion);
     
@@ -80,6 +81,8 @@ public class SwipeResult extends Fragment{
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, 
 	        Bundle savedInstanceState) {
+
+    	Log.d("CONRAD", "CREATE VIEW");
     	View view = inflater.inflate(R.layout.activity_list_view_deletion, container, false);
     	mBackgroundContainer = (BackgroundContainer) view.findViewById(R.id.listViewBackground);
     	if(savedInstanceState == null) {

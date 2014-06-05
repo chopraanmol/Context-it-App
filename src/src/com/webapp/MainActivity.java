@@ -86,8 +86,8 @@ public class MainActivity extends FragmentActivity {
             }
 
             // Create a new Fragment to be placed in the activity layout
-            login = new LoginFragment();
-    	    if(Session.restoreSession(this, null, callback, savedInstanceState) != null) {
+    	    if(Session.openActiveSession(this, true, callback) == null) {
+            	login = new LoginFragment();
     	    	getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, login).commitAllowingStateLoss();
     	    }
         }
@@ -118,11 +118,6 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public void onResume() {
 	    super.onResume();
-	    Session session = Session.getActiveSession();
-	    if (session != null &&
-	           (session.isOpened() || session.isClosed()) ) {
-	        onSessionStateChange(session, session.getState(), null);
-	    }
 	    uiHelper.onResume();    
 	}
 
@@ -148,7 +143,6 @@ public class MainActivity extends FragmentActivity {
 	public void onSaveInstanceState(Bundle outState) {
 	    super.onSaveInstanceState(outState);
 	    uiHelper.onSaveInstanceState(outState);
-	    Session.saveSession(Session.getActiveSession(), outState);
 	}
 	
 	private void onSessionStateChange(Session session, SessionState state,
@@ -209,6 +203,7 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	public void jumpToLandingFragment() {
+		Log.d("Conrad", "dunno why");
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragment_container, new LandingFragment());
 		transaction.addToBackStack(null);
