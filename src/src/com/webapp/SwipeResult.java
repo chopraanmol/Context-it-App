@@ -23,6 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.nhaarman.listviewanimations.swinginadapters.prepared.*;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -50,6 +52,7 @@ import android.widget.Toast;
 public class SwipeResult extends Fragment{
 
     StableArrayAdapter mAdapter;
+    SwingLeftInAnimationAdapter newAdapter;
     ListView mListView;
     BackgroundContainer mBackgroundContainer;
     boolean mSwiping = false;
@@ -74,6 +77,7 @@ public class SwipeResult extends Fragment{
         //mAdapter = new StableArrayAdapter(this, R.layout.opaque_text_view, searchResults,
         //        mTouchListener);
         //mListView.setAdapter(mAdapter);
+        
     }
     
     @Override
@@ -82,23 +86,14 @@ public class SwipeResult extends Fragment{
 	        Bundle savedInstanceState) {
     	View view = inflater.inflate(R.layout.activity_list_view_deletion, container, false);
     	mBackgroundContainer = (BackgroundContainer) view.findViewById(R.id.listViewBackground);
-    	if(savedInstanceState == null) {
-    		Log.d("Webapp", "view is null");
-    	}
     	mListView = (ListView) view.findViewById(R.id.listview);
-        //String[] stringResults = new String[searchResults.size()];
-        //int i = 0;
-        /* for(SearchResult sR : searchResults) {
-        	stringResults[i]= sR.toString();
-        	i++;
-        }*/
-        
+    	
         mAdapter = new StableArrayAdapter(context, R.layout.opaque_text_view, 
         								  getArguments().getStringArrayList("search_results"),
         								  mTouchListener);
-        android.util.Log.d("Debug", "d=" + mListView);
-
-        mListView.setAdapter(mAdapter);
+        newAdapter = new SwingLeftInAnimationAdapter(mAdapter);
+        newAdapter.setAbsListView(mListView);
+        mListView.setAdapter(newAdapter);
     	return view;
     }
     

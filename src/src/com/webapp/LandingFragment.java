@@ -28,7 +28,7 @@ public class LandingFragment extends Fragment {
 	
 	Button cameraButton = null;
 	File file = null;
-	Activity activity;
+	MainActivity activity;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,13 +61,21 @@ public class LandingFragment extends Fragment {
 		testButton.setTypeface(font);
 		Button swipeButton = (Button) view.findViewById(R.id.swipe_view_button);
 		swipeButton.setTypeface(font);
+		swipeButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.d("KAHO", "HEY");
+				activity.testSwipeView(v);
+			}
+		});
 		return view;
 	}
 	
 	@Override
     public void onAttach(Activity activity) {
     	super.onAttach(activity);
-    	this.activity = getActivity();
+    	this.activity = (MainActivity) getActivity();
     }
 	
 	@Override

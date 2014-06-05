@@ -48,7 +48,7 @@ public class WaitFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, 
 	        Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.wait_fragment, container, false);
+		final View view = inflater.inflate(R.layout.wait_fragment, container, false);
 		Request.newMeRequest(Session.getActiveSession(),
                 new Request.GraphUserCallback() {
 					@Override
@@ -60,11 +60,10 @@ public class WaitFragment extends Fragment {
 								POSTMap.put("user_id", user.getId());
 								try {
 									imageMap.put("file", new Pair<String, InputStream>("input.jpg", new FileInputStream(file)));
-									Log.d("Conrad","PENIIIIIIIIIIIIIIIIIIIIIS");
 									JSONObject ret = ImageConnection.sendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/process/process_image.php", POSTMap, imageMap);
 									if(ret != null) {
 										Log.d("Conrad", ret.toString());
-										main.goToSwipeView(JSONToArrayList(ret));
+										main.goToSwipeView(JSONToArrayList(ret), view);
 									} else {
 							            Toast.makeText(main.getApplicationContext(),
 							                    "New user entered to database", Toast.LENGTH_SHORT)

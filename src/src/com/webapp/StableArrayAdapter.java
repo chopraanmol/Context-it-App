@@ -41,6 +41,8 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
     LayoutInflater inflater;
     int height_of_element;
     final int num_of_rows = 3;
+    
+    
     public StableArrayAdapter(Context context, int textViewResourceId,
             List<String> objects, View.OnTouchListener listener) {
         super(context, textViewResourceId, objects);
@@ -76,6 +78,7 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
         //View view = super.getView(position, convertView, parent);
     	View view = convertView;
     	String text = texts.get(position);
+    	
         view = inflater.inflate(R.layout.search_result_list_row, null);
         if (view != convertView) {
             // Add touch listener to every new view to track swipe motion
@@ -83,6 +86,11 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
         }
         RelativeLayout r = (RelativeLayout) view.findViewById(R.id.r_l_title);
         TextView t = (TextView) view.findViewById(R.id.title);
+        if(text.isEmpty()) {
+    		t.setHeight(0);
+    		r.setMinimumHeight(0);
+    		return view;
+    	}
         t.setText(text);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "OleoScript-Bold.ttf" );
         t.setTypeface(tf);
