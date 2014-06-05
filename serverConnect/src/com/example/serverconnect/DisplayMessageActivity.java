@@ -34,17 +34,18 @@ public class DisplayMessageActivity extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		ServerConnection s = new ServerConnection();
+		ServerConnectionFactory fac = new ServerConnectionFactory(1);
+		ServerConnection s = fac.getConnection();
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("user_id","abcdefg");
 		Map<String, Pair<String,InputStream>> params = new HashMap<String, Pair<String,InputStream>>();	
 		String message = "";
 		try {
-			params.put("picture",new Pair<String,InputStream>("mercedes.jpg", getAssets().open("m.jpg")));
+			params.put("picture",new Pair<String,InputStream>("merc.jpg", getAssets().open("m.jpg")));
 			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/testing.php", m, params);
 			message = f1.get().toString();
 			File file = new File(this.getExternalCacheDir(), "a.jpg");
-			s.getFile("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/mercedes.jpg", file);
+			s.getFile("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/merc.jpg", file);
 			InputStream in = new FileInputStream(file);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			StringBuilder stringReply = new StringBuilder();
@@ -70,8 +71,8 @@ public class DisplayMessageActivity extends Activity {
 			// TODO Auto-generated catch block
 			message = " e  " + e.toString();
 		}
-		s.closeConnection();
-		
+		fac.recycleConnection(s);
+		fac.destroyAllConnection();
 	    TextView textView = (TextView) findViewById(R.id.view_text);
 	    textView.setText(message);
 
