@@ -85,8 +85,7 @@ public class Factory<K> implements Iterable<K>{
 
 		@Override
 		public void remove() {
-			// TODO Auto-generated method stub
-			
+			assert(false);	//this method should not be called.
 		}
 		
 	}

@@ -53,7 +53,6 @@ public class ServerConnection {
 		if (connection_closed) {
 			return;
 		}
-		System.out.println("\nclosing connection!!");
 		connection_closed = true;
 		new Thread(new Runnable() {
 			@Override
@@ -196,6 +195,8 @@ public class ServerConnection {
 			InputStream in = httpResponse.getEntity().getContent();
 			OutputStream out = new FileOutputStream(file);
 			IOUtils.copy(in, out);
+			in.close();
+			out.close();
 			return file;
 		}
 	}

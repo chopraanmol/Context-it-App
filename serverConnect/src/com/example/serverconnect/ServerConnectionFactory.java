@@ -12,7 +12,7 @@ public class ServerConnectionFactory {
 	public synchronized ServerConnection getConnection() {
 		ServerConnection connection = null;
 		boolean found_connection = false;
-		while(true) {
+		while(!found_connection) {
 			if (!factory.idleIsEmpty()) {
 				connection = factory.getAndUseAnIdle();
 				found_connection = true;
@@ -26,9 +26,10 @@ public class ServerConnectionFactory {
 			if (!found_connection) {
 				try {
 					wait();
-				} catch (InterruptedException e) {}
-			} else {
-				break;
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return connection;
