@@ -26,9 +26,11 @@ import java.util.Queue;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.*;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -57,7 +59,7 @@ public class SwipeResult extends Fragment{
     BackgroundContainer mBackgroundContainer;
     boolean mSwiping = false;
     boolean mItemPressed = false;
-    List<String> keptResults = new LinkedList<String>();
+    List<String> keptResults = new ArrayList<String>();
     HashMap<Long, Integer> mItemIdTopMap = new HashMap<Long, Integer>();
 
     private static final int SWIPE_DURATION = 250;
@@ -65,6 +67,7 @@ public class SwipeResult extends Fragment{
     
     
     Context context;
+    
    
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -299,9 +302,16 @@ public class SwipeResult extends Fragment{
                     }
                 }
                 mItemIdTopMap.clear();
+                
+              
                 return true;
             }
         });
+        if(listview.getCount() == 1) {
+        	((MainActivity)context).goToListOfSavedContext(keptResults);
+        }
     }
+
+	
 
 }

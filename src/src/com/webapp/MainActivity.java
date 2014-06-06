@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ExecutionException;
@@ -303,19 +304,18 @@ public class MainActivity extends FragmentActivity {
 		goToSwipeView(							 
 				new ArrayList<String>(Arrays.asList(
 				 "headline 1 : blah blah",
-				 "headline 2: asdfghj",
-				 "headline 3: wertyrew",
-				 "headline 4:weardfgvx",
-				 "headline 5: weaggggg",
+				 "headline 2 : asdfghj",
+				 "headline 3 : wertyrew",
+				 "headline 4 : weardfgvx",
+				 "headline 5 : weaggggg",
 				 "headline 6 : wawearwe",
-				 "headline 7: twatwea",
+				 "headline 7 : twatwea",
 				 "headline 8 : twaeaa",
 				 "headline 9 : waeaea",
 				 "headline 10: wawaaa",
 				 "" )), v);
 	}
 	public void goToSwipeView(ArrayList<String> arrayList, View v) {
-		Log.d("COnrad2", "GOT HERE HOORAY");
 		SwipeResult s = new SwipeResult();
 		Bundle b = new Bundle();
 		b.putStringArrayList("search_results", arrayList);
@@ -325,6 +325,17 @@ public class MainActivity extends FragmentActivity {
         transaction.addToBackStack(null);
         transaction.commit();
         v.setBackground(Drawable.createFromPath("@drawable/blur"));
+	}
+	
+	public void goToListOfSavedContext(List<String> results) {
+		ConfirmResultFragment f = new ConfirmResultFragment();
+		Bundle b = new Bundle();
+		b.putStringArrayList("results_to_confirm", (ArrayList<String>) results);
+		f.setArguments(b);
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, f);
+        transaction.addToBackStack(null);
+        transaction.commit();
 	}
 
 }
