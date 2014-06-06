@@ -1,61 +1,84 @@
 package com.example.serverconnect;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+
+import org.apache.commons.io.IOUtils;
 
 public class PreciousFile {
 	private File file;
-	private FILE_STATUS file_status;
-	private long approxFileSize;
-	
-	public PreciousFile(File file, long expectedFileSize) {
+	private volatile FILE_STATUS file_status;
+	private volatile long file_size;
+	private CacheManager manager;
+
+	public PreciousFile(File file, CacheManager manager) {
 		this.file = file;
-		approxFileSize = expectedFileSize;
+		file_size = 0;
+		this.manager = manager;
 	}
-	
-	public synchronized void changeStatus(FILE_STATUS file_status) {
-		this.file_status = file_status;
+
+	public void changeStatus(FILE_STATUS file_status) {
+		synchronized (this) {
+			this.file_status = file_status;
+		}
+		if (file_status != FILE_STATUS.STATUS_BUSY) {
+			synchronized (manager) {
+				manager.notifyAll();
+			}
+		}
 	}
-	
-	public synchronized FILE_STATUS getStatus() {
+
+	public FILE_STATUS getStatus() {
 		return file_status;
 	}
-	
-	//returns true iff the file was deleted, and sets status to deleted.
+
+	// gets the last actual size.
+	public long getFileSize() {
+		return file_size;
+	}
+
+	// returns true iff the file was deleted, and sets status to deleted and
+	// sets file_size to 0.
 	public synchronized boolean deleteIfIdle() {
 		boolean deleted = false;
-		if(file_status==FILE_STATUS.STATUS_IDLE) {
+		if (file_status == FILE_STATUS.STATUS_IDLE) {
 			deleted = file.delete();
 		}
-		if(deleted) {
-			file_status = FILE_STATUS.STATUS_DELETED;
+		if (deleted) {
+			changeStatus(FILE_STATUS.STATUS_DELETED);
+			file_size = 0;
 		}
-		return false || deleted;
+		return deleted;
 	}
-	
-	//returns file object if it is idle and sets status to busy. Else returns null.
-	public synchronized File getFile() {
-		if(file_status == FILE_STATUS.STATUS_IDLE) {
-			file_status = FILE_STATUS.STATUS_BUSY;
-			return file;
+
+	// write the InputStream into this file. Returns true is successful.m
+	public synchronized boolean write(InputStream in) throws IOException {
+		assert (file.length() == 0);
+		if (file_status == FILE_STATUS.STATUS_DELETED) {
+			return false;
 		}
-		return null;
+		FILE_STATUS old_status = file_status;
+		file_status = FILE_STATUS.STATUS_BUSY;
+		OutputStream out = new FileOutputStream(file);
+		IOUtils.copy(in, out);
+		in.close();
+		out.close();
+		file_status = old_status;
+		file_size = file.length();
+		return true;
 	}
-	
-	//gets the last actual size. This does not guarantee to give the correct size!
-	public synchronized long getApproxFileSize() {
-		if(file_status==FILE_STATUS.STATUS_IDLE) {
-			approxFileSize = file.length();
-		}
-		return approxFileSize;
+
+	public synchronized InputStream getInputStream()
+			throws FileNotFoundException {
+		return new FileInputStream(file);
 	}
-	
-	public synchronized boolean write(InputStream in) {
-		//TO-DO. check status.. change status to busy. write to file. restore status.
-		return false;
-	}
-	
-	//enum that represents current status of the file in this object.
+
+	// enum that represents current status of the file in this object.
 	public enum FILE_STATUS {
 		STATUS_BUSY, STATUS_IDLE, STATUS_DELETED;
 	}

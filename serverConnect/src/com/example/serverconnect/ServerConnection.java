@@ -1,7 +1,6 @@
 package com.example.serverconnect;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -122,9 +121,11 @@ public class ServerConnection {
 			for (String key : files.keySet()) {
 				// ENABLE THE FIRST VERSION IF CHUNKING IS AVALIABLE ON THE
 				// SERVER AND UNCOMMENT ITS IMPORT ON TOP.
-				 /*multipartEntity.addPart(key, new
-				 InputStreamBody(files.get(key).second,
-				 ContentType.APPLICATION_OCTET_STREAM,files.get(key).first));*/
+				/*
+				 * multipartEntity.addPart(key, new
+				 * InputStreamBody(files.get(key).second,
+				 * ContentType.APPLICATION_OCTET_STREAM,files.get(key).first));
+				 */
 				multipartEntity.addBinaryBody(key,
 						IOUtils.toByteArray(files.get(key).second),
 						ContentType.APPLICATION_OCTET_STREAM,
@@ -163,19 +164,21 @@ public class ServerConnection {
 	}
 
 	// Blocking version to obtain a file at the specified url.
-	public InputStream getFile(String url, File file) throws InterruptedException,
-			ExecutionException {
-		return asyncGetFile(url, file).get();
+	public InputStream getFileInputStream(String url)
+			throws InterruptedException, ExecutionException {
+		return asyncGetFileInputStream(url).get();
 	}
 
-	// non-blocking version to obtain a url at the specified url.
-	public Future<InputStream> asyncGetFile(String url, File file) {
+	// non-blocking version to obtain a file at the specified url.
+	public Future<InputStream> asyncGetFileInputStream(String url) {
 		HttpGet request = new HttpGet(url);
-		Future<InputStream> future = threadPool.submit(new getFileRequest(request));
+		Future<InputStream> future = threadPool.submit(new getFileRequest(
+				request));
 		return future;
 	}
 
-	// Thread to communicate with server and give back a file object.
+	// Thread to communicate with server and give back an inputstream object of
+	// a file.
 	private class getFileRequest implements Callable<InputStream> {
 
 		HttpRequestBase request;
@@ -189,10 +192,6 @@ public class ServerConnection {
 			HttpResponse httpResponse = httpClient.execute(request);
 			InputStream in = httpResponse.getEntity().getContent();
 			return in;
-			/*OutputStream out = new FileOutputStream(file);
-			IOUtils.copy(in, out);
-			in.close();
-			out.close();*/
 		}
 	}
 }
