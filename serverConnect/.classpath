@@ -3,10 +3,10 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="/home/rishabhpoddar/Desktop/serverConnect/libs/httpcore-4.3.2.jar"/>
-	<classpathentry kind="lib" path="/home/rishabhpoddar/Desktop/serverConnect/libs/httpmime-4.3.jar"/>
-	<classpathentry kind="lib" path="/home/rishabhpoddar/Desktop/serverConnect/libs/org.apache.commons.io.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="/homes/rp2612/Desktop/serverConnect/libs/httpcore-4.3.2.jar"/>
+	<classpathentry kind="lib" path="/homes/rp2612/Desktop/serverConnect/libs/httpmime-4.3.jar"/>
+	<classpathentry kind="lib" path="/homes/rp2612/Desktop/serverConnect/libs/org.apache.commons.io.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

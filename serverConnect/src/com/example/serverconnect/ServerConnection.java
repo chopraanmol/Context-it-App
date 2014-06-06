@@ -2,11 +2,9 @@ package com.example.serverconnect;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -165,39 +163,36 @@ public class ServerConnection {
 	}
 
 	// Blocking version to obtain a file at the specified url.
-	public File getFile(String url, File file) throws InterruptedException,
+	public InputStream getFile(String url, File file) throws InterruptedException,
 			ExecutionException {
 		return asyncGetFile(url, file).get();
 	}
 
 	// non-blocking version to obtain a url at the specified url.
-	public Future<File> asyncGetFile(String url, File file) {
+	public Future<InputStream> asyncGetFile(String url, File file) {
 		HttpGet request = new HttpGet(url);
-		Future<File> future = threadPool.submit(new getFileRequest(request,
-				file));
+		Future<InputStream> future = threadPool.submit(new getFileRequest(request));
 		return future;
 	}
 
 	// Thread to communicate with server and give back a file object.
-	private class getFileRequest implements Callable<File> {
+	private class getFileRequest implements Callable<InputStream> {
 
 		HttpRequestBase request;
-		File file;
 
-		public getFileRequest(HttpRequestBase request, File file) {
+		public getFileRequest(HttpRequestBase request) {
 			this.request = request;
-			this.file = file;
 		}
 
 		@Override
-		public File call() throws Exception {
+		public InputStream call() throws Exception {
 			HttpResponse httpResponse = httpClient.execute(request);
 			InputStream in = httpResponse.getEntity().getContent();
-			OutputStream out = new FileOutputStream(file);
+			return in;
+			/*OutputStream out = new FileOutputStream(file);
 			IOUtils.copy(in, out);
 			in.close();
-			out.close();
-			return file;
+			out.close();*/
 		}
 	}
 }

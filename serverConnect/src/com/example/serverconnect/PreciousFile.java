@@ -1,6 +1,7 @@
 package com.example.serverconnect;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class PreciousFile {
 	private File file;
@@ -47,6 +48,11 @@ public class PreciousFile {
 			approxFileSize = file.length();
 		}
 		return approxFileSize;
+	}
+	
+	public synchronized boolean write(InputStream in) {
+		//TO-DO. check status.. change status to busy. write to file. restore status.
+		return false;
 	}
 	
 	//enum that represents current status of the file in this object.
