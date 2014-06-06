@@ -38,10 +38,10 @@ if (isset($input['user_id'])){
                                       searchFaroo($text_array[1]));
               
               // Iterative deepening. search for the longest string (gives bigger context).
-              $results = searchFaroo(implode(" " , $text_array);
+              $results = searchFaroo(implode(" " , $text_array));
               while(count($text_array) > 0 && in_array(null,$results)){
                 array_pop($text_array);
-                $results = searchFaroo(implode(" " , $text_array);
+                $results = searchFaroo(implode(" " , $text_array));
               }
                
               $urlInfo = array_merge($results, $urlInfo);
