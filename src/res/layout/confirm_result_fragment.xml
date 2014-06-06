@@ -4,18 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/blur" >
-    <LinearLayout 
-        android:id="@+id/upper"
-    	android:layout_weight="1"
-    	android:background="@android:color/transparent"
-    	android:orientation = "vertical"  
-    >
+    
     <Button
-        android:id="@+id/share"
+        android:id="@+id/share_button"
         android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
         android:text="@string/share"/>
-    </LinearLayout>
+    
     <ListView 
         android:id="@+id/list_to_confirm"
         android:divider="@null"
