@@ -34,31 +34,32 @@ public class DisplayMessageActivity extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		ServerConnectionFactory fac = new ServerConnectionFactory(1);
+		ServerConnectionFactory fac = new ServerConnectionFactory(10);
 		ServerConnection s = fac.getConnection();
+		
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("user_id","abcdefg");
 		Map<String, Pair<String,InputStream>> params = new HashMap<String, Pair<String,InputStream>>();	
 		String message = "";
 		try {
 			long t0 = System.currentTimeMillis();
-			params.put("picture",new Pair<String,InputStream>("ll.mp3", getAssets().open("l.mp3")));
+			params.put("picture",new Pair<String,InputStream>("mo.jpg", getAssets().open("m.jpg")));
 			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/testing.php", m, params);
 			message = f1.get().toString();
 			System.out.println("upload time :" + (System.currentTimeMillis() - t0));
-			
 			long t1 = System.currentTimeMillis();
-			PreciousFile file = MainActivity.cm.getFile("ndshfbsdie.mp3", 10);
-			s.getFileInputStream("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/ll.mp3", file);
+			PreciousFile file = MainActivity.cm.getFile("pic.jpg", 10);
+			Future<Boolean> future = s.asyncGetFile("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/mo.jpg", file);
+			future.get();
 			System.out.println("download time :" + (System.currentTimeMillis() - t1));
-//			InputStream in = file.getInputStream();
-//			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-//			StringBuilder stringReply = new StringBuilder();
-//			String replyLine;
-//			while ((replyLine = reader.readLine()) != null) {
-//			    stringReply.append(replyLine);
-//			}
-//			System.out.println(stringReply);
+			InputStream in = file.getInputStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			StringBuilder stringReply = new StringBuilder();
+			String replyLine;
+			while ((replyLine = reader.readLine()) != null) {
+			    stringReply.append(replyLine);
+			}
+			System.out.println(stringReply);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			message = "  a  " + e.toString();
@@ -69,9 +70,6 @@ public class DisplayMessageActivity extends Activity {
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			message = "  c  " + e.toString();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			message = " d  " + e.toString();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			message = " e  " + e.toString();

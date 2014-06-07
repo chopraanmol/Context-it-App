@@ -30,6 +30,12 @@ public class Factory<K> implements Iterable<K>{
 			idle.add(obj);
 		}
 	}
+	
+	public void remove(K obj) {
+		if(!inUse.remove(obj)) {
+			idle.remove(obj);
+		}
+	}
 
 	public boolean idleIsEmpty() {
 		return idle.isEmpty();

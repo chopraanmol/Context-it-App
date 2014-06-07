@@ -25,14 +25,22 @@ public class PreciousFile {
 
 	}
 
-	public void changeStatus(FILE_STATUS file_status) {
+	public void changeStatus(final FILE_STATUS file_status) {
 		synchronized (this) {
 			this.file_status = file_status;
 		}
 		if (file_status != FILE_STATUS.STATUS_BUSY) {
-			synchronized (manager) {
-				manager.notifyAll();
-			}
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						synchronized (manager) {
+							manager.notifyAll();
+						}
+					} catch (Exception e) {
+					}
+				}
+			}).start();
 		}
 	}
 
@@ -65,14 +73,14 @@ public class PreciousFile {
 			return false;
 		}
 		FILE_STATUS old_status = file_status;
-		file_status = FILE_STATUS.STATUS_BUSY;
+		changeStatus(FILE_STATUS.STATUS_BUSY);
 		clearFile();
 		OutputStream out = new FileOutputStream(file);
 		IOUtils.copy(in, out);
 		in.close();
 		out.close();
-		file_status = old_status;
 		file_size = file.length();
+		changeStatus(old_status);
 		return true;
 	}
 

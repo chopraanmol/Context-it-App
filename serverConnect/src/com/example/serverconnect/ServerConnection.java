@@ -93,8 +93,7 @@ public class ServerConnection {
 	 */
 	public JSONObject sendPOSTRequest(String URL, Map<String, String> params,
 			Map<String, Pair<String, InputStream>> files)
-			throws InterruptedException, ExecutionException, JSONException,
-			IOException {
+			throws InterruptedException, ExecutionException, IOException {
 		return asyncSendPOSTRequest(URL, params, files).get();
 	}
 
@@ -105,9 +104,7 @@ public class ServerConnection {
 	 */
 	public Future<JSONObject> asyncSendPOSTRequest(String URL,
 			Map<String, String> params,
-			Map<String, Pair<String, InputStream>> files)
-			throws InterruptedException, ExecutionException, JSONException,
-			IOException {
+			Map<String, Pair<String, InputStream>> files) throws IOException {
 		HttpPost request = new HttpPost(URL);
 		MultipartEntityBuilder multipartEntity = MultipartEntityBuilder
 				.create();
@@ -148,32 +145,42 @@ public class ServerConnection {
 		}
 
 		@Override
-		public JSONObject call() throws Exception {	//TO-DO: catch exception and send an error code JSONObject? 
-			HttpResponse httpResponse = httpClient.execute(request);
-			InputStream in = httpResponse.getEntity().getContent();
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(in));
+		public JSONObject call() throws JSONException { // TO-DO: catch
+														// exception and send an
+														// error code
+														// JSONObject?
 			StringBuilder stringReply = new StringBuilder();
-			String replyLine;
-			while ((replyLine = reader.readLine()) != null) {
-				stringReply.append(replyLine);
+			try {
+				HttpResponse httpResponse = httpClient.execute(request);
+				InputStream in = httpResponse.getEntity().getContent();
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(in));
+				String replyLine;
+				while ((replyLine = reader.readLine()) != null) {
+					stringReply.append(replyLine);
+				}
+				in.close();
+			} catch (Exception e) {
+				stringReply.setLength(0);
+				stringReply.append((new JSONObject())
+						.accumulate("status", "-1").toString());
+
 			}
-			in.close();
 			return new JSONObject(stringReply.toString());
 		}
 	}
 
 	// Blocking version to obtain a file at the specified url.
-	public Boolean getFileInputStream(String url, PreciousFile file)
+	public Boolean getFile(String url, PreciousFile file)
 			throws InterruptedException, ExecutionException {
-		return asyncGetFileInputStream(url, file).get();
+		return asyncGetFile(url, file).get();
 	}
 
 	// non-blocking version to obtain a file at the specified url.
-	public Future<Boolean> asyncGetFileInputStream(String url, PreciousFile file) {
+	public Future<Boolean> asyncGetFile(String url, PreciousFile file) {
 		HttpGet request = new HttpGet(url);
-		Future<Boolean> future = threadPool.submit(new getFileRequest(
-				request, file));
+		Future<Boolean> future = threadPool.submit(new getFileRequest(request,
+				file));
 		return future;
 	}
 
@@ -190,10 +197,15 @@ public class ServerConnection {
 		}
 
 		@Override
-		public Boolean call() throws Exception {	//TO-DO Catch exception and return false?
-			HttpResponse httpResponse = httpClient.execute(request);
-			InputStream in = httpResponse.getEntity().getContent();
-			boolean success = file.write(in);
+		public Boolean call() {
+			boolean success = false;
+			try {
+				HttpResponse httpResponse = httpClient.execute(request);
+				InputStream in = httpResponse.getEntity().getContent();
+				success = file.write(in);
+			} catch (Exception e) {
+				success = false;
+			}
 			return success;
 		}
 	}

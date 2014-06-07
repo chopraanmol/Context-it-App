@@ -19,17 +19,15 @@ public class ServerConnectionFactory {
 				connection = factory.getAndUseAnIdle();
 				found_connection = true;
 			}
-			if (!factory.isFull()) {
-				ServerConnection newConnection = new ServerConnection();
-				factory.addToFactory(newConnection);
-				connection = newConnection;
+			else if (!factory.isFull()) {
+				connection = new ServerConnection();
+				factory.addToFactory(connection);
 				found_connection = true;
 			}
 			if (!found_connection) {
 				try {
 					wait();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -45,6 +43,7 @@ public class ServerConnectionFactory {
 	public synchronized void destroyAllConnection() {
 		for(ServerConnection conn : factory) {
 			conn.closeConnection();
+			factory.remove(conn);
 		}
 	}
 }
