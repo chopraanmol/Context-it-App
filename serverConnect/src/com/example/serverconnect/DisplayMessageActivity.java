@@ -41,19 +41,24 @@ public class DisplayMessageActivity extends Activity {
 		Map<String, Pair<String,InputStream>> params = new HashMap<String, Pair<String,InputStream>>();	
 		String message = "";
 		try {
-			params.put("picture",new Pair<String,InputStream>("merc.jpg", getAssets().open("m.jpg")));
+			long t0 = System.currentTimeMillis();
+			params.put("picture",new Pair<String,InputStream>("ll.mp3", getAssets().open("l.mp3")));
 			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/testing.php", m, params);
 			message = f1.get().toString();
-			PreciousFile file = MainActivity.cm.getFile("new_image.jpg", 10);
-			s.getFileInputStream("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/merc.jpg", file);
-			InputStream in = file.getInputStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-			StringBuilder stringReply = new StringBuilder();
-			String replyLine;
-			while ((replyLine = reader.readLine()) != null) {
-			    stringReply.append(replyLine);
-			}
-			System.out.println(stringReply);
+			System.out.println("upload time :" + (System.currentTimeMillis() - t0));
+			
+			long t1 = System.currentTimeMillis();
+			PreciousFile file = MainActivity.cm.getFile("ndshfbsdie.mp3", 10);
+			s.getFileInputStream("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/ll.mp3", file);
+			System.out.println("download time :" + (System.currentTimeMillis() - t1));
+//			InputStream in = file.getInputStream();
+//			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+//			StringBuilder stringReply = new StringBuilder();
+//			String replyLine;
+//			while ((replyLine = reader.readLine()) != null) {
+//			    stringReply.append(replyLine);
+//			}
+//			System.out.println(stringReply);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			message = "  a  " + e.toString();

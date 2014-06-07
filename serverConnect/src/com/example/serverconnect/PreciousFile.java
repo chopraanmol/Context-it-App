@@ -47,9 +47,9 @@ public class PreciousFile {
 
 	// returns true iff the file was deleted, and sets status to deleted and
 	// sets file_size to 0.
-	public synchronized boolean deleteIfIdle() {
+	public synchronized boolean deleteIfIdle(boolean force_delete) {
 		boolean deleted = false;
-		if (file_status == FILE_STATUS.STATUS_IDLE) {
+		if (file_status == FILE_STATUS.STATUS_IDLE || force_delete) {
 			deleted = file.delete();
 		}
 		if (deleted) {

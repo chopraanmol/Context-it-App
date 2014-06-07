@@ -12,7 +12,10 @@ public class CacheManager {
 
 	private File cacheDir;
 	private long size_limit;
-	private Map<String, PreciousFile> preciousFiles;	//TO-DO: TRY AND MAKE THIS SORTED BASED ON AGE OF FILE. AND THEN REMOVE OLDEST FILE.
+	private Map<String, PreciousFile> preciousFiles; // TO-DO: TRY AND MAKE THIS
+														// SORTED BASED ON AGE
+														// OF FILE. AND THEN
+														// REMOVE OLDEST FILE.
 	private long expectedFileSize;
 
 	public CacheManager(File cacheDir, long limitInBytes, long expectedFileSize) {
@@ -35,9 +38,10 @@ public class CacheManager {
 	}
 
 	public synchronized void deleteAllFilesInCache() {
-		for (String key : preciousFiles.keySet()) {
+		while (!preciousFiles.isEmpty()) {
+			String key = (String) (preciousFiles.keySet().toArray())[0];
 			PreciousFile file = preciousFiles.get(key);
-			deletePreciousFile(key, file);
+			deletePreciousFile(key, file, true);
 		}
 	}
 
@@ -77,7 +81,7 @@ public class CacheManager {
 															 * file.getFileSize
 															 * ()!=0
 															 */) {
-				if (deletePreciousFile(key, file) != 0) {
+				if (deletePreciousFile(key, file, false)) {
 					some_space_freed = true;
 					break;
 				}
@@ -86,14 +90,13 @@ public class CacheManager {
 		return some_space_freed;
 	}
 
-	private long deletePreciousFile(String name, PreciousFile file) {
-		long size = file.getFileSize();
-		if (file.deleteIfIdle()) {
+	private boolean deletePreciousFile(String name, PreciousFile file,
+			boolean force_delete) {
+		boolean removed = file.deleteIfIdle(force_delete);
+		if (removed) {
 			preciousFiles.remove(name);
-		} else {
-			size = 0;
 		}
-		return size;
+		return removed;
 	}
 
 	private long getApproxOccupiedSpace() {

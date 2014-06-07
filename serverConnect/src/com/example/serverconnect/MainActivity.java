@@ -18,6 +18,7 @@ public class MainActivity extends Activity {
 		if(cm==null) {
 			File dir = this.getCacheDir();
 			cm = new CacheManager(dir, 1048576, 51200);
+			cm.deleteAllFilesInCache();
 		}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
