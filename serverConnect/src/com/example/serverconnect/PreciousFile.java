@@ -89,11 +89,12 @@ public class PreciousFile {
 		return new FileInputStream(file);
 	}
 
-	public void clearFile() {
+	public synchronized void clearFile() {
 		try {
 			PrintWriter writer = new PrintWriter(file);
 			writer.print("");
 			writer.close();
+			file_size = 0;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

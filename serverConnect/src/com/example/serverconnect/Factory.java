@@ -6,7 +6,7 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-public class Factory<K> implements Iterable<K>{
+public class Factory<K> implements Iterable<K> {
 
 	private Set<K> idle = new HashSet<K>();
 	private Set<K> inUse = new HashSet<K>();
@@ -14,7 +14,7 @@ public class Factory<K> implements Iterable<K>{
 	private int number_of_Ks_created = 0;
 
 	public Factory(int max_number_of_Ks) {
-		Assert.assertTrue(max_number_of_Ks!=0);
+		Assert.assertTrue(max_number_of_Ks != 0);
 		this.max_number_of_Ks = max_number_of_Ks;
 	}
 
@@ -30,9 +30,9 @@ public class Factory<K> implements Iterable<K>{
 			idle.add(obj);
 		}
 	}
-	
+
 	public void remove(K obj) {
-		if(!inUse.remove(obj)) {
+		if (!inUse.remove(obj)) {
 			idle.remove(obj);
 		}
 	}
@@ -57,14 +57,14 @@ public class Factory<K> implements Iterable<K>{
 	public Iterator<K> iterator() {
 		return new KIterator(number_of_Ks_created);
 	}
-	
+
 	private class KIterator implements Iterator<K> {
-		
+
 		K[] idleArray;
 		K[] inUseArray;
 		private int number_of_elements_seen = 0;
 		private int number_of_elements;
-		
+
 		@SuppressWarnings("unchecked")
 		public KIterator(int number_of_elements) {
 			idleArray = (K[]) idle.toArray();
@@ -80,11 +80,11 @@ public class Factory<K> implements Iterable<K>{
 		@Override
 		public K next() {
 			K obj;
-			int index = idleArray.length==0 ? number_of_elements_seen : number_of_elements_seen % idleArray.length;
-			if(number_of_elements_seen < idleArray.length) {
+			int index = idleArray.length == 0 ? number_of_elements_seen
+					: number_of_elements_seen % idleArray.length;
+			if (number_of_elements_seen < idleArray.length) {
 				obj = idleArray[index];
-			}
-			else {
+			} else {
 				obj = inUseArray[index];
 			}
 			number_of_elements_seen++;
@@ -93,8 +93,8 @@ public class Factory<K> implements Iterable<K>{
 
 		@Override
 		public void remove() {
-			Assert.assertTrue(false);	//this method should not be called.
+			Assert.assertTrue(false); // this method should not be called.
 		}
-		
+
 	}
 }

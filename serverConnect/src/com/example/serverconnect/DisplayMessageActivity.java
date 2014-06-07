@@ -49,8 +49,13 @@ public class DisplayMessageActivity extends Activity {
 			System.out.println("upload time :" + (System.currentTimeMillis() - t0));
 			long t1 = System.currentTimeMillis();
 			PreciousFile file = MainActivity.cm.getFile("pic.jpg", 10);
+			PreciousFile file1 = MainActivity.cm.getFile("picd.jpg", 10);
+			PreciousFile file2 = MainActivity.cm.getFile("pidc.jpg", 10);
+			PreciousFile file3 = MainActivity.cm.getFile("pdic.jpg", 10);
 			Future<Boolean> future = s.asyncGetFile("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/mo.jpg", file);
 			future.get();
+			Future<Boolean> future1 = s.asyncGetFile("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/mo.jpg", file1);
+			future1.get();
 			System.out.println("download time :" + (System.currentTimeMillis() - t1));
 			InputStream in = file.getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));

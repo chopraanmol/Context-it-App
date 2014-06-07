@@ -68,9 +68,6 @@ public class CacheManager {
 		PreciousFile newFile = new PreciousFile(new File(cacheDir, name), this,
 				FILE_STATUS.STATUS_BUSY);
 		preciousFiles.put(name, newFile);
-		// NOT SURE ABOUT THIS
-		notifyAll();
-		// NOT SURE ABOUT THIS
 		return newFile;
 	}
 
@@ -78,11 +75,7 @@ public class CacheManager {
 		boolean some_space_freed = false;
 		for (String key : preciousFiles.keySet()) {
 			PreciousFile file = preciousFiles.get(key);
-			if (file.getStatus() == FILE_STATUS.STATUS_IDLE /*
-															 * &&
-															 * file.getFileSize
-															 * ()!=0
-															 */) {
+			if (file.getStatus() == FILE_STATUS.STATUS_IDLE) {
 				if (deletePreciousFile(key, file, false)) {
 					some_space_freed = true;
 					break;
