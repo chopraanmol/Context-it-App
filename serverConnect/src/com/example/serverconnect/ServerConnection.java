@@ -205,6 +205,7 @@ public class ServerConnection {
 				success = file.write(in);
 			} catch (Exception e) {
 				success = false;
+				file.clearFile();
 			}
 			return success;
 		}

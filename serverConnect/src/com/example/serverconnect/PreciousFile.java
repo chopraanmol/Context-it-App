@@ -29,7 +29,7 @@ public class PreciousFile {
 		synchronized (this) {
 			this.file_status = file_status;
 		}
-		if (file_status != FILE_STATUS.STATUS_BUSY) {
+		if (file_status == FILE_STATUS.STATUS_IDLE) {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -61,8 +61,8 @@ public class PreciousFile {
 			deleted = file.delete();
 		}
 		if (deleted) {
-			changeStatus(FILE_STATUS.STATUS_DELETED);
 			file_size = 0;
+			changeStatus(FILE_STATUS.STATUS_DELETED);
 		}
 		return deleted;
 	}
@@ -89,10 +89,14 @@ public class PreciousFile {
 		return new FileInputStream(file);
 	}
 
-	private void clearFile() throws FileNotFoundException {
-		PrintWriter writer = new PrintWriter(file);
-		writer.print("");
-		writer.close();
+	public void clearFile() {
+		try {
+			PrintWriter writer = new PrintWriter(file);
+			writer.print("");
+			writer.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// enum that represents current status of the file in this object.

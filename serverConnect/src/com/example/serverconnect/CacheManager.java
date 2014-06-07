@@ -52,7 +52,9 @@ public class CacheManager {
 		 */
 		Assert.assertTrue(expectedSize < size_limit);
 		if (preciousFiles.containsKey(name)) {
-			return preciousFiles.get(name);
+			PreciousFile file = preciousFiles.get(name);
+			file.changeStatus(FILE_STATUS.STATUS_BUSY);
+			return file;
 		}
 		while ((getApproxOccupiedSpace() + expectedSize) >= size_limit) {
 			if (!free_some_space()) {
