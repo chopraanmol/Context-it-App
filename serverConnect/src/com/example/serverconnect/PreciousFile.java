@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 import org.apache.commons.io.IOUtils;
 
@@ -16,10 +17,12 @@ public class PreciousFile {
 	private volatile long file_size;
 	private CacheManager manager;
 
-	public PreciousFile(File file, CacheManager manager) {
+	public PreciousFile(File file, CacheManager manager, FILE_STATUS file_status) {
 		this.file = file;
-		file_size = 0;
+		this.file_size = file.length();
 		this.manager = manager;
+		this.file_status = file_status;
+
 	}
 
 	public void changeStatus(FILE_STATUS file_status) {
@@ -58,12 +61,12 @@ public class PreciousFile {
 
 	// write the InputStream into this file. Returns true is successful.m
 	public synchronized boolean write(InputStream in) throws IOException {
-		assert (file.length() == 0);
 		if (file_status == FILE_STATUS.STATUS_DELETED) {
 			return false;
 		}
 		FILE_STATUS old_status = file_status;
 		file_status = FILE_STATUS.STATUS_BUSY;
+		clearFile();
 		OutputStream out = new FileOutputStream(file);
 		IOUtils.copy(in, out);
 		in.close();
@@ -76,6 +79,12 @@ public class PreciousFile {
 	public synchronized InputStream getInputStream()
 			throws FileNotFoundException {
 		return new FileInputStream(file);
+	}
+
+	private void clearFile() throws FileNotFoundException {
+		PrintWriter writer = new PrintWriter(file);
+		writer.print("");
+		writer.close();
 	}
 
 	// enum that represents current status of the file in this object.

@@ -44,9 +44,8 @@ public class DisplayMessageActivity extends Activity {
 			params.put("picture",new Pair<String,InputStream>("merc.jpg", getAssets().open("m.jpg")));
 			Future<JSONObject> f1 = s.asyncSendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/testing.php", m, params);
 			message = f1.get().toString();
-			CacheManager cm = new CacheManager(this.getCacheDir(), this.getCacheDir().length()/4, 51200);
-			PreciousFile file = cm.getFile("a.jpg");
-			file.write(s.getFileInputStream("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/merc.jpg"));
+			PreciousFile file = MainActivity.cm.getFile("new_image.jpg", 10);
+			s.getFileInputStream("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/merc.jpg", file);
 			InputStream in = file.getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			StringBuilder stringReply = new StringBuilder();

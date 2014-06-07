@@ -148,7 +148,7 @@ public class ServerConnection {
 		}
 
 		@Override
-		public JSONObject call() throws Exception {
+		public JSONObject call() throws Exception {	//TO-DO: catch exception and send an error code JSONObject? 
 			HttpResponse httpResponse = httpClient.execute(request);
 			InputStream in = httpResponse.getEntity().getContent();
 			BufferedReader reader = new BufferedReader(
@@ -164,34 +164,37 @@ public class ServerConnection {
 	}
 
 	// Blocking version to obtain a file at the specified url.
-	public InputStream getFileInputStream(String url)
+	public Boolean getFileInputStream(String url, PreciousFile file)
 			throws InterruptedException, ExecutionException {
-		return asyncGetFileInputStream(url).get();
+		return asyncGetFileInputStream(url, file).get();
 	}
 
 	// non-blocking version to obtain a file at the specified url.
-	public Future<InputStream> asyncGetFileInputStream(String url) {
+	public Future<Boolean> asyncGetFileInputStream(String url, PreciousFile file) {
 		HttpGet request = new HttpGet(url);
-		Future<InputStream> future = threadPool.submit(new getFileRequest(
-				request));
+		Future<Boolean> future = threadPool.submit(new getFileRequest(
+				request, file));
 		return future;
 	}
 
 	// Thread to communicate with server and give back an inputstream object of
 	// a file.
-	private class getFileRequest implements Callable<InputStream> {
+	private class getFileRequest implements Callable<Boolean> {
 
 		HttpRequestBase request;
+		PreciousFile file;
 
-		public getFileRequest(HttpRequestBase request) {
+		public getFileRequest(HttpRequestBase request, PreciousFile file) {
 			this.request = request;
+			this.file = file;
 		}
 
 		@Override
-		public InputStream call() throws Exception {
+		public Boolean call() throws Exception {	//TO-DO Catch exception and return false?
 			HttpResponse httpResponse = httpClient.execute(request);
 			InputStream in = httpResponse.getEntity().getContent();
-			return in;
+			boolean success = file.write(in);
+			return success;
 		}
 	}
 }

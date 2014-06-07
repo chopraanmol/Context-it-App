@@ -1,11 +1,13 @@
 package com.example.serverconnect;
 
+import junit.framework.Assert;
+
 public class ServerConnectionFactory {
 	
 	private Factory<ServerConnection> factory;
 	
 	public ServerConnectionFactory(int max_connections) {
-		assert(max_connections!=0);
+		Assert.assertTrue(max_connections!=0);
 		factory = new Factory<ServerConnection>(max_connections);
 	}
 	

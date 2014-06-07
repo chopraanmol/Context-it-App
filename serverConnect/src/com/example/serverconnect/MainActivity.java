@@ -1,5 +1,7 @@
 package com.example.serverconnect;
 
+import java.io.File;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -9,9 +11,14 @@ import android.widget.EditText;
 
 public class MainActivity extends Activity {
 	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+	public static CacheManager cm;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		if(cm==null) {
+			File dir = this.getCacheDir();
+			cm = new CacheManager(dir, 1048576, 51200);
+		}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 	}
