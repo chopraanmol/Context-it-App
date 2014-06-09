@@ -36,8 +36,9 @@ import android.graphics.drawable.Drawable;
 
 public class MainActivity extends FragmentActivity {
 
+	public boolean preventLanding = false;
 	private LoginFragment login;
-	private UiLifecycleHelper uiHelper;
+	public UiLifecycleHelper uiHelper;
 	private Queue<SearchResult> results;
 	private Session.StatusCallback callback = new Session.StatusCallback(){
 	    @Override
@@ -124,6 +125,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    super.onActivityResult(requestCode, resultCode, data);
+	    Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	    uiHelper.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -185,7 +187,9 @@ public class MainActivity extends FragmentActivity {
 									}
 									// send user id.
 								}
-								jumpToLandingFragment();
+								if(!preventLanding) {
+									jumpToLandingFragment();
+								}
 							}
 				}).executeAsync();
 			}
@@ -203,6 +207,7 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	public void jumpToLandingFragment() {
+		preventLanding = true;
 		Log.d("Conrad", "dunno why");
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragment_container, new LandingFragment());
@@ -305,13 +310,15 @@ public class MainActivity extends FragmentActivity {
 				 "headline 8 : twaeaa",
 				 "headline 9 : waeaea",
 				 "headline 10: wawaaa",
-				 "" )), v);
+				 "" )), null, v);
 	}
-	public void goToSwipeView(ArrayList<String> arrayList, View v) {
+	public void goToSwipeView(ArrayList<String> arrayList, File f, View v) {
 		Log.d("COnrad2", "GOT HERE HOORAY");
+		arrayList.add("");
 		SwipeResult s = new SwipeResult();
 		Bundle b = new Bundle();
 		b.putStringArrayList("search_results", arrayList);
+		b.putSerializable("file", f);
 		s.setArguments(b);
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, s);

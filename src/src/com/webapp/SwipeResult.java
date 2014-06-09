@@ -16,6 +16,7 @@
 
 package com.webapp;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,10 +24,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.facebook.Session;
+import com.facebook.widget.FacebookDialog;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.*;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -65,6 +69,13 @@ public class SwipeResult extends Fragment{
     
     
     Context context;
+    
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    super.onActivityResult(requestCode, resultCode, data);
+	    Session.getActiveSession().onActivityResult(getActivity(), requestCode, resultCode, data);
+	    ((MainActivity) getActivity()).uiHelper.onActivityResult(requestCode, resultCode, data);
+	}
    
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -305,6 +316,19 @@ public class SwipeResult extends Fragment{
                 return true;
             }
         });
+        Toast.makeText(context, String.valueOf(listview.getCount()), 1).show();
+        if(listview.getCount() == 1) {
+        	Session session = Session.getActiveSession();
+            Session.NewPermissionsRequest newPermissionsRequest = new Session
+              .NewPermissionsRequest(this, Arrays.asList("publish_actions"));
+            session.requestNewPublishPermissions(newPermissionsRequest);
+        	System.out.println(session.toString());
+        	FacebookDialog shareDialog = new FacebookDialog.PhotoShareDialogBuilder(getActivity())
+        	.addPhotoFiles(
+        			java.util.Collections.singleton((File)(getArguments().getSerializable("file"))))
+            .build();
+    ((MainActivity) getActivity()).uiHelper.trackPendingDialogCall(shareDialog.present());
+        }
     }
 
 }

@@ -63,7 +63,7 @@ public class WaitFragment extends Fragment {
 									JSONObject ret = ImageConnection.sendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/process/process_image.php", POSTMap, imageMap);
 									if(ret != null) {
 										Log.d("Conrad", ret.toString());
-										main.goToSwipeView(JSONToArrayList(ret), view);
+										main.goToSwipeView(JSONToArrayList(ret), file, view);
 									} else {
 							            Toast.makeText(main.getApplicationContext(),
 							                    "New user entered to database", Toast.LENGTH_SHORT)

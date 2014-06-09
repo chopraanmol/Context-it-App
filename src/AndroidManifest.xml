@@ -38,6 +38,11 @@
             android:name="com.webapp.LandingFragment"
             android:label="@string/title_activity_select" >
         </activity>
+        <provider
+            android:authorities="com.facebook.app.NativeAppCallContentProvider246830678850383" 
+            android:name="com.facebook.NativeAppCallContentProvider" 
+            android:exported="true">
+        </provider>
     </application>
 
 </manifest>
