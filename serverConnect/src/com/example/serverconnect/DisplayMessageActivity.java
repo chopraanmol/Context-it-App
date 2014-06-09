@@ -1,8 +1,6 @@
 package com.example.serverconnect;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Bundle;
@@ -34,8 +31,7 @@ public class DisplayMessageActivity extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		ServerConnectionFactory fac = new ServerConnectionFactory(10);
-		ServerConnection s = fac.getConnection();
+		ServerConnection s = new ServerConnection(10);
 		
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("user_id","abcdefg");
@@ -49,13 +45,8 @@ public class DisplayMessageActivity extends Activity {
 			System.out.println("upload time :" + (System.currentTimeMillis() - t0));
 			long t1 = System.currentTimeMillis();
 			PreciousFile file = MainActivity.cm.getFile("pic.jpg", 10);
-			PreciousFile file1 = MainActivity.cm.getFile("picd.jpg", 10);
-			PreciousFile file2 = MainActivity.cm.getFile("pidc.jpg", 10);
-			PreciousFile file3 = MainActivity.cm.getFile("pdic.jpg", 10);
 			Future<Boolean> future = s.asyncGetFile("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/mo.jpg", file);
 			future.get();
-			Future<Boolean> future1 = s.asyncGetFile("http://www.doc.ic.ac.uk/project/2013/271/g1327111/rishabh's%20testing/uploads/mo.jpg", file1);
-			future1.get();
 			System.out.println("download time :" + (System.currentTimeMillis() - t1));
 			InputStream in = file.getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -79,8 +70,6 @@ public class DisplayMessageActivity extends Activity {
 			// TODO Auto-generated catch block
 			message = " e  " + e.toString();
 		}
-		fac.recycleConnection(s);
-		fac.destroyAllConnection();
 	    TextView textView = (TextView) findViewById(R.id.view_text);
 	    textView.setText(message);
 
