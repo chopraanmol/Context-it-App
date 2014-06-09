@@ -32,19 +32,24 @@ if (isset($input['user_id'])){
               // search the first line using searchFaroo($actual_text[0]); 
               // search the last line using searchFaroo($actual_text[count($actual_text) - 1]); 
               // search the dictionary line using searchFaroo($text_array[1]); 
-              $urlInfo = array_merge(searchFaroo($text_array[0]), 
-                                      searchFaroo(implode(" " , $actual_text[0])), 
-                                      searchFaroo(implode(" " , $actual_text[count($actual_text) - 1])), 
-                                      searchFaroo($text_array[1]));
+              // $urlInfo = array_merge(searchFaroo($text_array[0]), 
+              //                         searchFaroo(implode(" " , $actual_text[0])), 
+              //                         searchFaroo(implode(" " , $actual_text[count($actual_text) - 1])), 
+              //                         searchFaroo($text_array[1]));
               
+              $results = searchBing($text_array[1]);
               // Iterative deepening. search for the longest string (gives bigger context).
-              $results = searchFaroo(implode(" " , $text_array));
-              while(count($text_array) > 0 && in_array(null,$results)){
-                array_pop($text_array);
-                $results = searchFaroo(implode(" " , $text_array));
-              }
-               
-              $urlInfo = array_merge($results, $urlInfo);
+                $results = searchFaroo(implode(' ',
+                  array_map(function($el){ return implode(' ', $el) }
+                  , $actual_text)));
+                while(count($text_array[1]) > 0 && in_array(null,$results)){
+                  array_pop($actual_text);
+                  $results = searchFaroo(implode(' ',
+                  array_map(function($el){ return implode(' ', $el) }
+                  , $actual_text)));
+                }
+                $urlInfo = array_merge($results, $urlInfo);
+
 
               $response = array();
               $response['status'] = 1;
