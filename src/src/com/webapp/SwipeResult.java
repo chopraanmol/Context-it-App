@@ -29,10 +29,12 @@ import com.facebook.widget.FacebookDialog;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.*;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -61,7 +63,7 @@ public class SwipeResult extends Fragment{
     BackgroundContainer mBackgroundContainer;
     boolean mSwiping = false;
     boolean mItemPressed = false;
-    List<String> keptResults = new LinkedList<String>();
+    List<String> keptResults = new ArrayList<String>();
     HashMap<Long, Integer> mItemIdTopMap = new HashMap<Long, Integer>();
 
     private static final int SWIPE_DURATION = 250;
@@ -313,12 +315,17 @@ public class SwipeResult extends Fragment{
                     }
                 }
                 mItemIdTopMap.clear();
+                
+              
                 return true;
             }
         });
         Toast.makeText(context, String.valueOf(listview.getCount()), 1).show();
         if(listview.getCount() == 1) {
-        	Session session = Session.getActiveSession();
+        	((MainActivity)context).goToListOfSavedContext(keptResults);
+        }
+        /*
+         *         	Session session = Session.getActiveSession();
             Session.NewPermissionsRequest newPermissionsRequest = new Session
               .NewPermissionsRequest(this, Arrays.asList("publish_actions"));
             session.requestNewPublishPermissions(newPermissionsRequest);
@@ -328,7 +335,9 @@ public class SwipeResult extends Fragment{
         			java.util.Collections.singleton((File)(getArguments().getSerializable("file"))))
             .build();
     ((MainActivity) getActivity()).uiHelper.trackPendingDialogCall(shareDialog.present());
-        }
+    */
     }
+
+	
 
 }

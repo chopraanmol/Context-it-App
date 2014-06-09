@@ -14,4 +14,5 @@
     <string name="swipe_view">&#xf07e;</string>
     <string name="icon_camera">&#xf030; </string>
     <string name="app_description">ContextIt allows you to attach web context with ease!</string>
+    <string name="share">Share! </string>
 </resources>
