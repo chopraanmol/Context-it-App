@@ -189,7 +189,7 @@ public class MainActivity extends FragmentActivity {
 									// send user id.
 								}
 								if(!preventLanding) {
-									jumpToLandingFragment();
+									goToLandingFragment();
 								}
 							}
 				}).executeAsync();
@@ -207,77 +207,12 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 	
-	public void jumpToLandingFragment() {
+	public void goToLandingFragment() {
 		preventLanding = true;
 		Log.d("Conrad", "dunno why");
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragment_container, new LandingFragment());
 		transaction.addToBackStack(null);
-		transaction.commitAllowingStateLoss();
-	}
-	
-	public void jumpToTest(View v) {
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.replace(R.id.fragment_container, new ResultContainerFragment());
-		transaction.addToBackStack(null);
-		transaction.commitAllowingStateLoss();
-	}
-	
-
-	public void displayFirstResults() {
-		for(int i = 1; i <= numResultToShowLarge; i++) {
-			if(resultCounter == 0) {
-				break;
-			}
-			resultCounter--;
-			renderResult(i, results.poll());
-		}
-	}
-
-	public void replaceResult(int location) {
-		// TODO Auto-generated method stub
-		if (resultCounter == 0) {
-			Log.d("ERROR", "replaceResult called even though there shouldn't be any "
-							+ "more resultFragment");
-		} else {
-			resultCounter--;
-			renderResult(location, results.poll());
-		}	
-	}
-
-	private void renderResult(int location, SearchResult result) {
-		// TODO Auto-generated method stub
-		// check if there is any more result to show, if yes render it.
-		// otherwise render empty fragment (or whatever needs to be done)
-		// Create new fragment and transaction
-		Fragment newFragment = new ResultFragment();
-		Bundle args = new Bundle();
-		args.putInt("locationId", location);
-		args.putString("headLine", result.getHeadLine());
-		args.putString("summary", result.getSummary());
-		newFragment.setArguments(args);
-		Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-		FragmentTransaction transaction = frag.getChildFragmentManager().beginTransaction();
-		// Replace whatever is in the fragment_container view with this fragment,
-		// and add the transaction to the back stack
-		switch(location) {
-		case 1:
-			transaction.replace(R.id.result_fragment1, newFragment);
-			transaction.addToBackStack(null);
-			break;
-		case 2:
-			transaction.replace(R.id.result_fragment2, newFragment);
-			transaction.addToBackStack(null);
-			break;
-		case 3:
-			transaction.replace(R.id.result_fragment3, newFragment);
-			transaction.addToBackStack(null);
-			break;
-		default: //add unswipeable
-			break;
-		}
-
-		// commitAllowingStateLoss the transaction
 		transaction.commitAllowingStateLoss();
 	}
 
@@ -326,10 +261,11 @@ public class MainActivity extends FragmentActivity {
         transaction.commitAllowingStateLoss();
 	}
 	
-	public void goToListOfSavedContext(List<String> results) {
+	public void goToListOfSavedContext(File file, List<String> results) {
 		ConfirmResultFragment f = new ConfirmResultFragment();
 		Bundle b = new Bundle();
 		b.putStringArrayList("results_to_confirm", (ArrayList<String>) results);
+		b.putSerializable("file", file);
 		f.setArguments(b);
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, f);

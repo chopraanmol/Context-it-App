@@ -322,7 +322,7 @@ public class SwipeResult extends Fragment{
         });
         Toast.makeText(context, String.valueOf(listview.getCount()), 1).show();
         if(listview.getCount() == 1) {
-        	((MainActivity)context).goToListOfSavedContext(keptResults);
+        	((MainActivity)context).goToListOfSavedContext((File)(getArguments().getSerializable("file")), keptResults);
         }
         /*
          *         	Session session = Session.getActiveSession();

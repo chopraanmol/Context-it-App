@@ -59,8 +59,10 @@ public class WaitFragment extends Fragment {
 								Map<String, Pair<String, InputStream>> imageMap = new HashMap<String,Pair<String,InputStream>>();
 								POSTMap.put("user_id", user.getId());
 								try {
-									imageMap.put("file", new Pair<String, InputStream>("input.jpg", new FileInputStream(file)));
+									InputStream i = new FileInputStream(file);
+									imageMap.put("file", new Pair<String, InputStream>("input.jpg", i));
 									JSONObject ret = ImageConnection.sendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/process/process_image.php", POSTMap, imageMap);
+									i.close();
 									if(ret != null) {
 										Log.d("Conrad", ret.toString());
 										main.goToSwipeView(JSONToArrayList(ret), file, view);
