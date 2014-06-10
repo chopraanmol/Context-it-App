@@ -15,4 +15,7 @@
     <string name="icon_camera">&#xf030; </string>
     <string name="app_description">ContextIt allows you to attach web context with ease!</string>
     <string name="share">Share! </string>
+    <string name="ask_action">Seems like we couldn\'t detect any characters :(</string>
+    <string name="icon_return">&#xf015; </string>
+    <string name="sorry">sorry !</string>
 </resources>

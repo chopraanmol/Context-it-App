@@ -1,6 +1,7 @@
 package com.webapp;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,7 +24,9 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.*;
@@ -49,6 +52,8 @@ public class MainActivity extends FragmentActivity {
 	    	}
 	    }
 	};
+	
+	File file = null;
 	
 	private int resultCounter = 0;
 	private int resultToShowCounter = 0;
@@ -300,8 +305,8 @@ public class MainActivity extends FragmentActivity {
 	
 	public void testSwipeView(View v) {
 		goToSwipeView(							 
-				new ArrayList<String>(Arrays.asList(
-				 "headline 1 : blah blah",
+				new ArrayList<String>()/*Arrays.asList(
+				/* "headline 1 : blah blah",
 				 "headline 2 : asdfghj",
 				 "headline 3 : wertyrew",
 				 "headline 4 : weardfgvx",
@@ -310,10 +315,18 @@ public class MainActivity extends FragmentActivity {
 				 "headline 7 : twatwea",
 				 "headline 8 : twaeaa",
 				 "headline 9 : waeaea",
-				 "headline 10: wawaaa")), null, v);
+				 "headline 10: wawaaa"))*/, null, v);
 	}
 	
 	public void goToSwipeView(ArrayList<String> arrayList, File f, View v) {
+		if (arrayList.isEmpty()) {
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			/* TODO */
+	        transaction.replace(R.id.fragment_container, new NoResultFragment());
+	        // transaction.addToBackStack(null);
+	        transaction.commitAllowingStateLoss();
+	        return;
+		}
 		arrayList.add("");
 		SwipeResult s = new SwipeResult();
 		Bundle b = new Bundle();
@@ -335,6 +348,33 @@ public class MainActivity extends FragmentActivity {
         transaction.replace(R.id.fragment_container, f);
         transaction.addToBackStack(null);
         transaction.commit();
+	}
+	
+public void activateCamera() {
+		
+		/*
+		 * Capturing Camera Image will launch camera app request image capture
+		 */
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		Uri fileUri;
+		try {
+			file = (File.createTempFile("IMAGE_TEMP", null));
+			fileUri = Uri.fromFile(file);
+			Log.d("TAG", "BEFORE " + file.getAbsolutePath());
+            if(!file.exists()) {
+    			Log.d("TAG", "AFTER " + file.getAbsolutePath());
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            file.setWritable(true, false);
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);	
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// start the image capture Intent
+		startActivityForResult(intent, 100);
 	}
 
 }
