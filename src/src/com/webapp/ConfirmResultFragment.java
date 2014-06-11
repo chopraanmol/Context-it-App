@@ -11,15 +11,21 @@ import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingLeftInAnima
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class ConfirmResultFragment extends Fragment{
 
@@ -59,11 +65,19 @@ public class ConfirmResultFragment extends Fragment{
 				share();
 			}
 		});
-		ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(
+		Typeface font = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf" );
+		shareButton.setTypeface(font);
+		ArrayAdapter<String> mAdapter = new StableArrayAdapter(
                 context, 
-                R.layout.search_result_list_row,
                 R.id.title,
-                results);
+                results,
+                new OnTouchListener() {
+					
+					@Override
+					public boolean onTouch(View arg0, MotionEvent arg1) {
+						return false;
+					}
+				});
     	ListView mListView = (ListView) view.findViewById(R.id.list_to_confirm);
         mListView.setAdapter(mAdapter);
     	return view;
@@ -81,5 +95,5 @@ public class ConfirmResultFragment extends Fragment{
         .build();
     	((MainActivity) getActivity()).uiHelper.trackPendingDialogCall(shareDialog.present());
 	}
-	    
+	
 }

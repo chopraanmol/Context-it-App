@@ -2,104 +2,72 @@ package com.webapp;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import com.facebook.widget.LoginButton;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Build;
-import android.provider.MediaStore;
 
-public class LandingFragment extends Fragment {
+public class NoResultFragment extends Fragment {
 	
-	Button cameraButton = null;
+	Context activity;
 	File file = null;
-	MainActivity activity;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		// final Button cameraButton = (Button) findViewById(R.id.cameraButton);
-        
-		/*if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}*/
-		
-	}
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, 
 	        Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.landing_fragment, container, false);
-		Typeface font = Typeface.createFromAsset( activity.getAssets(), "fontawesome-webfont.ttf" );
-		cameraButton = (Button) view.findViewById(R.id.camera_button);
-		cameraButton.setTypeface(font);
-		cameraButton.setOnClickListener(new OnClickListener() {
+		super.onCreateView(inflater, container, savedInstanceState);
+	    View view = inflater.inflate(R.layout.no_result, container, false);
+	    Typeface font = Typeface.createFromAsset( activity.getAssets(), "fontawesome-webfont.ttf" );
+	    Button cameraButton = (Button) view.findViewById(R.id.camera);
+	    cameraButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				activateCamera();	
-			}
-		});
-		Button testButton = (Button) view.findViewById(R.id.test_button);
-		testButton.setTypeface(font);
-		testButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Log.d("KAHO", "ABOUT TO JUMP");
-				activity.jumpToTest(v);
+				activateCamera();
 				
 			}
 		});
-		Button swipeButton = (Button) view.findViewById(R.id.swipe_view_button);
-		swipeButton.setTypeface(font);
-		swipeButton.setOnClickListener(new OnClickListener() {
+	    cameraButton.setTypeface(font);
+		
+	    Button returnButton = (Button) view.findViewById(R.id.return_button);
+	    returnButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				activity.testSwipeView(v);
+				((MainActivity) activity).goToLandingFragment();
 			}
 		});
-		return view;
+	    returnButton.setTypeface(font);
+	    Typeface font2 = Typeface.createFromAsset(activity.getAssets(), "LABTSECW.ttf" );
+	    TextView askAction = (TextView) view.findViewById(R.id.ask_action);
+	    askAction.setTypeface(font2);
+	    TextView sorry = (TextView) view.findViewById(R.id.sorry);
+	    sorry.setTypeface(font2);
+	    return view;
 	}
 	
 	@Override
     public void onAttach(Activity activity) {
     	super.onAttach(activity);
-    	this.activity = (MainActivity) getActivity();
+    	this.activity = getActivity();
     }
 	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-	
+
 	public void activateCamera() {
 		
 		/*
@@ -154,8 +122,5 @@ public class LandingFragment extends Fragment {
 	                    .show();
 	        }
 	    }
-	}
-	
-	
-
+	}	
 }
