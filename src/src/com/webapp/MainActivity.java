@@ -223,17 +223,18 @@ public class MainActivity extends FragmentActivity {
 	
 	public void jumpToTest(View v) {
 		
-		ArrayList<String> l = new ArrayList<String>(Arrays.asList("blah", "blah", "blah"));
-		Log.d("Kaho", "creating");
+		/*ArrayList<String> l = new ArrayList<String>(Arrays.asList("blah", "blah", "blah"));
 		Fragment newFragment = new ConfirmResultFragment();
-		Log.d("Kaho", "here");
 		Bundle args = new Bundle();
 		args.putStringArrayList("results_to_confirm",l);
 		newFragment.setArguments(args);
-		Log.d("Kaho", "here");
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragment_container, newFragment);
-		Log.d("Kaho", "here");
+		transaction.commitAllowingStateLoss();*/
+		
+		Fragment newFragment = new PastContextsFragment();
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.replace(R.id.fragment_container, newFragment);
 		transaction.commitAllowingStateLoss();
 
 	}
