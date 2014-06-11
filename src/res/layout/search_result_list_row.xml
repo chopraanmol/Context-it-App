@@ -5,15 +5,15 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="5dp"
+    android:background="@color/half_opaque_black"
     >
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
-        android:typeface="sans"
         android:textSize="30sp"
-        android:textStyle="bold"/>
+    />
     
 
 </RelativeLayout>

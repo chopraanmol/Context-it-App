@@ -2,6 +2,8 @@ package com.webapp;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -59,13 +61,21 @@ public class LandingFragment extends Fragment {
 		});
 		Button testButton = (Button) view.findViewById(R.id.test_button);
 		testButton.setTypeface(font);
+		testButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.d("KAHO", "ABOUT TO JUMP");
+				activity.jumpToTest(v);
+				
+			}
+		});
 		Button swipeButton = (Button) view.findViewById(R.id.swipe_view_button);
 		swipeButton.setTypeface(font);
 		swipeButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Log.d("KAHO", "HEY");
 				activity.testSwipeView(v);
 			}
 		});
@@ -145,5 +155,7 @@ public class LandingFragment extends Fragment {
 	        }
 	    }
 	}
+	
+	
 
 }

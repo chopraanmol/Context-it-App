@@ -5,20 +5,30 @@
     android:orientation="vertical"
     android:background="@drawable/blur" >
     
+    <RelativeLayout 
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        >
     <Button
         android:id="@+id/share_button"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:text="@string/share"/>
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/share"
+        android:textColor="@android:color/white"
+        android:textSize="80sp"
+        android:background="@android:color/transparent"/>
+    </RelativeLayout>
     
     <ListView 
         android:id="@+id/list_to_confirm"
         android:divider="@null"
         android:dividerHeight="0dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_weight="1"
     />
 

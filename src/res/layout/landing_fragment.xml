@@ -27,7 +27,7 @@
         android:background="@android:color/transparent"
         android:textSize="80sp"
         android:text="@string/test"
-        android:onClick="jumpToTest"
+      
         />
     
      <Button
