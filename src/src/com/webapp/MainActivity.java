@@ -160,7 +160,7 @@ public class MainActivity extends FragmentActivity {
 							public void onCompleted(GraphUser user, Response response) {
 							Log.d("Conrad", "FUCK YOU CONRAD");
 								if(user != null) {
-									ServerConnection IDConnection = new ServerConnection();
+									ServerConnection IDConnection = ServerConnection.connection;
 									Map<String, String> POSTMap = new HashMap<String, String>();
 									POSTMap.put("user_id", user.getId());
 									try {
@@ -182,7 +182,6 @@ public class MainActivity extends FragmentActivity {
 								                    .show();
 								            break;
 										}
-										IDConnection.closeConnection();
 									} catch (Exception e) {
 										e.printStackTrace();
 									}

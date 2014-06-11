@@ -54,7 +54,7 @@ public class WaitFragment extends Fragment {
 					@Override
 						public void onCompleted(GraphUser user, Response response) {
 							if(user != null) {
-								ServerConnection ImageConnection = new ServerConnection();
+								ServerConnection ImageConnection = ServerConnection.connection;
 								Map<String,String> POSTMap = new HashMap<String,String>();
 								Map<String, Pair<String, InputStream>> imageMap = new HashMap<String,Pair<String,InputStream>>();
 								POSTMap.put("user_id", user.getId());
@@ -89,7 +89,6 @@ public class WaitFragment extends Fragment {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-								ImageConnection.closeConnection();
 							} 
 						}
 
