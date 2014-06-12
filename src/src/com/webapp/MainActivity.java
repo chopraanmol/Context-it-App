@@ -203,6 +203,7 @@ public class MainActivity extends FragmentActivity {
 			System.out.println("HELLO HERE");
 			if (state.isClosed()) {
 			// Remove whatever is there, add LoginFragment
+			preventLanding = false;
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(R.id.fragment_container, new LoginFragment());
 			transaction.commitAllowingStateLoss();
@@ -264,10 +265,10 @@ public class MainActivity extends FragmentActivity {
 				 "headline 7 : twatwea",
 				 "headline 8 : twaeaa",
 				 "headline 9 : waeaea",
-				 "headline 10: wawaaa"))*/, null, v);
+				 "headline 10: wawaaa"))*/, null, null, v);
 	}
 	
-	public void goToSwipeView(ArrayList<String> arrayList, File f, View v) {
+	public void goToSwipeView(ArrayList<String> arrayList, String photo_id, File f, View v) {
 		if (arrayList.isEmpty()) {
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			/* TODO */
@@ -281,6 +282,7 @@ public class MainActivity extends FragmentActivity {
 		Bundle b = new Bundle();
 		b.putStringArrayList("search_results", arrayList);
 		b.putSerializable("file", f);
+		b.putString("photo_id", photo_id);
 		s.setArguments(b);
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, s);

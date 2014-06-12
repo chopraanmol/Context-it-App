@@ -17,12 +17,17 @@
 package com.webapp;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ExecutionException;
+
+import org.json.JSONObject;
 
 import com.facebook.Session;
 import com.facebook.widget.FacebookDialog;
@@ -197,7 +202,9 @@ public class SwipeResult extends Fragment{
                             remove = true;
                             //keep items swiped right
                             if(deltaX > 0) {
+                            	s = s.split("\n")[0];
                             	keptResults.add(s);
+                            	System.out.println(s);
 					            Toast.makeText(getActivity().getApplicationContext(),
 					            		s, Toast.LENGTH_SHORT)
 					                    .show();
@@ -322,6 +329,7 @@ public class SwipeResult extends Fragment{
         });
         Toast.makeText(context, String.valueOf(listview.getCount()), 1).show();
         if(listview.getCount() == 1) {
+        	sendLinks();
         	((MainActivity)context).goToListOfSavedContext((File)(getArguments().getSerializable("file")), keptResults);
         }
         /*
@@ -337,6 +345,21 @@ public class SwipeResult extends Fragment{
     ((MainActivity) getActivity()).uiHelper.trackPendingDialogCall(shareDialog.present());
     */
     }
+
+	private void sendLinks() {
+		try {
+			Map<String,String> POSTMap = new HashMap<String,String>();
+			POSTMap.put("photo_id", getArguments().getString("photo_id"));
+			for(String str : keptResults) {
+				POSTMap.put("url", str);
+				ServerConnection.connection.asyncSendPOSTRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/db/create/create_links.php", POSTMap, null);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 
 	
 

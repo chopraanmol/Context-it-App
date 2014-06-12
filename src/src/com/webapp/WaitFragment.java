@@ -65,7 +65,7 @@ public class WaitFragment extends Fragment {
 									i.close();
 									if(ret != null) {
 										Log.d("Conrad", ret.toString());
-										main.goToSwipeView(JSONToArrayList(ret), file, view);
+										main.goToSwipeView(JSONToArrayList(ret), ret.getString("photo_id"), file, view);
 									} else {
 							            Toast.makeText(main.getApplicationContext(),
 							                    "New user entered to database", Toast.LENGTH_SHORT)
