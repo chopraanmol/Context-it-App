@@ -18,4 +18,5 @@
     <string name="ask_action">Seems like we couldn\'t detect any characters :(</string>
     <string name="icon_return">&#xf015; </string>
     <string name="sorry">sorry !</string>
+    <string name="get_more">get more</string>
 </resources>

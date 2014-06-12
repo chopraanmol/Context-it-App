@@ -14,11 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -28,10 +30,13 @@ public class PastContextsFragment extends Fragment{
 	
 	Context context;
 	List<String> results = new ArrayList<String>(Arrays.asList("1", "2", "3"));
+	ArrayAdapter<String> adapter;
+	List<String> photo;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    
 	}
 	
 	@Override
@@ -40,9 +45,9 @@ public class PastContextsFragment extends Fragment{
 	        				 Bundle savedInstanceState) {
 		Log.d("KAHO", "CREATING PAST");
 		View view = inflater.inflate(R.layout.past_contexts_list, container, false);
-		ListView listView = (ListView) view.findViewById(R.id.past_context_lists);
+		PastContextsListView listView = (PastContextsListView) view.findViewById(R.id.past_context_lists);
 		
-		ArrayAdapter<String> adapter = new PastContextAdapter(
+		adapter = new PastContextAdapter(
                 context, 
                 R.id.context1,
                 results,
@@ -54,6 +59,15 @@ public class PastContextsFragment extends Fragment{
 					}
 				});
 		listView.setAdapter(adapter);
+		
+		Button b = (Button) view.findViewById(R.id.get_more);
+		b.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				getMorePhoto();
+			}
+		});
 		return view;
 	}
 	
@@ -62,5 +76,9 @@ public class PastContextsFragment extends Fragment{
     	super.onAttach(activity);
     	this.context = getActivity();
     }
+	
+	public void getMorePhoto() {
+		
+	}
 	
 }
