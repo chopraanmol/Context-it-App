@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -83,10 +84,10 @@ public class ServerConnection {
 		}
 		if (files != null) {
 			for (String key : files.keySet()) {
-				multipartEntity.addPart(key, new InputStreamBody(
-						files.get(key).second,
+				multipartEntity.addBinaryBody(key,
+						IOUtils.toByteArray(files.get(key).second),
 						ContentType.APPLICATION_OCTET_STREAM,
-						files.get(key).first));
+						files.get(key).first);
 			}
 		}
 		HttpEntity request = multipartEntity.build();
@@ -97,7 +98,8 @@ public class ServerConnection {
 		urlConnection.setDoOutput(true);
 		urlConnection.setRequestProperty(request.getContentType().getName(),
 				request.getContentType().getValue());
-		urlConnection.setChunkedStreamingMode(0);
+		urlConnection.setRequestProperty("Content-Length",
+				"" + request.getContentLength());
 		Future<JSONObject> future = threadPool.submit(new executeRequest(
 				request, urlConnection));
 		return future;
@@ -136,26 +138,29 @@ public class ServerConnection {
 				stringReply.append((new JSONObject())
 						.accumulate("status", "-1").toString());
 
-			}
-			finally {
+			} finally {
 				urlConnection.disconnect();
 			}
+			System.out.println(stringReply.toString());
 			return new JSONObject(stringReply.toString());
 		}
 	}
 
 	// Blocking version to obtain a file at the specified url.
-	public Boolean getFile(String url, PreciousFile file) throws InterruptedException, ExecutionException, IOException {
+	public Boolean getFile(String url, PreciousFile file)
+			throws InterruptedException, ExecutionException, IOException {
 		return asyncGetFile(url, file).get();
 	}
 
 	// non-blocking version to obtain a file at the specified url.
-	public Future<Boolean> asyncGetFile(String URL, PreciousFile file) throws IOException {
+	public Future<Boolean> asyncGetFile(String URL, PreciousFile file)
+			throws IOException {
 		URL url = new URL(URL);
-		HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+		HttpURLConnection urlConnection = (HttpURLConnection) url
+				.openConnection();
 		urlConnection.setRequestMethod("GET");
-		Future<Boolean> future = threadPool.submit(new getFileRequest(urlConnection,
-				file));
+		Future<Boolean> future = threadPool.submit(new getFileRequest(
+				urlConnection, file));
 		return future;
 	}
 
@@ -167,7 +172,7 @@ public class ServerConnection {
 		PreciousFile file;
 
 		public getFileRequest(HttpURLConnection urlConnection, PreciousFile file) {
-			this.urlConnection =urlConnection;
+			this.urlConnection = urlConnection;
 			this.file = file;
 		}
 
@@ -180,8 +185,7 @@ public class ServerConnection {
 			} catch (Exception e) {
 				success = false;
 				file.clearFile();
-			}
-			finally {
+			} finally {
 				urlConnection.disconnect();
 			}
 			return success;
