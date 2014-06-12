@@ -327,4 +327,5 @@ public void activateCamera() {
 		startActivityForResult(intent, 100);
 	}
 
+
 }
