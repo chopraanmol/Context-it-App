@@ -205,7 +205,6 @@ public class MainActivity extends FragmentActivity {
 			// Remove whatever is there, add LoginFragment
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(R.id.fragment_container, new LoginFragment());
-			transaction.addToBackStack(null);
 			transaction.commitAllowingStateLoss();
 			}
 		}
@@ -216,7 +215,6 @@ public class MainActivity extends FragmentActivity {
 		Log.d("Conrad", "dunno why");
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragment_container, new LandingFragment());
-		transaction.addToBackStack(null);
 		transaction.commitAllowingStateLoss();
 	}
 	
@@ -245,7 +243,6 @@ public class MainActivity extends FragmentActivity {
 		args.putSerializable("file", file);
 		newFragment.setArguments(args);
 		transaction.replace(R.id.fragment_container, newFragment);
-		transaction.addToBackStack(null);
 		transaction.commitAllowingStateLoss();
 	}
 	
@@ -275,7 +272,7 @@ public class MainActivity extends FragmentActivity {
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			/* TODO */
 	        transaction.replace(R.id.fragment_container, new NoResultFragment());
-	        // transaction.addToBackStack(null);
+	        // 
 	        transaction.commitAllowingStateLoss();
 	        return;
 		}
@@ -287,7 +284,6 @@ public class MainActivity extends FragmentActivity {
 		s.setArguments(b);
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, s);
-        transaction.addToBackStack(null);
         transaction.commitAllowingStateLoss();
 	}
 	
@@ -299,7 +295,6 @@ public class MainActivity extends FragmentActivity {
 		f.setArguments(b);
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, f);
-        transaction.addToBackStack(null);
         transaction.commit();
 	}
 	
