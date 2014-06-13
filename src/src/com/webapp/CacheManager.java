@@ -17,8 +17,9 @@ public class CacheManager {
 														// OF FILE. AND THEN
 														// REMOVE OLDEST FILE.
 	private long expectedFileSize;
-
-	public CacheManager(File cacheDir, long limitInBytes, long expectedFileSize) {
+	private static CacheManager instance = null;
+	
+	private CacheManager(File cacheDir, long limitInBytes, long expectedFileSize) {
 		Assert.assertTrue(limitInBytes != 0);
 		Assert.assertTrue(cacheDir.isDirectory());
 		this.cacheDir = cacheDir;
@@ -30,6 +31,16 @@ public class CacheManager {
 		for (File f : allFiles) {
 			preciousFiles.put(f.getName(), new PreciousFile(f, this,
 					FILE_STATUS.STATUS_IDLE));
+		}
+	}
+	
+	public static CacheManager getInstance() {
+		return instance;
+	}
+	
+	public static void setupCacheManager(File cacheDir, long limitInBytes, long expectedFileSize) {
+		if(instance  != null) {
+			instance = new CacheManager(cacheDir, limitInBytes, expectedFileSize);
 		}
 	}
 

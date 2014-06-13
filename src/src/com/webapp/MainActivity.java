@@ -91,7 +91,6 @@ public class MainActivity extends FragmentActivity {
 
                 return;
             }
-
             // Create a new Fragment to be placed in the activity layout
     	    if(Session.openActiveSession(this, true, callback) == null) {
             	login = new LoginFragment();

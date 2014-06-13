@@ -2,7 +2,18 @@ package com.webapp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphUser;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,34 +42,19 @@ public class PastContextsFragment extends Fragment{
 	Context context;
 	List<String> results = new ArrayList<String>(Arrays.asList("1", "2", "3"));
 	ArrayAdapter<String> adapter;
-	List<String> photo;
+	List<String> photos;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, 
 	        				 ViewGroup container, 
 	        				 Bundle savedInstanceState) {
-		Log.d("KAHO", "CREATING PAST");
-		View view = inflater.inflate(R.layout.past_contexts_list, container, false);
-		PastContextsListView listView = (PastContextsListView) view.findViewById(R.id.past_context_lists);
-		
-		adapter = new PastContextAdapter(
-                context, 
-                R.id.context1,
-                results,
-                new OnTouchListener() {
-					
-					@Override
-					public boolean onTouch(View arg0, MotionEvent arg1) {
-						return false;
-					}
-				});
-		listView.setAdapter(adapter);
+	    beginRequests();
+		View view = inflater.inflate(R.layout.past_contexts_fragment, container, false);
 		
 		Button b = (Button) view.findViewById(R.id.get_more);
 		b.setOnClickListener(new OnClickListener() {
@@ -81,4 +77,88 @@ public class PastContextsFragment extends Fragment{
 		
 	}
 	
+	private void beginRequests() {
+		Request.newMeRequest(Session.getActiveSession(),
+                new Request.GraphUserCallback() {
+					@Override
+						public void onCompleted(GraphUser user, Response response) {
+							if(user != null) {
+								ServerConnection serverConnection = ServerConnection.connection;
+								Map<String,String> POSTMap = new HashMap<String,String>();								
+								POSTMap.put("user_id", user.getId());
+								try {
+									JSONObject ret = serverConnection.sendGETRequest(
+										"http://www.doc.ic.ac.uk/project/2013/271/g1327111/db/view/view_photos.php",
+										POSTMap);
+									if(ret != null) {
+										requestAndDisplayPhotos(JSONToArrayList(ret));
+									} else {
+										Log.d("Conrad", "NULL!");
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							} 
+						}
+
+					private ArrayList<String> JSONToArrayList(JSONObject ret) throws JSONException {
+						// TODO Auto-generated method stub
+						JSONArray url_set = ret.getJSONArray("photo_paths");
+						ArrayList<String> toRet = new ArrayList<String>();
+						for(int i = 0; i < url_set.length(); i++) {
+							toRet.add(url_set.getString(i));
+						}
+						return toRet;
+					}
+					
+			}).executeAsync();
+	}
+	
+	private void requestAndDisplayPhotos(
+			ArrayList<String> jsonToArrayList) {
+		//TODO: should be requesting image thumbnail and putting in temp file
+		System.out.println(jsonToArrayList);
+		System.out.println(requestLinks(jsonToArrayList, 0));
+		photos = jsonToArrayList;
+		PastContextsListView listView = (PastContextsListView) getView().findViewById(R.id.past_context_lists);
+		
+		adapter = new PastContextAdapter(
+                context, 
+                R.id.context1,
+                new ArrayList<String>(Arrays.asList(new String[photos.size()/2])),
+                photos,
+                new OnTouchListener() {
+					
+					@Override
+					public boolean onTouch(View arg0, MotionEvent arg1) {
+						return false;
+					}
+				});
+		listView.setAdapter(adapter);
+	}
+
+	private ArrayList<String> requestLinks(
+			ArrayList<String> jsonToArrayList, int i) {
+		//accepts a JSONObject of the agreed list format (alternating image urls/ids) and
+		//the notional image "index" and returns the links associated with them
+		Map<String,String> POSTMap = new HashMap<String,String>();								
+		POSTMap.put("photo_id", jsonToArrayList.get(2*i+1));
+		try {
+			JSONObject ret = ServerConnection.connection.sendGETRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/db/view/view_links.php", POSTMap);
+			return (JSONToArrayList(ret));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private ArrayList<String> JSONToArrayList(JSONObject ret) throws JSONException {
+		JSONArray url_set = ret.getJSONArray("web_urls");
+		ArrayList<String> toRet = new ArrayList<String>();
+		for(int i = 0; i < url_set.length(); i++) {
+			toRet.add(url_set.getString(i));
+		}
+		return toRet;
+	}
 }
