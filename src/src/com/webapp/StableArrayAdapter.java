@@ -20,8 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -102,6 +104,11 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
         t.setHeight(height_of_element);
         r.setMinimumHeight(height_of_element);
         return view;
+    }
+    
+    public void openWebBrowser(String url) {
+    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+    	context.startActivity(browserIntent);
     }
 
 }
