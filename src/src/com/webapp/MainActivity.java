@@ -326,5 +326,14 @@ public void activateCamera() {
 		startActivityForResult(intent, 100);
 	}
 
+	public void displayAllLinks(ArrayList<String> linksToShow, String photoUrl) {
+		Bundle b = new Bundle();
+		b.putStringArrayList("links", linksToShow);
+		b.putString("photoUrl", photoUrl);
+		DialogFragment f = new PastContextSelectedFragment();
+		f.setArguments(b);
+		f.show(getSupportFragmentManager(), "past_context_fragment");
+	}
+
 
 }

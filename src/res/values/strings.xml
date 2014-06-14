@@ -19,4 +19,5 @@
     <string name="icon_return">&#xf015; </string>
     <string name="sorry">sorry !</string>
     <string name="get_more">get more</string>
+    <string name="back">back</string>
 </resources>

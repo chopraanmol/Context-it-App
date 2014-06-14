@@ -118,7 +118,7 @@ public class PastContextsFragment extends Fragment{
 			ArrayList<String> jsonToArrayList) {
 		//TODO: should be requesting image thumbnail and putting in temp file
 		System.out.println(jsonToArrayList);
-		System.out.println(requestLinks(jsonToArrayList, 0));
+		//System.out.println(requestLinks(jsonToArrayList, 0));
 		photos = jsonToArrayList;
 		PastContextsListView listView = (PastContextsListView) getView().findViewById(R.id.past_context_lists);
 		
@@ -137,23 +137,9 @@ public class PastContextsFragment extends Fragment{
 		listView.setAdapter(adapter);
 	}
 
-	private ArrayList<String> requestLinks(
-			ArrayList<String> jsonToArrayList, int i) {
-		//accepts a JSONObject of the agreed list format (alternating image urls/ids) and
-		//the notional image "index" and returns the links associated with them
-		Map<String,String> POSTMap = new HashMap<String,String>();								
-		POSTMap.put("photo_id", jsonToArrayList.get(2*i+1));
-		try {
-			JSONObject ret = ServerConnection.connection.sendGETRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/db/view/view_links.php", POSTMap);
-			return (JSONToArrayList(ret));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
 	
-	private ArrayList<String> JSONToArrayList(JSONObject ret) throws JSONException {
+	
+	public static ArrayList<String> JSONToArrayList(JSONObject ret) throws JSONException {
 		JSONArray url_set = ret.getJSONArray("web_urls");
 		ArrayList<String> toRet = new ArrayList<String>();
 		for(int i = 0; i < url_set.length(); i++) {
