@@ -91,7 +91,6 @@ public class MainActivity extends FragmentActivity {
 
                 return;
             }
-
             // Create a new Fragment to be placed in the activity layout
     	    if(Session.openActiveSession(this, true, callback) == null) {
             	login = new LoginFragment();
@@ -325,6 +324,15 @@ public void activateCamera() {
 		}
 		// start the image capture Intent
 		startActivityForResult(intent, 100);
+	}
+
+	public void displayAllLinks(ArrayList<String> linksToShow, String photoUrl) {
+		Bundle b = new Bundle();
+		b.putStringArrayList("links", linksToShow);
+		b.putString("photoUrl", photoUrl);
+		DialogFragment f = new PastContextSelectedFragment();
+		f.setArguments(b);
+		f.show(getSupportFragmentManager(), "past_context_fragment");
 	}
 
 
