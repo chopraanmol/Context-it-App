@@ -202,12 +202,7 @@ public class SwipeResult extends Fragment{
                             remove = true;
                             //keep items swiped right
                             if(deltaX > 0) {
-                            	s = s.split("\n")[0];
                             	keptResults.add(s);
-                            	System.out.println(s);
-					            Toast.makeText(getActivity().getApplicationContext(),
-					            		s, Toast.LENGTH_SHORT)
-					                    .show();
                             }
                         } else {
                             // Not far enough - animate it back
@@ -359,6 +354,14 @@ public class SwipeResult extends Fragment{
 			e.printStackTrace();
 		}
 
+	}
+	
+	public String[] splitText(String textContent) {
+		String[] ret = textContent.split("\n");
+		if(ret.length < 3) {
+			return ret;
+		}
+		return new String[]{ret[0], ret[2]};
 	}
 
 	
