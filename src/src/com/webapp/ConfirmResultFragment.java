@@ -1,16 +1,25 @@
 package com.webapp;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.model.GraphObject;
+import com.facebook.model.OpenGraphAction;
+import com.facebook.model.OpenGraphObject;
 import com.facebook.widget.FacebookDialog;
+import com.facebook.widget.FacebookDialog.OpenGraphActionDialogBuilder;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingLeftInAnimationAdapter;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -43,7 +52,7 @@ public class ConfirmResultFragment extends Fragment{
 	    super.onActivityResult(requestCode, resultCode, data);
 	    Session.getActiveSession().onActivityResult(getActivity(), requestCode, resultCode, data);
 	    ((MainActivity) getActivity()).uiHelper.onActivityResult(requestCode, resultCode, data);
-	    ((MainActivity) getActivity()).goToLandingFragment();
+	    //((MainActivity) getActivity()).goToLandingFragment();
 	}
 	
 	@Override
@@ -89,11 +98,27 @@ public class ConfirmResultFragment extends Fragment{
           .NewPermissionsRequest(this, Arrays.asList("publish_actions"));
         session.requestNewPublishPermissions(newPermissionsRequest);
     	System.out.println(session.toString());
-    	FacebookDialog shareDialog = new FacebookDialog.PhotoShareDialogBuilder(getActivity())
-    	.addPhotoFiles(
-    			java.util.Collections.singleton((File)(getArguments().getSerializable("file"))))
-        .build();
-    	((MainActivity) getActivity()).uiHelper.trackPendingDialogCall(shareDialog.present());
+    	String title = "";
+    	for (String s : results) {
+    		title += (s + "\n");
+    	}
+    	Bundle params = new Bundle();
+    	Arrays.asList(new File[]{(File)(getArguments().getSerializable("file"))});
+    	params.putParcelable("source", BitmapFactory.decodeFile(((File)(getArguments().getSerializable("file"))).getAbsolutePath()));
+
+    	params.putString("message", title);
+    	/* make the API call */
+    	new Request(
+    	    session,
+    	    "/me/photos",
+    	    params,
+    	    HttpMethod.POST,
+    	    new Request.Callback() {
+    	        public void onCompleted(Response response) {
+    	        }
+    	    }
+    	).executeAsync();
+    	((MainActivity) getActivity()).goToLandingFragment();
 	}
 	
 }
