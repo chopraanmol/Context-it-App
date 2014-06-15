@@ -98,6 +98,7 @@ public class PastContextAdapter extends ArrayAdapter<String> {
         		);
         if(entry != null){
             image = BitmapFactory.decodeByteArray(entry.data, 0, entry.data.length);
+            imageView.setImageBitmap(image);
         } else{
             // Cached response doesn't exists. Make network call here
         	ImageLoader imageLoader = VolleyCacheManager.getInstance().getImageLoader();
