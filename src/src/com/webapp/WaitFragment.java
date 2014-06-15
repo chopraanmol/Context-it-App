@@ -93,7 +93,8 @@ public class WaitFragment extends Fragment {
 						}
 
 					private ArrayList<String> JSONToArrayList(JSONObject ret) throws JSONException {
-						// TODO Auto-generated method stub
+						System.out.println(ret);
+						System.out.println("in function");
 						JSONArray url_set = ret.getJSONArray("url_set");
 						ArrayList<String> toRet = new ArrayList<String>();
 						for(int i = 0; i < url_set.length(); i++) {

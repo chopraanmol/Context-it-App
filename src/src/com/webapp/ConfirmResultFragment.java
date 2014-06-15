@@ -22,8 +22,12 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GestureDetectorCompat;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -76,16 +80,34 @@ public class ConfirmResultFragment extends Fragment{
 		});
 		Typeface font = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf" );
 		shareButton.setTypeface(font);
+		final MutableString s = new MutableString();
+        final GestureDetectorCompat mDetector = 
+        		new GestureDetectorCompat(getActivity(), new GestureDetector.SimpleOnGestureListener(){
+        			@Override
+        			public boolean onDown(MotionEvent event) {
+						return true;
+        				
+        			}
+        			
+    			   @Override
+    			   public boolean onSingleTapUp(MotionEvent event) {
+    				   openWebBrowser(SwipeResult.splitText(s.string)[0]);
+		        		return true;
+    			   }
+
+        		});
 		ArrayAdapter<String> mAdapter = new StableArrayAdapter(
                 context, 
                 R.id.title,
                 results,
                 new OnTouchListener() {
-					
+
 					@Override
-					public boolean onTouch(View arg0, MotionEvent arg1) {
-						return false;
+					public boolean onTouch(View v, MotionEvent event) {
+			        	s.string = ((TextView)((RelativeLayout) v).findViewById(R.id.title)).getText().toString();
+			        	return(mDetector.onTouchEvent(event));
 					}
+                	
 				});
     	ListView mListView = (ListView) view.findViewById(R.id.list_to_confirm);
         mListView.setAdapter(mAdapter);
@@ -121,4 +143,13 @@ public class ConfirmResultFragment extends Fragment{
     	((MainActivity) getActivity()).goToLandingFragment();
 	}
 	
+    public void openWebBrowser(String url) {
+    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+    	context.startActivity(browserIntent);
+    }
+	
+}
+
+class MutableString {
+	public String string = "";
 }

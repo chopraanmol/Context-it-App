@@ -105,10 +105,5 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
         r.setMinimumHeight(height_of_element);
         return view;
     }
-    
-    public void openWebBrowser(String url) {
-    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-    	context.startActivity(browserIntent);
-    }
 
 }

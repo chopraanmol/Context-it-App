@@ -356,7 +356,7 @@ public class SwipeResult extends Fragment{
 
 	}
 	
-	public String[] splitText(String textContent) {
+	public static String[] splitText(String textContent) {
 		String[] ret = textContent.split("\n");
 		if(ret.length < 3) {
 			return ret;
