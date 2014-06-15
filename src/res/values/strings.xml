@@ -16,9 +16,10 @@
     <string name="app_description">ContextIt allows you to attach web context with ease!</string>
     <string name="share">&#xf082; </string>
     <string name="ask_action">Seems like we couldn\'t detect any characters :(</string>
-    <string name="icon_return">&#xf015; </string>
+    <string name="icon_return">&#xf015;</string>
     <string name="sorry">sorry !</string>
     <string name="get_more">get more</string>
     <string name="close">&#xf00d;</string>
     <string name="right_arrow">&#xf064;</string>
+    <string name="slash">/</string>
 </resources>

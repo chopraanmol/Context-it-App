@@ -79,7 +79,7 @@ public class LandingFragment extends Fragment {
 				Fragment login = new LoginFragment();
     	    	activity.getSupportFragmentManager()
     	    	.beginTransaction()
-    	    	.add(R.id.fragment_container, login)
+    	    	.replace(R.id.fragment_container, login)
     	    	.commitAllowingStateLoss();
 			}
 		});

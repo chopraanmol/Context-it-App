@@ -11,16 +11,44 @@
         android:layout_width="fill_parent"
         android:layout_marginLeft="100dp"
         android:layout_marginRight="100dp"
-        >
-    <Button
-        android:id="@+id/share_button"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/speech_bubble">
+	
+   
+    <TextView
+        android:id="@+id/slash"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_centerInParent="true"
+        android:text="@string/slash"
+        android:textSize="80sp"
+        android:textColor="@android:color/white"
+        />
+     <Button
+        android:id="@+id/share_button"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         android:text="@string/share"
         android:textColor="@android:color/white"
         android:textSize="80sp"
-        android:background="@drawable/speech_bubble"/>
+        android:background="@android:color/transparent"
+        android:layout_toLeftOf="@id/slash"
+        android:layout_centerInParent="true"
+        />
+    <Button 
+        android:id="@+id/return_landing"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/icon_return"
+        android:textColor="@android:color/white"
+        android:textSize="80sp"
+        android:background="@android:color/transparent"
+        android:layout_toRightOf="@id/slash"
+        android:layout_centerInParent="true"
+        />
+        
+   
     </RelativeLayout>
     
     <ListView 

@@ -80,6 +80,15 @@ public class ConfirmResultFragment extends Fragment{
 		});
 		Typeface font = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf" );
 		shareButton.setTypeface(font);
+		Button homeButton = (Button) view.findViewById(R.id.return_landing);
+		homeButton.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				((MainActivity) getActivity()).goToLandingFragment();	
+			}
+		});
+		homeButton.setTypeface(font);
 		final MutableString s = new MutableString();
         final GestureDetectorCompat mDetector = 
         		new GestureDetectorCompat(getActivity(), new GestureDetector.SimpleOnGestureListener(){
