@@ -91,7 +91,7 @@ public class ConfirmResultFragment extends Fragment{
         			
     			   @Override
     			   public boolean onSingleTapUp(MotionEvent event) {
-    				   openWebBrowser(SwipeResult.splitText(s.string)[0]);
+    				   openWebBrowser(s.string);
 		        		return true;
     			   }
 
@@ -104,7 +104,8 @@ public class ConfirmResultFragment extends Fragment{
 
 					@Override
 					public boolean onTouch(View v, MotionEvent event) {
-			        	s.string = ((TextView)((RelativeLayout) v).findViewById(R.id.title)).getText().toString();
+			        	s.string = ((TextView)((RelativeLayout) v).findViewById(R.id.text2)).getText().toString();
+			        	
 			        	return(mDetector.onTouchEvent(event));
 					}
                 	
