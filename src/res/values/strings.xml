@@ -20,4 +20,5 @@
     <string name="sorry">sorry !</string>
     <string name="get_more">get more</string>
     <string name="close">&#xf00d;</string>
+    <string name="right_arrow">&#xf064;</string>
 </resources>
