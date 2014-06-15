@@ -56,14 +56,15 @@ public class PastContextsFragment extends Fragment{
 	    beginRequests();
 		View view = inflater.inflate(R.layout.past_contexts_fragment, container, false);
 		
-		Button b = (Button) view.findViewById(R.id.get_more);
+		Button b = (Button) view.findViewById(R.id.go_home);
 		b.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				getMorePhoto();
+				((MainActivity) getActivity()).goToLandingFragment();
 			}
 		});
+		b.setTypeface(Typeface.createFromAsset( getActivity().getAssets(), "fontawesome-webfont.ttf" ));
 		return view;
 	}
 	

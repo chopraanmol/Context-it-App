@@ -16,7 +16,7 @@
             android:id="@+id/list_image"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:src="@drawable/camera"
+            android:src="@drawable/loading"
         />
  
     </LinearLayout>

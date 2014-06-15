@@ -31,7 +31,7 @@ import android.widget.Toast;
 public class PastContextsListView extends ListView {
 
 	Context context;
-	int x =0;
+	int x = 0;
 	public PastContextsListView(Context context) {
 		super(context);
 		this.context = context;

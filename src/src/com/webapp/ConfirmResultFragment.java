@@ -78,7 +78,7 @@ public class ConfirmResultFragment extends Fragment{
 		shareButton.setTypeface(font);
 		ArrayAdapter<String> mAdapter = new StableArrayAdapter(
                 context, 
-                R.id.title,
+                R.id.text1,
                 results,
                 new OnTouchListener() {
 					

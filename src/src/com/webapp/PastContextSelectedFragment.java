@@ -38,7 +38,7 @@ public class PastContextSelectedFragment extends DialogFragment {
 		View view = inflater.inflate(R.layout.past_context_selected, container, false);
 		ArrayAdapter<String> mAdapter = new StableArrayAdapter(
                 getActivity(), 
-                R.id.title,
+                R.id.text1,
                 links,
                 new OnTouchListener() {
 					@Override
