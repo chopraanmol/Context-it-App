@@ -6,11 +6,11 @@
     android:background="@drawable/blur" >
     
     <RelativeLayout 
-        android:layout_weight="1"
-        android:layout_height="match_parent"
+        android:layout_weight="5"
+        android:layout_height="fill_parent"
         android:layout_width="fill_parent"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
         >
     <Button
         android:id="@+id/share_button"
@@ -20,7 +20,7 @@
         android:text="@string/share"
         android:textColor="@android:color/white"
         android:textSize="80sp"
-        android:background="@android:color/transparent"/>
+        android:background="@drawable/speech_bubble"/>
     </RelativeLayout>
     
     <ListView 
@@ -29,7 +29,7 @@
         android:dividerHeight="0dp"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
     />
 
 </LinearLayout>

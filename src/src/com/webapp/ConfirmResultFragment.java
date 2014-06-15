@@ -115,6 +115,7 @@ public class ConfirmResultFragment extends Fragment{
     	    HttpMethod.POST,
     	    new Request.Callback() {
     	        public void onCompleted(Response response) {
+    	        	System.out.println("IT'S A MIRACLE");
     	        }
     	    }
     	).executeAsync();
