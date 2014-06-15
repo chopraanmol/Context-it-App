@@ -76,7 +76,11 @@ public class LandingFragment extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				activity.testSwipeView(v);
+				Fragment login = new LoginFragment();
+    	    	activity.getSupportFragmentManager()
+    	    	.beginTransaction()
+    	    	.add(R.id.fragment_container, login)
+    	    	.commitAllowingStateLoss();
 			}
 		});
 		return view;

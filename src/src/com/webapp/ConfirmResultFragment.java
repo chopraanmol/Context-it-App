@@ -98,7 +98,7 @@ public class ConfirmResultFragment extends Fragment{
         		});
 		ArrayAdapter<String> mAdapter = new StableArrayAdapter(
                 context, 
-                R.id.title,
+                R.id.text1,
                 results,
                 new OnTouchListener() {
 
@@ -137,6 +137,7 @@ public class ConfirmResultFragment extends Fragment{
     	    HttpMethod.POST,
     	    new Request.Callback() {
     	        public void onCompleted(Response response) {
+    	        	System.out.println("IT'S A MIRACLE");
     	        }
     	    }
     	).executeAsync();

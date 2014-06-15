@@ -134,10 +134,12 @@ public class SwipeResult extends Fragment{
         
         @Override
         public boolean onTouch(final View v, MotionEvent event) {
-        	String s = ((TextView)((RelativeLayout) v).findViewById(R.id.title)).getText().toString();
+        	String s = ((TextView)((RelativeLayout) v).findViewById(R.id.text1)).getText().toString();
         	if(s.equals("")) {
         		return true;
         	}
+        	String s1 = ((TextView)((RelativeLayout) v).findViewById(R.id.text2)).getText().toString();
+        	s =  s1 + "\n\n" + s;
             if (mSwipeSlop < 0) {
 
                 mSwipeSlop = ViewConfiguration.get(context).
@@ -202,6 +204,9 @@ public class SwipeResult extends Fragment{
                             remove = true;
                             //keep items swiped right
                             if(deltaX > 0) {
+                            	if(s.isEmpty()) {
+                            		Log.d("KAHO", "EMPTY!");
+                            	}
                             	keptResults.add(s);
                             }
                         } else {
@@ -355,7 +360,7 @@ public class SwipeResult extends Fragment{
 		}
 
 	}
-	
+
 	public static String[] splitText(String textContent) {
 		String[] ret = textContent.split("\n");
 		if(ret.length < 3) {
@@ -363,7 +368,6 @@ public class SwipeResult extends Fragment{
 		}
 		return new String[]{ret[0], ret[2]};
 	}
-
 	
 
 }

@@ -80,30 +80,44 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
         //View view = super.getView(position, convertView, parent);
     	View view = convertView;
     	String text = texts.get(position);
-    	
+    	String[] splitTexts = splitText(texts.get(position));
+    	String link = splitTexts[0];
+    	String description = splitTexts[1];
         view = inflater.inflate(R.layout.search_result_list_row, null);
         if (view != convertView) {
             // Add touch listener to every new view to track swipe motion
             view.setOnTouchListener(mTouchListener);
         }
         RelativeLayout r = (RelativeLayout) view.findViewById(R.id.r_l_title);
-        TextView t = (TextView) view.findViewById(R.id.title);
+        TextView t1 = (TextView) view.findViewById(R.id.text1);
+        TextView t2 = (TextView) view.findViewById(R.id.text2);
         if(text.isEmpty()) {
-    		t.setHeight(0);
+    		t1.setHeight(0);
+    		t2.setHeight(0);
     		r.setMinimumHeight(0);
     		return view;
     	}
-        t.setText(text);
+        t1.setText(description);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "OleoScript-Bold.ttf" );
-        t.setTypeface(tf);
+        t1.setTypeface(tf);
+        t2.setText(link);
+        t1.setTypeface(tf);
         if(position % 2 == 0) {
         	view.setBackgroundColor(Color.argb(42, 0, 0, 0));
         } else {
         	view.setBackgroundColor(Color.argb(120, 0, 0, 0));
         }
-        t.setHeight(height_of_element);
+        
         r.setMinimumHeight(height_of_element);
         return view;
     }
+
+    private String[] splitText(String textContent) {
+		String[] ret = textContent.split("\n");
+		if(ret.length < 3) {
+			return new String[]{"", ""};
+		}
+		return new String[]{ret[0], ret[2]};
+	}
 
 }

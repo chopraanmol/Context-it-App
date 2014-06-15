@@ -10,8 +10,8 @@
     <string name="save_result">Save</string>
     <string name="discard_result">Skip</string>
     <string name="see_online">Read</string>
-    <string name="test">&#xf013;</string>
-    <string name="swipe_view">&#xf07e;</string>
+    <string name="test">&#xf1da;</string>
+    <string name="swipe_view">&#xf112;</string>
     <string name="icon_camera">&#xf030; </string>
     <string name="app_description">ContextIt allows you to attach web context with ease!</string>
     <string name="share">&#xf082; </string>
@@ -19,5 +19,6 @@
     <string name="icon_return">&#xf015; </string>
     <string name="sorry">sorry !</string>
     <string name="get_more">get more</string>
-    <string name="back">back</string>
+    <string name="close">&#xf00d;</string>
+    <string name="right_arrow">&#xf064;</string>
 </resources>

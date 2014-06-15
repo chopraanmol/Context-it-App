@@ -74,23 +74,13 @@ public class PastContextAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        //View view = super.getView(position, convertView, parent);
     	View view = convertView;
-    	String text2 = "WAEFAWDSFDFFDFF";
         view = inflater.inflate(R.layout.past_contexts_row, null);
         if (view != convertView) {
             // Add touch listener to every new view to track swipe motion
             view.setOnTouchListener(mTouchListener);
         }
-        Typeface tf = Typeface.createFromAsset(context.getAssets(), "OleoScript-Bold.ttf" );
-        TextView t = (TextView) view.findViewById(R.id.context1);
-        t.setText(getItem(position));
-        t.setTypeface(tf);
-        t = (TextView) view.findViewById(R.id.context2);
-        t.setText(text2);
-        t.setTypeface(tf);
         String url = toThumbnailURL(photos.get(position*2));
-        // TODO: here, add the logic of retrieving the photo from cache/server 
         Cache cache = VolleyCacheManager.getInstance().getRequestQueue().getCache();
         Entry entry = cache.get(url);
         Bitmap image;
@@ -102,8 +92,6 @@ public class PastContextAdapter extends ArrayAdapter<String> {
         } else{
             // Cached response doesn't exists. Make network call here
         	ImageLoader imageLoader = VolleyCacheManager.getInstance().getImageLoader();
-        	 
-        	// If you are using normal ImageView
         	imageLoader.get(url, new ImageListener() {
         	 
         	    @Override
@@ -141,7 +129,6 @@ public class PastContextAdapter extends ArrayAdapter<String> {
 			JSONObject ret = ServerConnection.connection.sendGETRequest("http://www.doc.ic.ac.uk/project/2013/271/g1327111/db/view/view_links.php", POSTMap);
 			return (PastContextsFragment.JSONToArrayList(ret));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
